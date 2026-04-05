@@ -1,16 +1,17 @@
 add_library(Hazel SHARED
     src/Hazel/Application.cpp
+    src/Hazel/Log.cpp
+    # src/Hazel/EntryPoint.h
 )
 
 # include路径设置
 target_include_directories(Hazel
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vender/spdlog/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-
 )
 
 # 预处理宏定义 
@@ -38,6 +39,7 @@ if(WIN32 AND MSVC)
         WINDOWS_EXPORT_ALL_SYMBOLS OFF
     )
 endif()
+
 
 # 安装规则
 include(GNUInstallDirs)

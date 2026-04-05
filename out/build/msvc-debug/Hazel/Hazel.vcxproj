@@ -87,7 +87,8 @@
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck></BufferSecurityCheck>
@@ -114,10 +115,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;HAZEL_DEBUG;HAZEL_ARCH_X64;CMAKE_INTDIR=\"Debug\";Hazel_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -144,7 +145,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck></BufferSecurityCheck>
@@ -172,10 +174,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;HAZEL_RELEASE;HAZEL_ARCH_X64;CMAKE_INTDIR=\"Release\";Hazel_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -202,7 +204,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck></BufferSecurityCheck>
@@ -229,10 +232,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;HAZEL_RELEASE;HAZEL_ARCH_X64;CMAKE_INTDIR=\"RelWithDebInfo\";Hazel_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -259,7 +262,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck></BufferSecurityCheck>
@@ -287,10 +291,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;HAZEL_BUILD_DLL;HAZEL_PLATFORM_WINDOWS;HAZEL_ARCH_X64;CMAKE_INTDIR=\"MinSizeRel\";Hazel_EXPORTS</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel\src;D:\Temp\code\Hazel\Hazel;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Temp\code\Hazel\Hazel;D:\Temp\code\Hazel\Hazel\vender\spdlog\include;D:\Temp\code\Hazel\Hazel\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -374,6 +378,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D:\Temp\code\Hazel\Hazel\src\Hazel\Application.cpp" />
+    <ClCompile Include="D:\Temp\code\Hazel\Hazel\src\Hazel\Log.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
