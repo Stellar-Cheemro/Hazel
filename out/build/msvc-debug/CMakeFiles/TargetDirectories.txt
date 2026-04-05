@@ -1,0 +1,7 @@
+D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/INSTALL.dir
+D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/ALL_BUILD.dir
+D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/ZERO_CHECK.dir
+D:/Temp/code/Hazel/out/build/msvc-debug/Hazel/CMakeFiles/Hazel.dir
+D:/Temp/code/Hazel/out/build/msvc-debug/Hazel/CMakeFiles/INSTALL.dir
+D:/Temp/code/Hazel/out/build/msvc-debug/Sandbox/CMakeFiles/Sandbox.dir
+D:/Temp/code/Hazel/out/build/msvc-debug/Sandbox/CMakeFiles/INSTALL.dir

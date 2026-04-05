@@ -1,0 +1,5 @@
+/build
+/.clang-format
+/.vscode
+/bin
+/Hazel.code-workspace

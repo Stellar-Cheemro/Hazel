@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Solution>
+	<Configurations>
+		<BuildType Name="Debug"/>
+		<BuildType Name="Release"/>
+		<BuildType Name="RelWithDebInfo"/>
+		<BuildType Name="MinSizeRel"/>
+		<Platform Name="x64"/>
+	</Configurations>
+	<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="21247820-d4d9-37f4-b211-cc0640b9461e">
+		<BuildDependency Project="Hazel/Hazel.vcxproj"/>
+		<BuildDependency Project="Sandbox/Sandbox.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="Hazel/Hazel.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="50459844-be6b-3337-9354-f306e0342d7a">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="INSTALL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7a81691e-42f2-3f5e-b3f1-ff9ec2da2e1a">
+		<BuildDependency Project="ALL_BUILD.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<Build Solution="Debug|*" Project="false"/>
+		<Build Solution="Release|*" Project="false"/>
+		<Build Solution="RelWithDebInfo|*" Project="false"/>
+		<Build Solution="MinSizeRel|*" Project="false"/>
+	</Project>
+	<Project Path="Sandbox/Sandbox.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7abf1514-11e6-3460-9164-6e9ae4569a04" DefaultStartup="true">
+		<BuildDependency Project="Hazel/Hazel.vcxproj"/>
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
+	<Project Path="ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="453d273f-54dd-39e0-b88a-e57ec33a4494"/>
+</Solution>
