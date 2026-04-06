@@ -59,6 +59,7 @@ endif()
 add_library(Hazel::Hazel SHARED IMPORTED)
 
 set_target_properties(Hazel::Hazel PROPERTIES
+  INTERFACE_COMPILE_DEFINITIONS "HAZEL_PLATFORM_WINDOWS"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
 )
 

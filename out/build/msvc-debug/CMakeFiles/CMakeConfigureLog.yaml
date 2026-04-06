@@ -5,7 +5,7 @@ events:
     kind: "message-v1"
     backtrace:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineSystem.cmake:212 (message)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     message: |
       The system is: Windows - 10.0.26100 - AMD64
   -
@@ -16,7 +16,7 @@ events:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "file"
     variable: "src_in"
     description: "Path to a file."
@@ -35,19 +35,19 @@ events:
     found: "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeCXXCompilerId.cpp.in"
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -98,14 +98,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -129,7 +121,7 @@ events:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     message: |
       Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
       Compiler: cl.exe 
@@ -139,7 +131,7 @@ events:
       The output was:
       0
       閫傜敤浜?.NET Framework MSBuild 鐗堟湰 18.0.5+e22287bf1
-      鐢熸垚鍚姩鏃堕棿涓?2026/4/4 22:42:18銆?
+      鐢熸垚鍚姩鏃堕棿涓?2026/4/6 19:35:38銆?
       
       鑺傜偣 1 涓婄殑椤圭洰鈥淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\4.2.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj鈥?榛樿鐩爣)銆?
       PrepareForBuild:
@@ -168,7 +160,7 @@ events:
           0 涓鍛?
           0 涓敊璇?
       
-      宸茬敤鏃堕棿 00:00:00.96
+      宸茬敤鏃堕棿 00:00:02.00
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -185,7 +177,7 @@ events:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:103 (__resolve_linker_path)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "program"
     variable: "_CMAKE_TOOL_WITH_PATH"
     description: "Path to a program."
@@ -201,19 +193,18 @@ events:
       - "link"
     candidate_directories:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TestWindow/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/"
       - "D:/Code/Ide/VS/vs/Team Tools/DiagnosticsHub/Collector/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/"
       - "D:/Code/Ide/VS/vs/Common7/Tools/"
       - "C:/Program Files (x86)/Razer Chroma SDK/bin/"
@@ -274,19 +265,19 @@ events:
     found: "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/link.exe"
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -337,14 +328,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -359,7 +342,7 @@ events:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "program"
     variable: "_CMAKE_TOOL_WITH_PATH"
     description: "Path to a program."
@@ -375,19 +358,18 @@ events:
       - "lld-link"
     candidate_directories:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TestWindow/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/"
       - "D:/Code/Ide/VS/vs/Team Tools/DiagnosticsHub/Collector/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/"
       - "D:/Code/Ide/VS/vs/Common7/Tools/"
       - "C:/Program Files (x86)/Razer Chroma SDK/bin/"
@@ -447,9 +429,6 @@ events:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/lld-link.com"
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/lld-link.exe"
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/lld-link"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/lld-link.com"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/lld-link.exe"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/lld-link"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/lld-link.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/lld-link.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/lld-link"
@@ -462,9 +441,9 @@ events:
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/lld-link.com"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/lld-link.exe"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/lld-link"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/lld-link.com"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/lld-link.exe"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/lld-link"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/lld-link.com"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/lld-link.exe"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/lld-link"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/lld-link.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/lld-link.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/lld-link"
@@ -474,18 +453,18 @@ events:
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/lld-link.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/lld-link.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/lld-link"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/lld-link.com"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/lld-link.exe"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/lld-link"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/lld-link.com"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/lld-link.exe"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/lld-link"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/lld-link.com"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/lld-link.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/lld-link"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/lld-link.com"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/lld-link.exe"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/lld-link"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/lld-link.com"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/lld-link.exe"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/lld-link"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/lld-link.com"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/lld-link.exe"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/lld-link"
       - "D:/Code/Ide/VS/vs/Common7/IDE/lld-link.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/lld-link.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/lld-link"
@@ -654,19 +633,19 @@ events:
     found: false
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -717,14 +696,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -737,7 +708,7 @@ events:
     backtrace:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "program"
     variable: "CMAKE_LINKER"
     description: "Path to a program."
@@ -753,19 +724,18 @@ events:
       - "link"
     candidate_directories:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TestWindow/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/"
       - "D:/Code/Ide/VS/vs/Team Tools/DiagnosticsHub/Collector/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/"
       - "D:/Code/Ide/VS/vs/Common7/Tools/"
       - "C:/Program Files (x86)/Razer Chroma SDK/bin/"
@@ -826,19 +796,19 @@ events:
     found: "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/link.exe"
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -889,14 +859,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -909,7 +871,7 @@ events:
     backtrace:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "program"
     variable: "CMAKE_MT"
     description: "Path to a program."
@@ -925,19 +887,18 @@ events:
       - "mt"
     candidate_directories:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TestWindow/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/"
       - "D:/Code/Ide/VS/vs/Team Tools/DiagnosticsHub/Collector/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/"
       - "D:/Code/Ide/VS/vs/Common7/Tools/"
       - "C:/Program Files (x86)/Razer Chroma SDK/bin/"
@@ -997,9 +958,6 @@ events:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/mt.com"
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/mt.exe"
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/mt"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/mt.com"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/mt.exe"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/mt"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/mt.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/mt.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/mt"
@@ -1012,9 +970,9 @@ events:
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/mt.com"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/mt.exe"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/mt"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/mt.com"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/mt.exe"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/mt"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/mt.com"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/mt.exe"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/mt"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/mt.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/mt.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/mt"
@@ -1024,23 +982,23 @@ events:
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/mt.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/mt.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/mt"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/mt.com"
-    found: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/mt.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/mt.com"
+    found: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/mt.exe"
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -1091,14 +1049,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -1111,7 +1061,7 @@ events:
     backtrace:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "program"
     variable: "CMAKE_AR"
     description: "Path to a program."
@@ -1127,19 +1077,18 @@ events:
       - "lib"
     candidate_directories:
       - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TestWindow/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/"
       - "D:/Code/Ide/VS/vs/Team Tools/DiagnosticsHub/Collector/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/"
       - "D:/Code/Ide/VS/vs/Common7/Tools/"
       - "C:/Program Files (x86)/Razer Chroma SDK/bin/"
@@ -1200,19 +1149,19 @@ events:
     found: "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/lib.exe"
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -1263,14 +1212,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -1286,7 +1227,7 @@ events:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/Platform/Windows-MSVC.cmake:553 (__windows_compiler_msvc_enable_rc)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/Platform/Windows-MSVC-CXX.cmake:6 (__windows_compiler_msvc)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeCXXInformation.cmake:48 (include)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     mode: "program"
     variable: "CMAKE_RC_COMPILER"
     description: "RC compiler"
@@ -1301,19 +1242,19 @@ events:
     names:
       - "rc"
     candidate_directories:
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/"
+      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TestWindow/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/"
       - "D:/Code/Ide/VS/vs/Team Tools/DiagnosticsHub/Collector/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/x86/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/x64/"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/"
-      - "C:/Windows/Microsoft.NET/Framework/v4.0.30319/"
+      - "C:/Windows/Microsoft.NET/Framework64/v4.0.30319/"
       - "D:/Code/Ide/VS/vs/Common7/IDE/"
       - "D:/Code/Ide/VS/vs/Common7/Tools/"
       - "C:/Program Files (x86)/Razer Chroma SDK/bin/"
@@ -1382,9 +1323,9 @@ events:
       - "D:/Temp/code/Hazel/out/install/msvc-debug/sbin/"
       - "D:/Temp/code/Hazel/out/install/msvc-debug/"
     searched_directories:
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/rc.com"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/rc.exe"
-      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx86/x86/rc"
+      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/rc.com"
+      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/rc.exe"
+      - "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/rc"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/rc.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/rc.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/VC/vcpackages/rc"
@@ -1397,9 +1338,9 @@ events:
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/rc.com"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/rc.exe"
       - "D:/Code/Ide/VS/vs/MSBuild/Current/Bin/Roslyn/rc"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/rc.com"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/rc.exe"
-      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/rc"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/rc.com"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/rc.exe"
+      - "C:/Program Files (x86)/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools/x64/rc"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/rc.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/rc.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/CommonExtensions/Microsoft/FSharp/Tools/rc"
@@ -1409,23 +1350,23 @@ events:
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/rc.com"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/rc.exe"
       - "D:/Code/Ide/VS/vs/Common7/IDE/Extensions/Microsoft/CodeCoverage.Console/rc"
-      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/rc.com"
-    found: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x86/rc.exe"
+      - "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/rc.com"
+    found: "C:/Program Files (x86)/Windows Kits/10/bin/10.0.26100.0/x64/rc.exe"
     search_context:
       ENV{PATH}:
-        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX86\\x86"
+        - "D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\VC\\VCPackages"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\TeamFoundation\\Team Explorer"
         - "D:\\Code\\Ide\\VS\\vs\\MSBuild\\Current\\bin\\Roslyn"
-        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\"
+        - "C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v10.0A\\bin\\NETFX 4.8 Tools\\x64\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\FSharp\\Tools"
         - "D:\\Code\\Ide\\VS\\vs\\Team Tools\\DiagnosticsHub\\Collector"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\Extensions\\Microsoft\\CodeCoverage.Console"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x86"
-        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x86"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\10.0.26100.0\\\\x64"
+        - "C:\\Program Files (x86)\\Windows Kits\\10\\bin\\\\x64"
         - "D:\\Code\\Ide\\VS\\vs\\\\MSBuild\\Current\\Bin\\amd64"
-        - "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319"
+        - "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\Tools\\"
         - "C:\\Program Files (x86)\\Razer Chroma SDK\\bin"
@@ -1476,14 +1417,6 @@ events:
         - "D:\\Code\\Tool\\Qt\\6.10.2\\msvc2022_64\\bin"
         - "D:\\Code\\Tool\\Go\\bin"
         - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\.cargo\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Local\\Microsoft\\WindowsApps"
-        - "D:\\Code\\Ide\\IntelliJ IDEA 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\PyCharm 2024.3.1.1\\bin"
-        - "D:\\Code\\Ide\\Microsoft VS Code\\bin"
-        - "D:\\Code\\Tool\\mingw64\\bin"
-        - "C:\\Users\\Stellar\\AppData\\Roaming\\npm"
-        - "C:\\Users\\Stellar\\.dotnet\\tools"
         - "C:\\Users\\Stellar\\AppData\\Local\\Pandoc\\"
         - "C:\\Users\\Stellar\\go\\bin"
         - "D:\\Code\\Ide\\VS\\vs\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin"
@@ -1501,12 +1434,12 @@ events:
     backtrace:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-fxj9bl"
-      binary: "D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-fxj9bl"
+      source: "D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-yrem4z"
+      binary: "D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-yrem4z"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -1516,39 +1449,39 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-fxj9bl'
+        Change Dir: 'D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-yrem4z'
         
-        Run Build Command(s): D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_db59f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
+        Run Build Command(s): D:/Code/Ide/VS/vs/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_44231.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=18.0 /v:n
         閫傜敤浜?.NET Framework MSBuild 鐗堟湰 18.0.5+e22287bf1
-        鐢熸垚鍚姩鏃堕棿涓?2026/4/4 22:42:19銆?
+        鐢熸垚鍚姩鏃堕棿涓?2026/4/6 19:35:40銆?
         
-        鑺傜偣 1 涓婄殑椤圭洰鈥淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-fxj9bl\\cmTC_db59f.vcxproj鈥?榛樿鐩爣)銆?
+        鑺傜偣 1 涓婄殑椤圭洰鈥淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-yrem4z\\cmTC_44231.vcxproj鈥?榛樿鐩爣)銆?
         PrepareForBuild:
           宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
-          姝ｅ湪鍒涘缓鐩綍鈥淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-fxj9bl\\Debug\\鈥濄€?
-          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_db59f.dir\\Debug\\cmTC_db59f.tlog\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-yrem4z\\Debug\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_44231.dir\\Debug\\cmTC_44231.tlog\\鈥濄€?
         InitializeBuildStatus:
-          姝ｅ湪鍒涘缓鈥渃mTC_db59f.dir\\Debug\\cmTC_db59f.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
-          姝ｅ湪瀵光€渃mTC_db59f.dir\\Debug\\cmTC_db59f.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+          姝ｅ湪鍒涘缓鈥渃mTC_44231.dir\\Debug\\cmTC_44231.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+          姝ｅ湪瀵光€渃mTC_44231.dir\\Debug\\cmTC_44231.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
         ClCompile:
-          D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_db59f.dir\\Debug\\\\" /Fd"cmTC_db59f.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "D:\\Code\\Tool\\Cmake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
+          D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_44231.dir\\Debug\\\\" /Fd"cmTC_44231.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "D:\\Code\\Tool\\Cmake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
           鐢ㄤ簬 x64 鐨?Microsoft (R) C/C++ 浼樺寲缂栬瘧鍣?19.50.35719 鐗?
           鐗堟潈鎵€鏈?C) Microsoft Corporation銆備繚鐣欐墍鏈夋潈鍒┿€?
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_db59f.dir\\Debug\\\\" /Fd"cmTC_db59f.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "D:\\Code\\Tool\\Cmake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D _MBCS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /Fo"cmTC_44231.dir\\Debug\\\\" /Fd"cmTC_44231.dir\\Debug\\vc145.pdb" /external:W1 /TP /errorReport:queue "D:\\Code\\Tool\\Cmake\\share\\cmake-4.2\\Modules\\CMakeCXXCompilerABI.cpp"
           CMakeCXXCompilerABI.cpp
         Link:
-          D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-fxj9bl\\Debug\\cmTC_db59f.exe" /INCREMENTAL /ILK:"cmTC_db59f.dir\\Debug\\cmTC_db59f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-fxj9bl/Debug/cmTC_db59f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-fxj9bl/Debug/cmTC_db59f.lib" /MACHINE:X64  /machine:x64 cmTC_db59f.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_db59f.vcxproj -> D:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-fxj9bl\\Debug\\cmTC_db59f.exe
+          D:\\Code\\Ide\\VS\\vs\\VC\\Tools\\MSVC\\14.50.35717\\bin\\HostX64\\x64\\link.exe /OUT:"D:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-yrem4z\\Debug\\cmTC_44231.exe" /INCREMENTAL /ILK:"cmTC_44231.dir\\Debug\\cmTC_44231.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-yrem4z/Debug/cmTC_44231.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"D:/Temp/code/Hazel/out/build/msvc-debug/CMakeFiles/CMakeScratch/TryCompile-yrem4z/Debug/cmTC_44231.lib" /MACHINE:X64  /machine:x64 cmTC_44231.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_44231.vcxproj -> D:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-yrem4z\\Debug\\cmTC_44231.exe
         FinalizeBuildStatus:
-          姝ｅ湪鍒犻櫎鏂囦欢鈥渃mTC_db59f.dir\\Debug\\cmTC_db59f.tlog\\unsuccessfulbuild鈥濄€?
-          姝ｅ湪瀵光€渃mTC_db59f.dir\\Debug\\cmTC_db59f.tlog\\cmTC_db59f.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
-        宸插畬鎴愮敓鎴愰」鐩€淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-fxj9bl\\cmTC_db59f.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
+          姝ｅ湪鍒犻櫎鏂囦欢鈥渃mTC_44231.dir\\Debug\\cmTC_44231.tlog\\unsuccessfulbuild鈥濄€?
+          姝ｅ湪瀵光€渃mTC_44231.dir\\Debug\\cmTC_44231.tlog\\cmTC_44231.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
+        宸插畬鎴愮敓鎴愰」鐩€淒:\\Temp\\code\\Hazel\\out\\build\\msvc-debug\\CMakeFiles\\CMakeScratch\\TryCompile-yrem4z\\cmTC_44231.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
         
         宸叉垚鍔熺敓鎴愩€?
             0 涓鍛?
             0 涓敊璇?
         
-        宸茬敤鏃堕棿 00:00:00.81
+        宸茬敤鏃堕棿 00:00:01.32
         
       exitCode: 0
   -
@@ -1556,7 +1489,7 @@ events:
     backtrace:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
@@ -1574,7 +1507,7 @@ events:
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/Internal/CMakeDetermineLinkerId.cmake:38 (message)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
       - "D:/Code/Tool/Cmake/share/cmake-4.2/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:7 (project)"
+      - "CMakeLists.txt:3 (project)"
     message: |
       Running the CXX compiler's linker: "D:/Code/Ide/VS/vs/VC/Tools/MSVC/14.50.35717/bin/HostX64/x64/link.exe" "-v"
       Microsoft (R) Incremental Linker Version 14.50.35719.0

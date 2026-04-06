@@ -7,18 +7,17 @@ add_library(Hazel SHARED
 # include路径设置
 target_include_directories(Hazel
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vender/spdlog/include>
         $<INSTALL_INTERFACE:include>
-    PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
 )
 
 # 预处理宏定义 
 target_compile_definitions(Hazel
+    PUBLIC    
+        HAZEL_PLATFORM_WINDOWS
     PRIVATE
         HAZEL_BUILD_DLL
-        HAZEL_PLATFORM_WINDOWS
         $<$<CONFIG:Debug>:HAZEL_DEBUG>
         $<$<CONFIG:Release>:HAZEL_RELEASE>
         $<$<CONFIG:RelWithDebInfo>:HAZEL_RELEASE>
