@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../Core.h"
-
+#include "Hazel/Core.h"
+#include "spdlog/fmt/ostr.h"
+#include <functional>
 #include <sstream>
 
 namespace Hazel
@@ -29,7 +30,7 @@ enum EventCategory
 #define EVENT_CLASS_TYPE(type)                                                                     \
     static EventType GetStaticType()                                                               \
     {                                                                                              \
-        return EventType::##type;                                                                  \
+        return EventType::type;                                                                    \
     }                                                                                              \
     virtual EventType GetEventType() const override                                                \
     {                                                                                              \
@@ -80,7 +81,7 @@ public:
     {
         if (m_Event.GetEventType() == T::GetStaticType())
         {
-            m_Event.m_Handled = func(*(T*)&m_Event);
+            m_Event.m_Handled = func(static_cast<T&>(m_Event));
             return true;
         }
         return false;
@@ -90,31 +91,12 @@ private:
     Event& m_Event;
 };
 
-class HAZEL_API WindowResizeEvent : public Event
+inline std::ostream& operator<<(std::ostream& os, const Event& e)
 {
-public:
-    WindowResizeEvent(unsigned int width, unsigned int height) : m_Width(width), m_Height(height)
-    {
-    }
-
-    inline unsigned int GetWidth() const
-    {
-        return m_Width;
-    }
-    inline unsigned int GetHeight() const
-    {
-        return m_Height;
-    }
-
-    std::string ToString() const override
-    {
-        std::stringstream ss;
-        ss << "WindowResizeEvent:" << m_Width << "," << m_Height;
-        return ss.str();
-    }
-
-private:
-    int m_Width, m_Height;
-};
+    return os << e.ToString();
+}
 
 } // namespace Hazel
+template <> struct fmt::formatter<Hazel::Event> : fmt::ostream_formatter
+{
+};

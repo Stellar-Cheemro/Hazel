@@ -53,5 +53,5 @@ public:
         return ss.str();
     }
     EVENT_CLASS_TYPE(KeyReleased)
-}; // namespace Hazel
+};
 } // namespace Hazel
