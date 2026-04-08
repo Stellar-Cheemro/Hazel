@@ -91,12 +91,23 @@ private:
     Event& m_Event;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const Event& e)
+// 事件格式化输出
+template <typename T>
+    requires std::derived_from<T, Event>
+std::string format_as(const T& e)
 {
-    return os << e.ToString();
+    return e.ToString();
 }
 
+// inline std::ostream& operator<<(std::ostream& os, const Event& e)
+// {
+//     return os << e.ToString();
+// }
+
 } // namespace Hazel
-template <> struct fmt::formatter<Hazel::Event> : fmt::ostream_formatter
-{
-};
+/**
+**@note 可以使用formatter格式化输出，但需要调用ToString函数 如HAZEL_CORE_TRACE("{}", e.ToString())
+**/
+// template <> struct fmt::formatter<Hazel::Event> : fmt::ostream_formatter
+// {
+// };
