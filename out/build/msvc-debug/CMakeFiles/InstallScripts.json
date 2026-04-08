@@ -1,9 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"D:/Temp/code/Hazel/out/build/msvc-debug/cmake_install.cmake",
-		"D:/Temp/code/Hazel/out/build/msvc-debug/Hazel/cmake_install.cmake",
-		"D:/Temp/code/Hazel/out/build/msvc-debug/Sandbox/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

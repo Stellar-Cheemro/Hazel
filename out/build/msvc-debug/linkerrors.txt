@@ -1,8 +1,0 @@
-================================================================================
-Linker Errors
-Generated: 2026-04-07T16:03:48.092Z
-Total Errors: 1
-================================================================================
-
-[LNK1168] (MSVC)
-无法打开 D:\Temp\code\Hazel\out\bin\Debug\Hazel.dll 进行写入 [D:\Temp\code\Hazel\out\build\msvc-debug\Hazel\Hazel.vcxproj]
