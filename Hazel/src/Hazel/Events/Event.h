@@ -2,8 +2,6 @@
 
 #include "Hazel/Core.h"
 #include "spdlog/fmt/ostr.h"
-#include <functional>
-#include <sstream>
 
 namespace Hazel
 {

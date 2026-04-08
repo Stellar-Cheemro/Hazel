@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "Hazel/Log.h"
 #include "Hazel/Events/ApplicationEvent.h"
-#include "Hazel/Events/Event.h"
 // clang-format on
 
 namespace Hazel
@@ -17,7 +16,15 @@ Application::~Application()
 void Application::Run()
 {
     WindowResizeEvent e(1280, 720);
-    HAZEL_CLIENT_TRACE(e);
+    if (e.IsInCategory(EventCategoryApplication))
+    {
+        HAZEL_CLIENT_TRACE(e);
+    }
+    else
+    {
+        HAZEL_CLIENT_TRACE("It is not an application event");
+    }
+
     while (true)
     {
     }

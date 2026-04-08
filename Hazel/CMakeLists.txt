@@ -8,7 +8,7 @@ add_library(Hazel SHARED
 target_include_directories(Hazel
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vender/spdlog/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -23,6 +23,10 @@ target_compile_definitions(Hazel
         $<$<CONFIG:RelWithDebInfo>:HAZEL_RELEASE>
 )
 
+# 预编译头文件
+target_precompile_headers(Hazel PRIVATE
+    "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/Hazelpch.h>"
+)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     target_compile_definitions(Hazel PRIVATE HAZEL_ARCH_X64)
 endif()
