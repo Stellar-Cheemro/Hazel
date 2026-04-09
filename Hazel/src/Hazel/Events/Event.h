@@ -3,6 +3,7 @@
 #include "Hazel/Core.h"
 
 #include <functional>
+#include <sstream>
 #include <string>
 namespace Hazel
 {
