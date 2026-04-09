@@ -1,12 +1,15 @@
 add_library(Hazel SHARED
     src/Hazel/Application.cpp
     src/Hazel/Log.cpp
+    src/Hazelpch.cpp
+    src/Platform/Windows/WindowsWindow.cpp
     # src/Hazel/EntryPoint.h
 )
 
 # include路径设置
 target_include_directories(Hazel
     PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include>
         $<INSTALL_INTERFACE:include>
@@ -24,9 +27,18 @@ target_compile_definitions(Hazel
 )
 
 # 预编译头文件
-target_precompile_headers(Hazel PRIVATE
-    "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/Hazelpch.h>"
+target_precompile_headers(Hazel 
+    PRIVATE
+        "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/Hazelpch.h>"
 )
+
+# 链接第三方库
+target_link_libraries(Hazel
+    PRIVATE
+        glfw
+        opengl32
+)
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     target_compile_definitions(Hazel PRIVATE HAZEL_ARCH_X64)
 endif()

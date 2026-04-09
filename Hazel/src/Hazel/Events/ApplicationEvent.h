@@ -29,7 +29,8 @@ public:
     EVENT_CLASS_TYPE(WindowResize)
     EVENT_CLASS_CATEGORY(EventCategoryApplication)
 private:
-    int m_Width, m_Height;
+    unsigned int m_Width;
+    unsigned int m_Height;
 };
 
 class HAZEL_API WindowCloseEvent : public Event

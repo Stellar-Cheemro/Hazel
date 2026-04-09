@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Hazel/Core.h"
-#include "spdlog/fmt/ostr.h"
 
+#include <functional>
+#include <string>
 namespace Hazel
 {
 enum class EventType
@@ -89,13 +90,13 @@ private:
     Event& m_Event;
 };
 
-// 事件格式化输出
-template <typename T>
-    requires std::derived_from<T, Event>
-std::string format_as(const T& e)
-{
-    return e.ToString();
-}
+// // 事件格式化输出 在glfw初始化WindowsWindow时爆雷，抛弃
+// template <typename T>
+//     requires std::derived_from<T, Event>
+// std::string format_as(const T& e)
+// {
+//     return e.ToString();
+// }
 
 // inline std::ostream& operator<<(std::ostream& os, const Event& e)
 // {

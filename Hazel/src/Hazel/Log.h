@@ -31,11 +31,12 @@ private:
 #define HAZEL_CORE_INFO(...)        ::Hazel::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define HAZEL_CORE_TRACE(...)       ::Hazel::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define HAZEL_CORE_CRITICAL(...)    ::Hazel::Log::GetCoreLogger()->critical(__VA_ARGS__)
-
+#define HAZEL_CORE_ASSERT(x, ...) { if(!(x)) { HAZEL_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 // Client log macros
 #define HAZEL_CLIENT_ERROR(...)     ::Hazel::Log::GetClientLogger()->error(__VA_ARGS__)
 #define HAZEL_CLIENT_WARN(...)      ::Hazel::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define HAZEL_CLIENT_INFO(...)      ::Hazel::Log::GetClientLogger()->info(__VA_ARGS__)
 #define HAZEL_CLIENT_TRACE(...)     ::Hazel::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define HAZEL_CLIENT_CRITICAL(...)  ::Hazel::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define HAZEL_CLIENT_ASSERT(x, ...) { if(!(x)) { HAZEL_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 // clang-format on

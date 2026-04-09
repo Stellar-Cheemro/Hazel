@@ -33,7 +33,22 @@ if(MSVC)
 endif()
 
 # --------------------------------
-# 3. 统一输出目录
+# 3. 第三方库设置
+# --------------------------------
+# --------------------------------
+# 3.1 GLFW设置
+# --------------------------------
+# 关闭 GLFW 自带内容
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+# 增加第三方库项目
+add_subdirectory(Hazel/vendor/glfw)
+
+
+# --------------------------------
+# 4. 统一输出目录
 # --------------------------------
 set(HAZEL_OUT_ROOT "${CMAKE_SOURCE_DIR}/out")
 
@@ -47,13 +62,13 @@ if(MSVC)
 endif()
 
 # --------------------------------
-# 4. 子项目
+# 5. 子项目
 # --------------------------------
 add_subdirectory(Hazel)
 add_subdirectory(Sandbox)
 
 # --------------------------------
-# 5. VS 默认启动项目
+# 6. VS 默认启动项目
 # --------------------------------
 if(MSVC)
     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Sandbox)
