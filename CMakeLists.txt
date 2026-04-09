@@ -46,7 +46,7 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 # 增加第三方库项目
 add_subdirectory(Hazel/vendor/glfw)
 add_subdirectory(Hazel/vendor/glad)
-
+add_subdirectory(Hazel/vendor/imgui)
 
 # --------------------------------
 # 4. 统一输出目录

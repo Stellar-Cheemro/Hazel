@@ -37,9 +37,10 @@ target_precompile_headers(Hazel
 # 链接第三方库
 target_link_libraries(Hazel
     PRIVATE
-        glfw
-        opengl32
         glad
+        glfw
+        imgui
+        opengl32
 )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
