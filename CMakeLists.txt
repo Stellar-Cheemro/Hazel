@@ -45,6 +45,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 # 增加第三方库项目
 add_subdirectory(Hazel/vendor/glfw)
+add_subdirectory(Hazel/vendor/glad)
 
 
 # --------------------------------

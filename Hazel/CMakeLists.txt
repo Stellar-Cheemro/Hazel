@@ -39,6 +39,7 @@ target_link_libraries(Hazel
     PRIVATE
         glfw
         opengl32
+        glad
 )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
