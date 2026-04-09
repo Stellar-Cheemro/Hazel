@@ -1,8 +1,13 @@
+// clang-format off
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "WindowsWindow.h"
 #include "Hazel/Events/ApplicationEvent.h"
 #include "Hazel/Events/KeyEvent.h"
 #include "Hazel/Events/MouseEvent.h"
 #include "Hazel/Log.h"
+// clang-format on
+
 namespace Hazel
 {
 static bool s_GLFWInitialized = false;
@@ -46,6 +51,8 @@ void WindowsWindow::Init(const WindowProps& props)
     m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr,
                                 nullptr);
     glfwMakeContextCurrent(m_Window);
+    int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    HAZEL_CORE_ASSERT(status, "Failed to initialize Glad!");
     glfwSetWindowUserPointer(m_Window, &m_Data);
     SetVSync(true);
 
