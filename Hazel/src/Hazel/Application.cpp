@@ -3,6 +3,7 @@
 #include "Hazel/Log.h"
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/ApplicationEvent.h"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
 
