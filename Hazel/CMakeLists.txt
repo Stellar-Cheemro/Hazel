@@ -3,6 +3,8 @@ add_library(Hazel SHARED
     src/Hazel/Log.cpp
     src/Hazelpch.cpp
     src/Platform/Windows/WindowsWindow.cpp
+    src/Hazel/LayerStack.cpp
+    src/Hazel/Layer.cpp
     # src/Hazel/EntryPoint.h
 )
 
