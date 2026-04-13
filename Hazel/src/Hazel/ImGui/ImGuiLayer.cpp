@@ -46,7 +46,7 @@ void ImGuiLayer::OnDetach()
 void ImGuiLayer::OnUpdate()
 {
     ImGuiIO& io = ImGui::GetIO();
-    Application& app = Application::Get();
+    Application& app = Application::GetApplication();
     io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
     float time = (float)glfwGetTime();

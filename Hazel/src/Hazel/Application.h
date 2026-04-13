@@ -3,6 +3,7 @@
 #include "Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Window.h"
+#include "input.h"
 #include <memory>
 namespace Hazel
 {
@@ -19,7 +20,7 @@ public:
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
 
-    inline static Application& Get()
+    inline static Application& GetApplication()
     {
         return *s_Instance;
     }
