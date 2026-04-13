@@ -5,6 +5,7 @@ add_library(Hazel SHARED
     src/Platform/Windows/WindowsWindow.cpp
     src/Hazel/LayerStack.cpp
     src/Hazel/Layer.cpp
+    src/Hazel/ImGui/ImGuiLayer.cpp
     # src/Hazel/EntryPoint.h
 )
 
@@ -23,6 +24,7 @@ target_compile_definitions(Hazel
         HAZEL_PLATFORM_WINDOWS
     PRIVATE
         HAZEL_BUILD_DLL
+        IMGUI_IMPL_OPENGL_LOADER_CUSTOM
         $<$<CONFIG:Debug>:HAZEL_DEBUG>
         $<$<CONFIG:Release>:HAZEL_RELEASE>
         $<$<CONFIG:RelWithDebInfo>:HAZEL_RELEASE>

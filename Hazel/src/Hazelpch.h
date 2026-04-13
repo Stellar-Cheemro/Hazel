@@ -12,7 +12,7 @@
 #include <unordered_set>
 #include <vector>
 
-#ifdef HZ_PLATFORM_WINDOWS
+#ifdef HAZEL_PLATFORM_WINDOWS
 #    include <Windows.h>
 
 #endif

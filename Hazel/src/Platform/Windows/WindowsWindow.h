@@ -16,7 +16,7 @@ public:
     {
         return m_Data.Width;
     }
-    inline unsigned int GetHeigth() const override
+    inline unsigned int GetHeight() const override
     {
         return m_Data.Height;
     }

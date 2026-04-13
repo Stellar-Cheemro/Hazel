@@ -7,3 +7,4 @@
 [submodule "Hazel/vendor/imgui"]
 	path = Hazel/vendor/imgui
 	url = https://github.com/ocornut/imgui
+	branch = docking
