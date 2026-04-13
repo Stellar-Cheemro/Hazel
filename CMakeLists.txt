@@ -43,10 +43,13 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+#关闭glm测试
+set(GLM_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 # 增加第三方库项目
 add_subdirectory(Hazel/vendor/glfw)
 add_subdirectory(Hazel/vendor/glad)
 add_subdirectory(Hazel/vendor/imgui)
+add_subdirectory(Hazel/vendor/glm)
 
 # --------------------------------
 # 4. 统一输出目录

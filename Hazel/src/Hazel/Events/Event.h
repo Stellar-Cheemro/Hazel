@@ -96,23 +96,11 @@ private:
     Event& m_Event;
 };
 
-// // 事件格式化输出 在glfw初始化WindowsWindow时爆雷，抛弃
-// template <typename T>
-//     requires std::derived_from<T, Event>
-// std::string format_as(const T& e)
-// {
-//     return e.ToString();
-// }
-
-// inline std::ostream& operator<<(std::ostream& os, const Event& e)
-// {
-//     return os << e.ToString();
-// }
-
 } // namespace Hazel
 /**
-**@note 可以使用formatter格式化输出，但需要调用ToString函数 如HAZEL_CORE_TRACE("{}", e.ToString())
-**/
-// template <> struct fmt::formatter<Hazel::Event> : fmt::ostream_formatter
-// {
-// };
+ * @note 最新版spdlog使用formatter来格式化日志输出，
+ *       默认情况下spdlog无法直接格式化Hazel::Event及其派生类，
+ *       因此需要为它们提供一个统一的formatter。
+ *       该formatter位于Hazel/src/Hazel/SpdlogFormatters/EventFormatters.h中，
+ *       通过调用Event的ToString方法来获取事件的字符串表示。
+ */

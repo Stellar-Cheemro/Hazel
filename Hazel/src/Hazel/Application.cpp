@@ -5,6 +5,8 @@
 #include "Hazel/Events/ApplicationEvent.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 // clang-format on
 
 namespace Hazel
@@ -36,6 +38,8 @@ void Application::PushOverlay(Layer* layer)
 
 void Application::Run()
 {
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 2.0f, 3.0f));
+    HAZEL_CLIENT_INFO(transform);
     while (m_Running)
     {
         glClearColor(0.0f, 1.0f, 1.0f, 1);

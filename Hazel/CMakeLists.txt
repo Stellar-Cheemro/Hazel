@@ -8,6 +8,7 @@ add_library(Hazel SHARED
     src/Hazel/ImGui/ImGuiLayer.cpp
     src/Platform/Windows/WindowsInput.cpp
     src/Hazel/MouseCodes.h
+    src/Hazel/SpdlogFormatters/EventFormatters.h
     # src/Hazel/EntryPoint.h
 )
 
@@ -17,6 +18,7 @@ target_include_directories(Hazel
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -45,6 +47,7 @@ target_link_libraries(Hazel
         glfw
         imgui
         opengl32
+        glm::glm
 )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -55,6 +58,14 @@ if(MSVC)
     target_compile_options(Hazel PRIVATE /W4 /permissive- /EHsc)
 else()
     target_compile_options(Hazel PRIVATE -Wall -Wextra -Wpedantic)
+# glm SIMD优化
+target_compile_definitions(Hazel PUBLIC
+    $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:GLM_FORCE_INTRINSICS>
+    $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:GLM_FORCE_INLINE>
+)
+target_compile_options(Hazel PRIVATE
+    $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:/arch:AVX2>
+)
 endif()
 
 if(WIN32 AND MSVC)

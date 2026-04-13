@@ -1,8 +1,11 @@
 #pragma once
-
+// clang-format off
 #include "Core.h"
-#include "spdlog/spdlog.h"
-
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+#include "SpdlogFormatters/GLMFormatters.h"
+#include "SpdlogFormatters/EventFormatters.h"
+// clang-format on
 namespace Hazel
 {
 class HAZEL_API Log
