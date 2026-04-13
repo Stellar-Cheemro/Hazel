@@ -5,8 +5,6 @@ int main(int argc, char** argv)
 {
     Hazel::Log::Init();
     HAZEL_CORE_WARN("Initialized Core Log!");
-    int a = 5;
-    HAZEL_CLIENT_INFO("Hello!Var={0}", a);
 
     auto app = Hazel::CreateApplication();
     app->Run();

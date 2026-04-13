@@ -44,8 +44,6 @@ void Application::Run()
         {
             layer->OnUpdate();
         }
-        auto [x, y] = Input::GetMousePosition();
-        HAZEL_CORE_TRACE("Mouse Position: ({0}, {1})", x, y);
         m_Window->OnUpdate();
     }
 }

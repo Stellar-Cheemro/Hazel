@@ -7,6 +7,7 @@ add_library(Hazel SHARED
     src/Hazel/Layer.cpp
     src/Hazel/ImGui/ImGuiLayer.cpp
     src/Platform/Windows/WindowsInput.cpp
+    src/Hazel/MouseCodes.h
     # src/Hazel/EntryPoint.h
 )
 
