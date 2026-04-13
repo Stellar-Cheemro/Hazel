@@ -1,124 +1,109 @@
-# Hazel Engine v1.0.0
+# Hazel Engine v1.0.1
 
 Hazel Engine 是一个基于 **C++20** 的早期引擎架构练习项目。
-当前工程采用 **引擎核心库（Hazel）+ 客户端示例程序（Sandbox）** 的组织方式，重点在于先建立清晰、稳定、可扩展的运行骨架，再逐步向渲染、Layer、输入、编辑器和场景系统演进。
+当前工程采用 **引擎核心库（Hazel）+ 客户端示例程序（Sandbox）** 的组织方式，
+目标是在尽量小的代码体量下，把窗口、事件、Layer、输入、ImGui 和基础渲染主循环先串起来，
+再逐步向渲染抽象、编辑器和场景系统演进。
 
-从现有工程状态来看，这个项目已经完成了一个引擎雏形最关键的几条主线：
-
-- 引擎与客户端分离
-- 应用生命周期统一管理
-- 平台窗口抽象与 Windows 平台实现
-- 统一事件系统
-- 日志系统
-- 基于 CMake 的工程组织与输出目录管理
-
-它目前更适合被理解为一个**工程骨架已经成形的引擎实验项目**，而不是一个功能已经齐备的游戏引擎。
+> 目前的 Hazel 更适合被理解为一个“主干已经打通、基础设施持续补齐中的引擎实验项目”，
+> 而不是一个功能完备的成品引擎。
 
 ---
 
-## 1. 项目定位
+## 1. 当前进度概览
 
-本项目的核心目标不是在最早阶段堆叠大量功能，而是优先解决以下工程问题：
+相比更早阶段，本工程现在已经不仅仅是“窗口 + 日志 + 事件”的最小骨架，
+而是继续补齐了几条非常关键的运行时链路：
+
+- 引擎与客户端分离
+- `Application` 主循环与生命周期管理
+- `Window` 抽象与 `WindowsWindow` 平台实现
+- 基于 GLFW 回调的 Hazel 事件系统
+- `Layer` / `LayerStack`
+- `Input` 抽象与 `WindowsInput` 平台实现
+- ImGui 集成，支持 **Docking** 与 **Multi-Viewport**
+- 基于 `spdlog + fmt` 的日志系统
+- `GLM` 数学库接入与自定义 formatter
+- 基于 CMake 的第三方依赖组织与输出目录管理
+
+当前已经具备一个可持续扩展的运行骨架：
+
+```text
+Sandbox
+  -> 定义客户端 Layer / Application
+  -> 调用 Hazel 暴露的公共 API
+
+Hazel
+  -> 管理应用生命周期
+  -> 管理 LayerStack
+  -> 管理窗口与事件桥接
+  -> 管理 ImGui 生命周期
+  -> 管理输入查询与日志系统
+```
+
+---
+
+## 2. 项目定位
+
+这个项目当前阶段的核心目标，不是堆叠大量高层功能，而是先解决以下工程问题：
 
 1. **如何划分引擎与客户端的职责边界**
-2. **如何让程序生命周期有统一入口与统一调度者**
-3. **如何屏蔽平台窗口和原生回调细节**
-4. **如何为后续新增系统预留合理的扩展点**
+2. **如何建立清晰可扩展的主循环**
+3. **如何屏蔽 GLFW / OpenGL 细节**
+4. **如何为 Layer、ImGui、输入系统预留统一挂载点**
+5. **如何让未来的渲染抽象顺利落地**
 
-因此，当前版本更加重视：
+因此当前版本更强调：
 
 - 模块职责是否清晰
 - 依赖方向是否合理
 - 主循环与事件链是否顺畅
-- 工程组织是否便于扩展和维护
-
-而不是立即实现完整渲染器、资源管理器或编辑器。
+- OpenGL / GLFW / GLAD 初始化顺序是否正确
+- 工程组织是否便于继续演进
 
 ---
 
-## 2. 工程整体结构
+## 3. 工程整体结构
 
-项目整体可以分为三层：
-
-### 2.1 根工程层
+### 3.1 根工程层
 根目录负责整个工程的构建组织。
 
 根 `CMakeLists.txt` 主要承担以下职责：
 
 - 设置全局 C++ 标准与编译选项
 - 配置 MSVC 运行时库策略
-- 引入第三方库 GLFW
+- 引入第三方库 `GLFW`、`GLAD`、`ImGui`、`GLM`
 - 统一二进制输出目录
 - 组织 `Hazel` 与 `Sandbox` 两个子项目
 
 这一层不直接实现引擎逻辑，而是作为整个项目的构建与输出管理中心。
 
-### 2.2 Hazel 引擎层
-`Hazel` 目前构建为一个 **共享库（DLL）**，用于承载引擎核心逻辑。
+### 3.2 Hazel 引擎层
+`Hazel` 当前构建为一个 **共享库（DLL）**，承载引擎核心逻辑。
 
 当前主要包含以下模块：
 
 - `Application`：应用主控层
 - `Window`：窗口抽象接口
-- `WindowsWindow`：Windows 平台窗口实现
+- `WindowsWindow`：基于 GLFW 的 Windows 平台窗口实现
 - `Event` 体系：事件描述与事件分发
+- `Layer` / `LayerStack`
+- `Input` / `WindowsInput`
+- `ImGuiLayer`
 - `Log`：日志系统
 - `EntryPoint`：程序入口桥接
+- `SpdlogFormatters`：GLM 与 Event 的日志格式化支持
 
-Hazel 的职责是提供**统一的运行框架和基础设施**，而不是具体业务内容。
+Hazel 的职责是提供统一的运行框架和基础设施，而不是直接承载客户端业务。
 
-### 2.3 Sandbox 客户端层
-`Sandbox` 是一个最小客户端示例程序。
+### 3.3 Sandbox 客户端层
+`Sandbox` 是最小客户端示例程序。
 
-它当前只做两件事：
+它当前主要做三件事：
 
 - 继承 `Hazel::Application`
-- 实现 `Hazel::CreateApplication()`
-
-也就是说，客户端并不掌控底层启动流程，它只是把“要运行的应用对象”交给引擎，由引擎统一调度程序生命周期。
-
----
-
-## 3. 架构设计思路
-
-### 3.1 核心理念
-当前工程的核心设计思想可以概括为一句话：
-
-> **客户端定义应用，引擎驱动应用，平台实现细节被封装在引擎内部。**
-
-从依赖关系上看，当前结构大致如下：
-
-```text
-Sandbox
-  -> 依赖 Hazel 暴露的公共接口
-  -> 提供 CreateApplication()
-
-Hazel
-  -> 管理应用生命周期
-  -> 管理窗口抽象
-  -> 封装平台窗口实现
-  -> 封装事件系统
-  -> 封装日志系统
-```
-
-这样做的直接收益是：
-
-- 客户端不会直接接触底层平台 API
-- 平台事件不会直接泄漏到上层业务代码
-- 运行主流程由引擎统一控制
-- 后续扩展新系统时有稳定挂载点
-
-### 3.2 当前阶段的架构价值
-目前的代码量并不算大，但从工程角度看，主干已经形成：
-
-- 有统一入口
-- 有统一主循环
-- 有统一事件入口
-- 有窗口抽象层
-- 有平台实现层
-- 有客户端注入方式
-
-这说明项目已经从“零散实验代码”进入了“具备连续扩展能力的工程骨架”阶段。
+- 在构造时压入一个 `ExampleLayer`
+- 使用 `Input` 与事件系统验证引擎主链是否可用
 
 ---
 
@@ -127,86 +112,66 @@ Hazel
 当前项目采用“**客户端提供应用对象，引擎提供主入口**”的启动模式。
 
 ### 4.1 启动流程
-整体流程如下：
-
-1. 客户端在 `Sandbox` 中实现 `Hazel::CreateApplication()`
-2. 引擎入口文件中定义 `main`
-3. 程序启动后先初始化日志系统
-4. 通过 `CreateApplication()` 创建客户端应用对象
-5. 调用 `Application::Run()` 进入主循环
-6. 程序退出时释放应用对象
-
-可以概括为：
 
 ```text
 main
   -> Log::Init()
   -> CreateApplication()
+  -> Application 构造
+       -> Window::Create()
+       -> WindowsWindow::Init()
+       -> 创建 ImGuiLayer 并压入 LayerStack
   -> Application::Run()
-  -> Application 销毁
+       -> OpenGL 清屏
+       -> Layer::OnUpdate()
+       -> ImGui Begin/End
+       -> glfwPollEvents + glfwSwapBuffers
+  -> Application 析构
 ```
 
-### 4.2 这种方式的好处
-#### 统一初始化顺序
-所有客户端都走相同的初始化与退出流程，避免多个程序各自写出不同的入口逻辑。
+### 4.2 当前价值
 
-#### 限制客户端职责
-客户端不需要处理窗口创建、日志初始化或底层消息循环，只需要描述自己的应用对象。
+这种结构的好处是：
 
-#### 方便后续扩展
-未来若要在启动阶段加入：
-
-- 渲染系统初始化
-- 资源系统初始化
-- 调试层初始化
-- 编辑器相关准备逻辑
-
-都可以由引擎入口统一处理，而不必修改每个客户端项目。
+- 所有客户端都走同一套启动与退出流程
+- 客户端不需要自己写窗口初始化或原生消息循环
+- 后续若加入渲染器、资源系统、编辑器初始化，可以统一放在引擎入口或 `Application` 中管理
 
 ---
 
 ## 5. Application：应用主控层
 
-`Application` 是当前运行时的总调度器，也是现阶段架构中最重要的中心对象。
+`Application` 是当前运行时的总调度器，也是现阶段架构中的中心对象。
 
 ### 5.1 当前职责
-`Application` 目前承担以下职责：
 
-- 创建窗口对象
-- 持有窗口生命周期
-- 注册事件回调
-- 维护主循环
-- 接收并分发事件
+- 创建并持有主窗口
+- 注册窗口事件回调
+- 管理主循环
+- 管理 `LayerStack`
+- 驱动 `ImGuiLayer`
 - 决定程序何时退出
 
 ### 5.2 当前运行逻辑
-其工作流程大致为：
 
-1. 构造时创建 `Window`
-2. 将自身 `OnEvent` 绑定为窗口回调
-3. 在 `Run()` 中执行循环
-4. 每帧完成基础更新与窗口刷新
-5. 当收到关闭事件时退出循环
+当前主循环大致如下：
 
-### 5.3 为什么需要这一层
-把 `Application` 作为核心调度器有几个显著优点：
+1. 调用基础 OpenGL 清屏
+2. 遍历 `LayerStack` 执行 `OnUpdate()`
+3. 让 `ImGuiLayer` 开始一帧 ImGui
+4. 遍历 `LayerStack` 执行 `OnImGuiRender()`
+5. 让 `ImGuiLayer` 提交 ImGui DrawData
+6. 调用窗口 `OnUpdate()`，完成事件轮询与缓冲交换
 
-#### 生命周期集中管理
-程序不再依赖分散在 `main` 或平台代码中的零碎逻辑，而是由一个明确对象统一管理。
+### 5.3 所有权注意事项
 
-#### 形成系统挂载点
-以后要加入：
+当前 `LayerStack` **拥有所有 layer/overlay 的生命周期**，会在析构时统一 `delete`。
+因此 `Application` 中缓存的 `m_ImGuiLayer` 只是一个 **non-owning 指针**，
+方便每帧调用 `Begin()` / `End()`，但不负责释放。
 
-- `LayerStack`
-- `Renderer`
-- `Scene`
-- `ImGuiLayer`
-- `InputSystem`
-
-都可以围绕 `Application` 逐步扩展。
-
-#### 保持客户端轻量
-客户端不需要知道程序主循环如何跑，只需要告诉引擎“我要运行哪个应用”。
+- 若把 `ImGuiLayer` 同时交给 `std::unique_ptr` 和 `LayerStack` 管理
+- 应用退出时会发生 **双重析构**
+- 最终表现为崩溃、heap corruption 或 heap overflow
 
 ---
 
@@ -215,55 +180,96 @@ main
 当前工程并没有让 `Application` 直接依赖 GLFW，而是先定义了一个抽象接口 `Window`。
 
 ### 6.1 当前暴露能力
-`Window` 当前主要提供：
 
 - 窗口更新
 - 获取窗口尺寸
 - 设置事件回调
 - 控制垂直同步
 - 查询垂直同步状态
+- 获取原生窗口句柄
 - 通过工厂函数创建平台窗口实现
 
 ### 6.2 设计意义
-这层抽象非常关键，因为它决定了上层看到的是“窗口能力”，而不是“某个具体平台库的细节”。
 
-#### 隔离平台 API
-`Application` 不需要知道 GLFW 的窗口类型、消息处理方式或回调注册细节。
+这层抽象的价值在于：
 
-#### 明确依赖方向
-高层逻辑依赖抽象接口，而不是依赖平台实现。
-
-#### 为后续扩展预留空间
-虽然当前只有 Windows 平台实现，但这一层已经为未来加入更多平台或更多图形后端保留了接口边界。
+- 上层依赖“窗口能力”，而不是具体平台 API
+- `Application` 不需要知道 GLFW 窗口类型和回调细节
+- 后续若切换平台或引入 `GraphicsContext`，有明确边界可扩展
 
 ---
 
-## 7. WindowsWindow：Windows 平台窗口实现
+## 7. WindowsWindow：GLFW + OpenGL + GLAD 初始化链路
 
-`WindowsWindow` 是 `Window` 的 Windows 版本实现，目前基于 **GLFW** 完成窗口与消息层的基础封装。
+`WindowsWindow` 打通了：
+
+- GLFW 窗口系统
+- OpenGL 上下文
+- GLAD 函数加载
+- Hazel 事件系统
 
 ### 7.1 当前职责
-这部分代码当前主要负责：
 
 - 初始化 GLFW
-- 创建原生窗口
-- 设置 OpenGL 上下文
-- 保存窗口相关数据
+- 创建 GLFWwindow
+- 绑定当前 OpenGL 上下文
+- 使用 GLAD 加载 OpenGL 函数地址
 - 注册 GLFW 回调
-- 轮询窗口消息
-- 交换前后缓冲
+- 把平台输入转成 Hazel 事件
+- 轮询消息并交换缓冲
 
-### 7.2 当前价值
-这一层的价值在于：
+### 7.2 初始化顺序为什么不能错
 
-#### 把平台细节集中管理
-所有窗口平台相关逻辑都被收敛到了 `Platform/Windows` 下，工程结构更加清楚。
+当前实现中最关键的顺序是：
 
-#### 降低上层耦合
-上层只知道 `Window`，不知道 GLFW 回调、窗口句柄或上下文绑定细节。
+```text
+glfwCreateWindow
+  -> glfwMakeContextCurrent
+  -> gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)
+```
 
-#### 为多平台演化打基础
-后续如果要扩展 Linux / macOS 平台实现，已有清晰的组织模板可沿用。
+原因如下：
+
+#### GLFW 负责“创建窗口 + 创建 OpenGL 上下文”
+`glfwCreateWindow()` 不只是生成一个 OS 窗口，它还会附带创建 OpenGL context。
+
+#### `glfwMakeContextCurrent()` 负责把这个 context 绑定到当前线程
+OpenGL 的绝大部分函数都依赖“当前线程已经有当前上下文”。
+如果上下文没绑定，就没有可供 GLAD 查询的有效函数入口。
+
+#### GLAD 只负责“加载函数指针”，不负责创建 context
+`gladLoadGLLoader()` 的本质，是通过 `glfwGetProcAddress` 把当前上下文可用的 OpenGL 函数地址解析出来。
+所以如果在 `glfwMakeContextCurrent()` 之前就调用 GLAD，
+通常会导致函数指针加载失败，后续任何 OpenGL 调用都不可靠。
+
+### 7.3 回调桥接逻辑
+
+`WindowsWindow` 当前使用 `glfwSetWindowUserPointer(m_Window, &m_Data)`
+把 Hazel 自己的窗口状态挂到原生 `GLFWwindow` 上。
+
+这样在 GLFW 的匿名回调里就能这样做：
+
+```text
+GLFW callback
+  -> 取回 WindowData
+  -> 构造 Hazel Event
+  -> 调用 EventCallback
+```
+
+这一步的意义是：
+
+- 平台回调只存在于平台层
+- 上层永远面对 Hazel 的事件对象，而不是 GLFW 原始参数
+- Application、Layer、ImGui 等系统都能消费统一事件语义
+
+### 7.4 OnUpdate 做了什么
+
+当前 `WindowsWindow::OnUpdate()` 主要做两件事：
+
+1. `glfwPollEvents()`：驱动 GLFW 处理消息并触发回调
+2. `glfwSwapBuffers(m_Window)`：把本帧 OpenGL 渲染结果显示到屏幕上
+
+这意味着当前主循环里的 OpenGL 绘制，最终都要依赖这里完成呈现。
 
 ---
 
@@ -272,6 +278,7 @@ main
 事件系统是当前工程中最完整、最有“引擎骨架感”的模块之一。
 
 ### 8.1 当前组成
+
 目前事件系统已经包含：
 
 - 事件基类 `Event`
@@ -294,6 +301,7 @@ main
 #### 键盘事件
 - `KeyPressedEvent`
 - `KeyReleasedEvent`
+- `KeyTypedEvent`
 
 #### 鼠标事件
 - `MouseMovedEvent`
@@ -302,83 +310,212 @@ main
 - `MouseButtonReleasedEvent`
 
 ### 8.2 事件流转路径
-当前事件从平台输入到应用处理的路径为：
 
 ```text
 GLFW Callback
   -> WindowsWindow 捕获平台事件
-  -> 转换为 Hazel Event 对象
-  -> 调用已注册的 EventCallback
+  -> 构造 Hazel Event 对象
+  -> 调用注册的 EventCallback
   -> Application::OnEvent(Event&)
-  -> EventDispatcher 按类型分发
+  -> 先处理 Application 级事件
+  -> 再由 LayerStack 从栈顶向下逆序传播
 ```
 
-### 8.3 这套设计的意义
-#### 统一事件语义
-上层只面对 Hazel 自己的事件类型，而不直接处理 GLFW 原始回调参数。
+### 8.3 当前设计意义
 
-#### 解耦平台层与应用层
-平台负责“捕获事件”，引擎负责“表达事件”，应用负责“处理事件”。
-
-#### 便于后续扩展 Layer 体系
-未来引入 `Layer` 与 `LayerStack` 后，事件可以沿同一条链继续向不同层传播。
-
-#### 调试体验更好
-事件在进入应用层后可以统一记录日志，方便观察系统交互。
+- 统一事件语义
+- 解耦平台层与应用层
+- 为 Layer / Overlay 的事件消费顺序提供基础
+- 便于日志记录和调试
 
 ---
 
-## 9. 日志系统
+## 9. Layer / LayerStack
 
-项目当前封装了一套基于 **spdlog** 的日志系统。
+相比更早阶段，当前工程已经加入 `Layer` 和 `LayerStack`。
 
-### 9.1 当前结构
-日志系统主要包含：
+### 9.1 当前组织方式
 
-- `Log::Init()`：初始化日志器
-- Core Logger：引擎内部日志
-- Client Logger：客户端日志
-- 一组日志宏和断言宏
+`LayerStack` 使用一个 `std::vector<Layer*>` 存储所有层对象，
+并用 `m_LayerInsertIndex` 记录普通 Layer 与 Overlay 的分界线：
 
-### 9.2 设计意图
-日志系统属于基础设施层，其目标不是提供复杂功能，而是提供统一、稳定、低门槛的调试出口。
+- `[0, m_LayerInsertIndex)`：普通层
+- `[m_LayerInsertIndex, end())`：Overlay
 
-### 9.3 当前优势
-#### 区分引擎日志与客户端日志
-这能让调试时快速判断：
+### 9.2 为什么用索引而不是 iterator
 
-- 问题发生在引擎内部
-- 还是发生在客户端逻辑中
+当前代码已经从“缓存 `vector` iterator”改成了“缓存索引”的方式。
+这是因为：
 
-#### 为后续调试与诊断提供基础
-随着系统变复杂，日志与断言会成为定位问题的第一手工具。
+- `std::vector` 扩容后，iterator 很容易失效
+- 但“插入边界是第几个位置”这个语义，用索引表达更稳定
+
+这对于需要频繁插入普通 Layer / Overlay 的结构更安全。
+
+### 9.3 当前注意事项
+
+当前 `LayerStack::~LayerStack()` 会统一 `delete` 所有 layer。
+因此：
+
+- 外部缓存裸指针时，只能把它当作 non-owning 句柄使用
+- `PopLayer/PopOverlay()` 当前只移除，不立即 delete
+- 若后续希望在 Pop 时立即销毁，需要统一所有权策略
 
 ---
 
-## 10. 当前渲染相关状态
+## 10. Input 系统
 
-当前工程已经能够完成最基础的 OpenGL 清屏调用，这说明以下链路已经打通：
+当前工程已经有了 `Input` 抽象与 `WindowsInput` 平台实现。
+
+### 10.1 当前风格
+
+输入系统当前采用“**事件 + 轮询并存**”的模式：
+
+- 事件系统负责描述“发生了什么输入事件”
+- `Input` 查询接口负责读取“当前状态是什么”
+
+例如：
+
+- `KeyPressedEvent` 适合事件分发
+- `Input::IsKeyPressed(...)` 适合在 `OnUpdate()` 中持续查询按键状态
+
+### 10.2 WindowsInput 的实现基础
+
+当前 `WindowsInput` 完全基于 GLFW 的轮询接口：
+
+- `glfwGetKey`
+- `glfwGetMouseButton`
+- `glfwGetCursorPos`
+
+### 10.3 当前限制
+
+当前所有输入查询都默认从主窗口读取。
+因此在多窗口编辑器场景下，后续还需要进一步处理：
+
+- 焦点窗口是谁
+- 输入是否应被 ImGui 拦截
+- 多视口状态下如何决定输入归属
+
+---
+
+## 11. ImGui 集成
+
+当前工程已经集成 ImGui，并启用了：
+
+- Keyboard Navigation
+- Docking
+- Multi-Viewport
+
+### 11.1 当前职责
+
+`ImGuiLayer` 当前负责：
+
+- 创建 / 销毁 ImGui Context
+- 初始化 `imgui_impl_glfw` backend
+- 初始化 `imgui_impl_opengl3` backend
+- 每帧执行 Begin / End
+- 展示 DemoWindow 作为集成验证
+
+### 11.2 Docking / Viewport 目前意味着什么
+
+这说明项目已经从“单窗口 OpenGL 主循环”向“编辑器风格 UI 骨架”前进一步。
+当前虽然还没有自己的面板系统，但底层所需的关键能力已经接通：
+
+- 可停靠窗口
+- 可拖出主窗口的子视口
+- 多平台窗口渲染链路
+
+### 11.3 Multi-Viewport 下最关键的 OpenGL 注意事项
+
+在 `ImGuiLayer::End()` 中，当前已经做了：
+
+```text
+backup_current_context = glfwGetCurrentContext()
+ImGui::UpdatePlatformWindows()
+ImGui::RenderPlatformWindowsDefault()
+glfwMakeContextCurrent(backup_current_context)
+```
+
+这一步非常重要。
+
+原因是：
+
+- 开启多视口后，ImGui 可能在渲染额外平台窗口时切换 OpenGL context
+- 如果不在结束后恢复主窗口上下文
+- 下一帧主窗口的 OpenGL 调用或 `glfwSwapBuffers` 可能会作用在错误的 context 上
+
+对 **GLFW + OpenGL** 组合来说，这一步通常是必须的。
+
+### 11.4 当前日志系统还没有直接输出到 ImGui 子视口
+
+虽然工程已经有 ImGui Demo 窗口和 docking/viewports，
+但当前 `Log::Init()` 仍然只挂了控制台 sink，日志依旧输出到 VS Code 终端或外部控制台。
+
+如果后续希望在 ImGui 内做真正的 Log 面板，需要继续补：
+
+- 自定义 spdlog sink
+- 日志缓冲区
+- ImGui 日志面板绘制逻辑
+
+---
+
+## 12. 日志系统与 formatter
+
+当前日志系统基于 **spdlog**，并在这版里补齐了对自定义类型的直接输出支持。
+
+### 12.1 当前结构
+
+- `Log::Init()`：初始化 Core / Client logger
+- `HAZEL_CORE_*`：引擎日志宏
+- `HAZEL_CLIENT_*`：客户端日志宏
+- `EventFormatters.h`：支持直接输出 `Hazel::Event`
+- `GLMFormatters.h`：支持直接输出 `glm::vec*` / `glm::mat4`
+
+### 12.2 当前价值
+
+你现在已经可以直接这样写：
+
+```cpp
+HAZEL_CORE_INFO(event);
+HAZEL_CLIENT_INFO(transform);
+```
+
+而不用手动 `ToString()` 或 `glm::to_string()`。
+
+这在调试输入事件、矩阵变换和主循环状态时非常方便。
+
+---
+
+## 13. 当前渲染相关状态
+
+当前工程已经能够完成最基础的 OpenGL 清屏和 ImGui 绘制提交，这说明以下链路已经打通：
 
 - GLFW 窗口创建成功
 - OpenGL 上下文建立成功
-- 主循环能够驱动图形调用
+- GLAD 函数加载成功
+- 主循环能够驱动 OpenGL 调用
+- ImGui OpenGL3 backend 能够提交 DrawData
 
 但需要明确的是：
 
-> 当前仍处于“能发起基础图形调用”的阶段，还没有形成真正独立的渲染抽象层。
+> 当前仍处于“OpenGL 调用链验证已经打通，但渲染抽象尚未建立”的阶段。
 
-也就是说，当前还没有正式建立：
+当前还没有正式形成：
 
 - `GraphicsContext`
 - `Renderer`
 - `RenderCommand`
 - `RendererAPI`
 
-因此这部分更适合被视为**渲染主干验证**，而不是完整渲染系统。
+因此这部分更适合被视为：
+
+> **主循环 + OpenGL + ImGui 集成验证阶段**
+
+而不是完整渲染系统。
 
 ---
 
-## 11. 目录结构说明
+## 14. 目录结构说明
 
 当前工程目录可概括为：
 
@@ -394,21 +531,26 @@ HazelEngine/
 │  │  ├─ Hazelpch.cpp
 │  │  ├─ Hazel/
 │  │  │  ├─ Application.h / Application.cpp
-│  │  │  ├─ Core.h
-│  │  │  ├─ EntryPoint.h
-│  │  │  ├─ Log.h / Log.cpp
 │  │  │  ├─ Window.h
-│  │  │  └─ Events/
-│  │  │     ├─ Event.h
-│  │  │     ├─ ApplicationEvent.h
-│  │  │     ├─ KeyEvent.h
-│  │  │     └─ MouseEvent.h
+│  │  │  ├─ Layer.h / Layer.cpp
+│  │  │  ├─ LayerStack.h / LayerStack.cpp
+│  │  │  ├─ Log.h / Log.cpp
+│  │  │  ├─ input.h / input.cpp
+│  │  │  ├─ KeyCodes.h / MouseCodes.h
+│  │  │  ├─ ImGui/
+│  │  │  │  ├─ ImGuiLayer.h / ImGuiLayer.cpp
+│  │  │  │  └─ ImGuiBuild.cpp
+│  │  │  ├─ Events/
+│  │  │  └─ SpdlogFormatters/
 │  │  └─ Platform/
 │  │     └─ Windows/
-│  │        ├─ WindowsWindow.h
-│  │        └─ WindowsWindow.cpp
+│  │        ├─ WindowsWindow.h / WindowsWindow.cpp
+│  │        └─ WindowsInput.h / WindowsInput.cpp
 │  └─ vendor/
 │     ├─ glfw/
+│     ├─ GLAD/
+│     ├─ glm/
+│     ├─ imgui/
 │     └─ spdlog/
 └─ Sandbox/
    ├─ CMakeLists.txt
@@ -416,101 +558,111 @@ HazelEngine/
       └─ Sandbox.cpp
 ```
 
-### 11.1 各目录职责
-#### 根目录
-负责组织整个工程的构建规则与输出路径。
-
-#### Hazel/
-负责存放引擎核心代码与第三方依赖。
-
-#### Hazel/src/Hazel/
-负责存放平台无关的引擎核心模块。
-
-#### Hazel/src/Platform/
-负责存放平台相关实现，当前主要是 Windows 窗口实现。
-
-#### Sandbox/
-负责存放最小客户端示例，用于验证引擎主干是否可运行。
-
 ---
 
-## 12. 构建系统说明
+## 15. 构建系统说明
 
-### 12.1 当前工具链
+### 15.1 当前工具链
+
 项目当前使用：
 
 - **C++20**
 - **CMake 3.28+**
-- **MSVC / Visual Studio**
+- **MSVC / Visual Studio / VS Code + CMake Tools**
 - **GLFW**
+- **GLAD**
+- **Dear ImGui**
+- **GLM**
 - **spdlog**
 
-### 12.2 输出目录组织
-当前根工程对输出目录进行了统一管理，构建产物主要输出到：
+### 15.2 输出目录组织
+
+当前根工程统一输出到：
 
 - `out/bin`：动态库与可执行程序
 - `out/lib`：库文件
 - `out/pdb`：调试符号（MSVC）
 
-这种方式可以避免不同目标把构建产物散落在各自子目录中。
+这种方式便于集中查看构建产物。
 
-### 12.3 预设配置
-项目中已经提供 `CMakePresets.json`，用于快速生成 Visual Studio 工程并指向统一的构建目录。
+### 15.3 当前第三方接入说明
+
+- `GLFW`：窗口、输入回调、上下文管理
+- `GLAD`：OpenGL 函数指针加载
+- `Dear ImGui`：调试 UI、Docking、多视口
+- `GLM`：数学类型与变换函数
+- `spdlog`：日志输出
 
 ---
 
-## 13. 构建与运行
+## 16. 构建与运行
 
-### 13.1 环境要求
+### 16.1 环境要求
+
 建议使用以下环境：
 
 - Windows
 - Visual Studio / MSVC
 - CMake 3.28 或以上
 
-### 13.2 配置工程
+### 16.2 配置工程
 
 ```bash
 cmake --preset msvc-debug
 ```
 
-### 13.3 编译 Sandbox
+### 16.3 编译 Sandbox
 
 ```bash
 cmake --build out/build/msvc-debug --config Debug --target Sandbox
 ```
 
-### 13.4 运行结果
-编译完成后运行 `Sandbox`，程序当前会：
+### 16.4 运行结果
+
+当前程序运行后会：
 
 - 初始化日志系统
-- 创建窗口
+- 创建 GLFW 窗口与 OpenGL context
+- 使用 GLAD 加载 OpenGL 函数
 - 进入主循环
-- 进行基础清屏
-- 接收窗口与输入事件
-- 输出相关日志信息
+- 执行基础清屏
+- 接收并分发窗口/键盘/鼠标事件
+- 运行 ImGui Demo 窗口
+- 支持 Docking 与 Multi-Viewport 验证
+- 在 Sandbox 中验证输入查询链路
 
 ---
 
-## 14. 客户端接入方式
+## 17. 客户端接入方式
 
-当前客户端接入方式非常轻量。
-
-客户端只需：
+当前客户端接入方式仍然保持轻量：
 
 1. 继承 `Hazel::Application`
-2. 实现 `Hazel::CreateApplication()`
+2. 在构造函数里压入自己的 Layer
+3. 实现 `Hazel::CreateApplication()`
 
 示例：
 
 ```cpp
 #include "Hazel.h"
 
+class ExampleLayer : public Hazel::Layer
+{
+public:
+    void OnUpdate() override
+    {
+        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_TAB))
+            HAZEL_CLIENT_TRACE("Tab key is pressed!");
+    }
+};
+
 class Sandbox : public Hazel::Application
 {
 public:
-    Sandbox() = default;
-    ~Sandbox() = default;
+    Sandbox()
+    {
+        PushLayer(new ExampleLayer());
+    }
 };
 
 Hazel::Application* Hazel::CreateApplication()
@@ -519,126 +671,91 @@ Hazel::Application* Hazel::CreateApplication()
 }
 ```
 
-### 14.1 这种接入方式的好处
-#### 降低接入成本
-客户端不需要关心主入口、窗口初始化、主循环驱动等底层细节。
+---
 
-#### 保持主流程统一
-所有应用都必须通过 Hazel 的统一入口运行，避免不同客户端项目各写一套生命周期逻辑。
+## 18. 当前架构的优点
+
+### 18.1 主干链路已经明显比早期更完整
+当前不仅有主循环和事件系统，还补齐了：
+
+- Layer 运行结构
+- ImGui 骨架
+- 输入查询接口
+- 常用数学类型和日志格式化能力
+
+### 18.2 GLFW / OpenGL / GLAD 链路已经清晰可控
+这对后续抽离 `GraphicsContext` 和渲染抽象非常关键。
+
+### 18.3 平台细节被较好地限制在平台层与 ImGui backend 层
+大部分上层逻辑不需要直接处理 GLFW 原生对象或 OpenGL 初始化顺序。
+
+### 18.4 已具备“编辑器雏形”所需的 UI 基础能力
+虽然还没有真正的面板系统，但 Docking 与 Viewports 已经把底层准备好了。
 
 ---
 
-## 15. 当前架构的优点
+## 19. 当前存在的不足
 
-尽管当前功能仍然有限，但从工程设计角度看，这套骨架已经具备比较明确的优势。
+当前工程已经具备较好的主干，但仍处在较早期阶段。
 
-### 15.1 职责划分清楚
-- `Application`：负责程序生命周期与主循环
-- `Window`：负责窗口能力抽象
-- `WindowsWindow`：负责平台实现
-- `Event`：负责统一描述系统事件
-- `Sandbox`：负责客户端应用定义
+### 19.1 渲染抽象尚未建立
+仍然是基础 OpenGL 清屏与 ImGui 提交，尚无 Renderer 级抽象。
 
-### 15.2 平台细节被隔离
-GLFW 回调、上下文绑定和窗口刷新等细节都被收敛在平台层，而不是散落到整个工程中。
+### 19.2 日志系统仍然只输出到控制台
+尚未接入 ImGui 日志面板 sink。
 
-### 15.3 依赖方向基本合理
-客户端依赖 Hazel，Hazel 上层依赖抽象接口，平台实现位于底层。整体方向健康。
+### 19.3 输入系统仍然与主窗口绑定较强
+未来进入多窗口编辑器阶段，需要更细的焦点与输入路由设计。
 
-### 15.4 主流程已经打通
-从程序入口到窗口创建、主循环、事件接收再到事件分发，这条主链已经完整可运行。
+### 19.4 LayerStack 的所有权约定仍然偏原始
+当前基于裸指针 + owning container，后续可考虑更现代的生命周期管理方式。
 
-### 15.5 具备继续扩展的基础
-后续新增渲染系统、Layer、输入系统或编辑器功能时，不需要推翻当前主干，只需要沿现有架构继续扩展。
+### 19.5 更高层系统尚未建立
+场景、实体、资源、时间系统、渲染抽象、编辑器面板系统都还没正式开始构建。
 
 ---
 
-## 16. 当前存在的不足
+## 20. 建议的后续演进方向
 
-当前工程已经具备了较好的主干，但仍然处在较早期阶段，很多系统尚未正式建立。
+结合当前实际进度，更合理的下一步通常包括：
 
-### 16.1 缺少 Layer / LayerStack
-当前事件与更新逻辑主要集中在 `Application`，还没有向多个层传播的机制。
+1. **抽离 `GraphicsContext`**
+   把窗口管理与图形上下文初始化拆开。
 
-### 16.2 渲染抽象尚未建立
-当前仍然是基础 OpenGL 调用测试，还没有独立的渲染接口与命令层。
+2. **建立 `Renderer` / `RenderCommand` 抽象**
+   逐步把 `Application::Run()` 中的直接 OpenGL 调用移出去。
 
-### 16.3 输入系统尚未独立
-虽然输入事件已经可以接收，但还没有统一的状态查询接口。
+3. **补齐 `Timestep`**
+   让 Layer 更新不再完全依赖帧率。
 
-### 16.4 缺少时间系统
-当前主循环还没有 timestep 或帧时间管理机制。
+4. **补 ImGui 日志面板与调试面板体系**
+   让日志、统计信息、Hierarchy/Inspector 拥有自己的面板。
 
-### 16.5 缺少更高层运行时系统
-场景、实体、资源、编辑器等系统目前都还没有开始构建。
+5. **完善输入系统与事件吞噬策略**
+   尤其是在 Docking + Viewports 场景下，理清 ImGui 与游戏层的输入优先级。
 
-因此，当前版本更适合被定义为：
-
-> **一个主干已经形成、但系统仍在逐步补齐的早期引擎工程。**
-
----
-
-## 17. 建议的后续演进方向
-
-从当前结构出发，比较合理的下一步通常包括：
-
-### 17.1 引入 Layer / LayerStack
-将事件传播与更新逻辑从单一 `Application` 扩展到多层结构。
-
-### 17.2 建立 Renderer 抽象
-把当前直接写在主循环中的图形调用逐步抽离出去。
-
-### 17.3 拆出 GraphicsContext
-进一步分离“窗口管理”和“图形上下文管理”的职责。
-
-### 17.4 建立 Input 系统
-支持统一的键盘和鼠标状态查询。
-
-### 17.5 引入 Timestep
-为更新逻辑提供时间尺度支持，避免逻辑完全依赖帧率。
-
-### 17.6 增加工具层与编辑器基础设施
-为后续调试 UI、编辑器面板和引擎工具链做准备。
-
-### 17.7 构建 Scene / Entity 系统
-在底层主干稳定后继续向更高层功能扩展。
+6. **引入更高层运行时系统**
+   包括 Scene、Entity、资源系统和编辑器基础设施。
 
 ---
 
-## 18. 项目现阶段的合理理解
+## 21. 总结
 
-Hazel Engine 当前最重要的成果，不是“已经完成了多少功能”，而是：
-
-- 工程边界已经开始清晰
-- 系统职责已经开始分层
-- 依赖关系已经有了基础秩序
-- 运行主流程已经能够闭环
-
-这正是一个引擎项目在早期最值得重视的部分。
-
-如果把当前版本定义为一个阶段性成果，那么它更像是：
-
-> **一个以架构验证为核心目标的早期引擎骨架。**
-
-在这个阶段，最重要的不是功能数量，而是结构是否足够健康，能否支撑后续持续演进。
-
----
-
-## 19. 总结
-
-当前 Hazel Engine 已经具备了一个轻量引擎项目应有的最基本骨架：
+当前 Hazel Engine 已经不只是“窗口跑起来了”的阶段，而是形成了一套比较完整的早期引擎骨架：
 
 - 有统一入口
 - 有统一主循环
 - 有窗口抽象层
 - 有平台实现层
 - 有统一事件系统
-- 有日志系统
-- 有客户端接入机制
+- 有 Layer / Overlay 结构
+- 有输入系统
+- 有 ImGui 集成
+- 有日志系统与 formatter 支持
 - 有清晰的构建组织方式
 
 虽然它距离完整引擎还有很长的路要走，但从工程设计的角度看，当前阶段已经完成了最难也最关键的一步：
 
-> **先把骨架搭对。**
+> **先把核心主链打通，并把容易踩坑的 GLFW / GLAD / OpenGL / ImGui 集成顺序理顺。**
 
-只要主干方向正确，后续的渲染、Layer、输入、编辑器、场景与工具链系统，都可以在这套结构上继续自然生长。
+在这个基础上继续长渲染系统、编辑器与场景系统，会比在零散实验代码上堆功能稳得多。

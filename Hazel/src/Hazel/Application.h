@@ -14,12 +14,13 @@ public:
     Application();
 
     virtual ~Application();
-    void Run();
-
-    void OnEvent(Event& e);
 
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
+
+    void OnEvent(Event& e);
+
+    void Run();
 
     inline static Application& GetApplication()
     {
@@ -33,6 +34,8 @@ public:
 
 private:
     bool OnWindowClose(WindowCloseEvent& e);
+
+private:
     std::unique_ptr<Window> m_Window;
     ImGuiLayer* m_ImGuiLayer;
     bool m_Running = true;
