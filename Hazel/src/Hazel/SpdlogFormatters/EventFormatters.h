@@ -5,7 +5,7 @@
 
 #include <spdlog/fmt/fmt.h>
 
-#include "Hazel/Events/Event.h"
+#include <Hazel/Events/Event.h>
 
 // 为 Hazel::Event 及其所有派生类提供统一 formatter
 template <typename T>

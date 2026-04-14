@@ -1,12 +1,17 @@
 // clang-format off
 #include "Application.h"
-#include "Hazel/Log.h"
-#include "Hazel/Events/Event.h"
-#include "Hazel/Events/ApplicationEvent.h"
+
+#include <Hazel/Core/Log.h>
+
+#include <Hazel/Core/Core.h>
+#include <Hazel/Core/LayerStack.h>
+#include <Hazel/Core/Window.h>
+
+#include <Hazel/Events/ApplicationEvent.h>
+
+#include <Hazel/ImGui/ImGuiLayer.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 // clang-format on
 
 namespace Hazel
@@ -58,7 +63,7 @@ void Application::OnEvent(Event& e)
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<WindowCloseEvent>(HAZEL_BIND_EVENT_FN(Application::OnWindowClose));
 
-    HAZEL_CORE_TRACE("{}", e.ToString());
+    HAZEL_CORE_TRACE(e);
 
     // 事件从栈顶往下传播，上层 UI/Overlay 优先拦截
     // 一旦某层将事件标记为 Handled，则停止继续向下传播
@@ -72,10 +77,6 @@ void Application::OnEvent(Event& e)
 
 void Application::Run()
 {
-    // 这里保留一个简单的 GLM 输出测试
-    // 用于验证 spdlog formatter 是否已经支持 glm::mat4
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 2.0f, 3.0f));
-    HAZEL_CLIENT_INFO(transform);
 
     while (m_Running)
     {

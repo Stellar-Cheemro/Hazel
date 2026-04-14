@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Hazel/Core.h"
-#include "Hazel/Events/Event.h"
+#include <Hazel/Core/Core.h>
+#include <Hazel/Events/Event.h>
 
+#include <string>
 namespace Hazel
 {
 class HAZEL_API Layer

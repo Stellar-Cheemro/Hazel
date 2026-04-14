@@ -1,21 +1,27 @@
 add_library(Hazel SHARED
-    src/Hazel/Application.cpp
-    src/Hazel/Log.cpp
-    src/Hazelpch.cpp
+    src/Hazel/Core/Application.cpp
+    src/Hazel/Core/Log.cpp
+    src/Hazel/Core/LayerStack.cpp
+    src/Hazel/Core/Layer.cpp
+    src/Hazel/Core/MouseCodes.h
+
+
     src/Platform/Windows/WindowsWindow.cpp
-    src/Hazel/LayerStack.cpp
-    src/Hazel/Layer.cpp
+
     src/Hazel/ImGui/ImGuiLayer.cpp
+    src/Hazel/ImGui/ImGuiBuild.cpp
+
+    src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
-    src/Hazel/MouseCodes.h
+
     src/Hazel/SpdlogFormatters/EventFormatters.h
-    # src/Hazel/EntryPoint.h
+
+    src/Hazelpch.cpp
 )
 
 # include路径设置
 target_include_directories(Hazel
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm>
