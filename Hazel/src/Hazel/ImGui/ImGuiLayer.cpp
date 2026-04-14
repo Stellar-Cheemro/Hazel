@@ -95,7 +95,7 @@ void ImGuiLayer::OnDetach()
 	// 2. 再关闭平台后端
 	// 3. 最后销毁 ImGui Context
 	//
-	// 这样可以确保后端在 Shutdown 时仍然能访问到有效的 ImGui 状态。
+	// 确保后端在 Shutdown 时仍然能访问到有效的 ImGui 状态
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -113,8 +113,6 @@ void ImGuiLayer::Begin()
 	// 1. 渲染后端 NewFrame
 	// 2. 平台后端 NewFrame
 	// 3. ImGui::NewFrame()
-	//
-	// 这样平台输入状态、渲染状态和 ImGui 本身状态会一起进入“新的一帧”。
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();

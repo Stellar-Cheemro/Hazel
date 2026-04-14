@@ -11,6 +11,9 @@ class HAZEL_API LayerStack
 {
 public:
     LayerStack();
+    // 当前 LayerStack 直接持有所有 Layer* 的生命周期
+    // 因此析构时会统一 delete
+    // 不要在外部再重复 delete
     ~LayerStack();
 
     void PushLayer(Layer* layer);
@@ -28,6 +31,7 @@ public:
     }
 
 private:
+    // [Layer][Overlay]
     std::vector<Layer*> m_Layers;
     unsigned int m_LayerInsertIndex = 0;
 };

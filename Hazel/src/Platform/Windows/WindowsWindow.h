@@ -12,6 +12,16 @@ public:
     WindowsWindow(const WindowProps& props);
     virtual ~WindowsWindow();
     void OnUpdate() override;
+
+    // 窗口属性
+    inline void SetEventCallback(const EventCallbackFn& callback) override
+    {
+        m_Data.EventCallback = callback;
+    }
+
+    void SetVSync(bool enabled) override;
+    bool IsVSync() const override;
+
     inline unsigned int GetWidth() const override
     {
         return m_Data.Width;
@@ -21,14 +31,6 @@ public:
         return m_Data.Height;
     }
 
-    // 窗口属性
-    inline void SetEventCallback(const EventCallbackFn& callback) override
-    {
-        m_Data.EventCallback = callback;
-    }
-    void SetVSync(bool enabled) override;
-    bool IsVSync() const override;
-
     inline void* GetNativeWindow() const override
     {
         return m_Window;
@@ -37,6 +39,7 @@ public:
 private:
     virtual void Init(const WindowProps& props);
     virtual void Shutdown();
+    void RegisterGLFWCallbacks();
 
 private:
     GLFWwindow* m_Window;
