@@ -16,7 +16,7 @@
 
 #include <Hazel/ImGui/ImGuiLayer.h>
 
-// ---入口点----------------z
+// ---入口点-------------------
 #include <Hazel/Core/EntryPoint.h>
 // ---------------------------
 // clang-format on

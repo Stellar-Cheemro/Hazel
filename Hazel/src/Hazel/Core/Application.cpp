@@ -10,6 +10,9 @@
 #include <Hazel/Events/ApplicationEvent.h>
 
 #include <Hazel/ImGui/ImGuiLayer.h>
+
+#include <Platform/OpenGL/OpenGLBuffer.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
@@ -43,10 +46,6 @@ Application::Application()
     glGenVertexArrays(1, &m_VertexArray);
     glBindVertexArray(m_VertexArray);
 
-    // 创建 VBO 数据本体
-    glGenBuffers(1, &m_VertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
     // clang-format off
     float vertices[3 * 3] = 
     {
@@ -55,12 +54,13 @@ Application::Application()
          0.0f,  0.5f, 0.0f  // top
     };
     // clang-format on
+
     // 把顶点数据上传到 GPU
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+    m_VertexBuffer->Bind();
 
     // 设置顶点属性指针
     glEnableVertexAttribArray(0);
-
     // 参数说明：
     // 0：顶点属性位置（location = 0）
     // 3：每个顶点属性由 3 个 float 组成
@@ -70,10 +70,9 @@ Application::Application()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void*)0);
 
     // 创建 EBO 索引缓冲对象
-    glGenBuffers(1, &m_IndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
     unsigned int indices[3] = {0, 1, 2};
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+    m_IndexBuffer->Bind();
 
     std::string vertexSrc = R"(
         #version 330 core
@@ -146,7 +145,7 @@ void Application::Run()
         // 3：索引数量，这里是 3 个顶点
         // GL_UNSIGNED_INT：索引数据类型，这里是 unsigned int
         // nullptr：索引数据在 EBO 中的偏移量，这里是从头开始
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
         // 先更新普通 Layer
         for (Layer* layer : m_LayerStack)
         {
