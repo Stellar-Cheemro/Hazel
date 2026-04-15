@@ -1,8 +1,4 @@
 #include <Hazel.h>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -26,6 +22,10 @@ public:
             Hazel::KeyPressedEvent& e = static_cast<Hazel::KeyPressedEvent&>(event);
             HAZEL_CLIENT_TRACE("{0}", static_cast<char>(e.GetKeyCode()));
         }
+    }
+
+    void OnImGuiRender() override
+    {
     }
 };
 

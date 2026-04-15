@@ -11,12 +11,16 @@ add_library(Hazel SHARED
     src/Hazel/ImGui/ImGuiLayer.cpp
     src/Hazel/ImGui/ImGuiBuild.cpp
 
+    src/Hazel/Renderer/GraphicsContext.cpp
+
+    src/Platform/OpenGL/OpenGLContext.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
 
     src/Hazel/SpdlogFormatters/EventFormatters.h
 
     src/Hazelpch.cpp
+
 )
 
 # include路径设置
@@ -25,6 +29,7 @@ target_include_directories(Hazel
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -34,7 +39,6 @@ target_compile_definitions(Hazel
         HAZEL_PLATFORM_WINDOWS
     PRIVATE
         HAZEL_BUILD_DLL
-        IMGUI_IMPL_OPENGL_LOADER_CUSTOM
         $<$<CONFIG:Debug>:HAZEL_DEBUG>
         $<$<CONFIG:Release>:HAZEL_RELEASE>
         $<$<CONFIG:RelWithDebInfo>:HAZEL_RELEASE>

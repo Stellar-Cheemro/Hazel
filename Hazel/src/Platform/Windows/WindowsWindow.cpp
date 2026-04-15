@@ -7,7 +7,8 @@
 #include <Hazel/Events/KeyEvent.h>
 #include <Hazel/Events/MouseEvent.h>
 
-#include <glad/glad.h>
+#include <Platform/OpenGL/OpenGLContext.h>
+
 #include <GLFW/glfw3.h>
 // clang-format on
 
@@ -98,6 +99,7 @@ void WindowsWindow::Init(const WindowProps& props)
     // - 标题
     // - monitor：nullptr 表示窗口模式，不是全屏
     // - share：nullptr 表示不与其他窗口共享上下文
+
     // clang-format off
     m_Window = glfwCreateWindow(
         static_cast<int>(props.Width), 
@@ -107,11 +109,8 @@ void WindowsWindow::Init(const WindowProps& props)
         nullptr
     );
     // clang-format on
-    // 让这个窗口的 OpenGL context 成为当前线程的激活上下文
-    glfwMakeContextCurrent(m_Window);
-    // 使用 GLAD 加载当前平台/驱动实际提供的 OpenGL 函数指针
-    int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    HAZEL_CORE_ASSERT(status, "Failed to initialize Glad!");
+    m_Context = new OpenGLContext(m_Window);
+    m_Context->Init();
 
     // 把 Hazel 自己的窗口元数据挂到 GLFWwindow 上
     // 之后在所有 GLFW 原生回调里
@@ -239,10 +238,7 @@ void WindowsWindow::OnUpdate()
     // 并触发前面注册的 GLFW 回调
     glfwPollEvents();
 
-    // glfwSwapBuffers():
-    // 交换前台/后台缓冲，把当前帧渲染结果显示到屏幕上
-    //
-    // 如果开启了 VSync，那么交换缓冲通常会和显示器刷新同步
-    glfwSwapBuffers(m_Window);
+    // 交换前后台缓冲，把当前帧渲染结果显示到屏幕上
+    m_Context->SwapBuffers();
 }
 } // namespace Hazel
