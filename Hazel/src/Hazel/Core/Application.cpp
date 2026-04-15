@@ -74,6 +74,26 @@ Application::Application()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
     unsigned int indices[3] = {0, 1, 2};
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    std::string vertexSrc = R"(
+        #version 330 core
+        layout (location = 0) in vec3 a_Position;
+        void main()
+        {
+            gl_Position = vec4(a_Position, 1.0);
+        }
+    )";
+
+    std::string fragmentSrc = R"(
+        #version 330 core
+        layout(location = 0) out vec4 FragColor;
+        void main()
+        {
+            FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+        }
+    )";
+
+    m_Shader = std::make_unique<Shader>(vertexSrc, fragmentSrc);
 }
 Application::~Application()
 {
@@ -114,6 +134,7 @@ void Application::OnEvent(Event& e)
 void Application::Run()
 {
 
+    m_Shader->Bind();
     while (m_Running)
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -147,6 +168,7 @@ void Application::Run()
         // 2. glfwSwapBuffers()：交换前后缓冲
         m_Window->OnUpdate();
     }
+    m_Shader->Unbind();
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& e)

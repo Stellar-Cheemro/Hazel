@@ -11,8 +11,10 @@ add_library(Hazel SHARED
     src/Hazel/ImGui/ImGuiLayer.cpp
     src/Hazel/ImGui/ImGuiBuild.cpp
 
+    src/Hazel/Renderer/Shader.cpp
     src/Hazel/Renderer/GraphicsContext.cpp
-
+    
+    src/Platform/OpenGL/OpenGLShader.cpp
     src/Platform/OpenGL/OpenGLContext.cpp
     src/Platform/Windows/WindowsWindow.cpp
     src/Platform/Windows/WindowsInput.cpp
@@ -20,6 +22,8 @@ add_library(Hazel SHARED
     src/Hazel/SpdlogFormatters/EventFormatters.h
 
     src/Hazelpch.cpp
+
+
 
 )
 
