@@ -63,8 +63,11 @@ Application::Application()
     // 这里不再使用 unique_ptr 或者shared_ptr 持有 ImGuiLayer避免双重释放
     m_ImGuiLayer = new ImGuiLayer();
     PushOverlay(m_ImGuiLayer);
-
+    // 顶点数据布局
+    BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
+                           {ShaderDataType::Float4, "a_Color"}};
     // clang-format off
+    // 一个简单的三角形顶点数据，包含位置和颜色属性
     float vertices[3 * 7] = 
     {
         -0.5f, -0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // left
@@ -74,16 +77,39 @@ Application::Application()
     // clang-format on
     m_VertexArray.reset(VertexArray::Create());
     // 把顶点数据上传到 GPU
-    m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-    BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
-                           {ShaderDataType::Float4, "a_Color"}};
-    m_VertexBuffer->SetLayout(layout);
-    m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+
+    std::shared_ptr<VertexBuffer> vertexBuffer(VertexBuffer::Create(vertices, sizeof(vertices)));
+    vertexBuffer->SetLayout(layout);
+    m_VertexArray->AddVertexBuffer(vertexBuffer);
     // 创建 EBO 索引缓冲对象
     unsigned int indices[3] = {0, 1, 2};
-    m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
-    m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+    std::shared_ptr<IndexBuffer> indexBuffer(
+        IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+    m_VertexArray->SetIndexBuffer(indexBuffer);
 
+    // 正方形绘制
+    // clang-format off
+    float SQvertices[4 * 7] = 
+    {
+         0.0f,  0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // top
+         0.5f,  0.0f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
+         0.0f, -0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// bottom
+        -0.5f,  0.0f, 0.0f,  0.5f,0.5f, 0.5f,1.0f,// left
+    };
+    // clang-format on
+    // 创建VA
+    m_SquareVA.reset(VertexArray::Create());
+    // 把顶点数据上传到 GPU
+    std::shared_ptr<VertexBuffer> squareVB(VertexBuffer::Create(SQvertices, sizeof(SQvertices)));
+    squareVB->SetLayout(layout);
+    m_SquareVA->AddVertexBuffer(squareVB);
+    // 创建 EBO 索引缓冲对象
+    unsigned int squareIndices[6] = {0, 1, 2, 2, 3, 0};
+    std::shared_ptr<IndexBuffer> squareIB(
+        IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
+    m_SquareVA->SetIndexBuffer(squareIB);
+
+    // 着色器源码
     std::string vertexSrc = R"(
         #version 330 core
         layout (location = 0) in vec3 a_Position;
@@ -108,7 +134,6 @@ Application::Application()
             FragColor = v_Color;
         }
     )";
-
     m_Shader = std::make_unique<Shader>(vertexSrc, fragmentSrc);
 }
 Application::~Application()
@@ -150,19 +175,23 @@ void Application::OnEvent(Event& e)
 void Application::Run()
 {
 
-    m_Shader->Bind();
     while (m_Running)
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
         m_Shader->Bind();
+        m_SquareVA->Bind();
+        glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
+                       nullptr);
+
         m_VertexArray->Bind();
         // 参数说明：
         // GL_TRIANGLES：绘制模式，表示每三个顶点构成一个三
         // 3：索引数量，这里是 3 个顶点
         // GL_UNSIGNED_INT：索引数据类型，这里是 unsigned int
         // nullptr：索引数据在 EBO 中的偏移量，这里是从头开始
-        glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
+                       nullptr);
         // 先更新普通 Layer
         for (Layer* layer : m_LayerStack)
         {
@@ -183,8 +212,8 @@ void Application::Run()
         // 1. glfwPollEvents()：轮询系统消息
         // 2. glfwSwapBuffers()：交换前后缓冲
         m_Window->OnUpdate();
+        m_Shader->Unbind();
     }
-    m_Shader->Unbind();
 }
 
 bool Application::OnWindowClose(WindowCloseEvent& e)
