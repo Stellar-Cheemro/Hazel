@@ -22,6 +22,28 @@ namespace Hazel
 
 Application* Application::s_Instance = nullptr;
 
+static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) noexcept
+{
+    switch (type)
+    {       // clang-format off
+        case ShaderDataType::Float:   return GL_FLOAT;
+        case ShaderDataType::Float2:  return GL_FLOAT;
+        case ShaderDataType::Float3:  return GL_FLOAT;
+        case ShaderDataType::Float4:  return GL_FLOAT;
+        case ShaderDataType::Mat3:    return GL_FLOAT;
+        case ShaderDataType::Mat4:    return GL_FLOAT;
+
+        case ShaderDataType::Int:     return GL_INT;
+        case ShaderDataType::Int2:    return GL_INT;
+        case ShaderDataType::Int3:    return GL_INT;
+        case ShaderDataType::Int4:    return GL_INT;
+
+        case ShaderDataType::Bool:    return GL_BOOL;
+            // clang-format on
+    }
+    HAZEL_CORE_ASSERT(false, "Unknown ShaderDataType!");
+    return 0;
+}
 Application::Application()
 {
     HAZEL_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -47,27 +69,42 @@ Application::Application()
     glBindVertexArray(m_VertexArray);
 
     // clang-format off
-    float vertices[3 * 3] = 
+    float vertices[3 * 7] = 
     {
-        -0.5f, -0.5f, 0.0f, // left
-         0.5f, -0.5f, 0.0f, // right
-         0.0f,  0.5f, 0.0f  // top
+        -0.5f, -0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // left
+         0.5f, -0.5f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
+         0.0f,  0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// top
     };
     // clang-format on
 
     // 把顶点数据上传到 GPU
     m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
     m_VertexBuffer->Bind();
+    {
+        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
+                               {ShaderDataType::Float4, "a_Color"}};
 
-    // 设置顶点属性指针
-    glEnableVertexAttribArray(0);
-    // 参数说明：
-    // 0：顶点属性位置（location = 0）
-    // 3：每个顶点属性由 3 个 float 组成
-    // GL_FALSE：不需要归一化
-    // 3 * sizeof(float)：每个顶点属性占用的字节数（步长）
-    // (const void*)0：顶点属性数据在缓冲中的偏移量，这里是从头开始
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void*)0);
+        m_VertexBuffer->SetLayout(layout);
+    }
+
+    uint32_t index = 0;
+    const auto& layout = m_VertexBuffer->GetLayout();
+    for (const auto& element : layout)
+    {
+        // 设置顶点属性指针
+        glEnableVertexAttribArray(index);
+        // 参数说明：
+        // 0：顶点属性位置（location = 0）
+        // 3：每个顶点属性由 3 个 float 组成
+        // GL_FALSE：不需要归一化
+        // 3 * sizeof(float)：每个顶点属性占用的字节数（步长）
+        // (const void*)0：顶点属性数据在缓冲中的偏移量，这里是从头开始
+        glVertexAttribPointer(index, element.GetComponentCount(),
+                              ShaderDataTypeToOpenGLBaseType(element.GetType()),
+                              element.GetNormalized() ? GL_TRUE : GL_FALSE, layout.GetStride(),
+                              (const void*)element.Offset);
+        index++;
+    }
 
     // 创建 EBO 索引缓冲对象
     unsigned int indices[3] = {0, 1, 2};
@@ -77,8 +114,13 @@ Application::Application()
     std::string vertexSrc = R"(
         #version 330 core
         layout (location = 0) in vec3 a_Position;
+        layout (location = 1) in vec4 a_Color;
+
+        out vec4 v_Color;
+
         void main()
         {
+            v_Color = a_Color;
             gl_Position = vec4(a_Position, 1.0);
         }
     )";
@@ -86,9 +128,11 @@ Application::Application()
     std::string fragmentSrc = R"(
         #version 330 core
         layout(location = 0) out vec4 FragColor;
+
+        in vec4 v_Color;
         void main()
         {
-            FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+            FragColor = v_Color;
         }
     )";
 
