@@ -64,10 +64,6 @@ Application::Application()
     m_ImGuiLayer = new ImGuiLayer();
     PushOverlay(m_ImGuiLayer);
 
-    // 创建 VAO 负责与着色器的顶点属性对接
-    glGenVertexArrays(1, &m_VertexArray);
-    glBindVertexArray(m_VertexArray);
-
     // clang-format off
     float vertices[3 * 7] = 
     {
@@ -76,40 +72,17 @@ Application::Application()
          0.0f,  0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// top
     };
     // clang-format on
-
+    m_VertexArray.reset(VertexArray::Create());
     // 把顶点数据上传到 GPU
     m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-    m_VertexBuffer->Bind();
-    {
-        BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
-                               {ShaderDataType::Float4, "a_Color"}};
-
-        m_VertexBuffer->SetLayout(layout);
-    }
-
-    uint32_t index = 0;
-    const auto& layout = m_VertexBuffer->GetLayout();
-    for (const auto& element : layout)
-    {
-        // 设置顶点属性指针
-        glEnableVertexAttribArray(index);
-        // 参数说明：
-        // 0：顶点属性位置（location = 0）
-        // 3：每个顶点属性由 3 个 float 组成
-        // GL_FALSE：不需要归一化
-        // 3 * sizeof(float)：每个顶点属性占用的字节数（步长）
-        // (const void*)0：顶点属性数据在缓冲中的偏移量，这里是从头开始
-        glVertexAttribPointer(index, element.GetComponentCount(),
-                              ShaderDataTypeToOpenGLBaseType(element.GetType()),
-                              element.GetNormalized() ? GL_TRUE : GL_FALSE, layout.GetStride(),
-                              (const void*)element.Offset);
-        index++;
-    }
-
+    BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
+                           {ShaderDataType::Float4, "a_Color"}};
+    m_VertexBuffer->SetLayout(layout);
+    m_VertexArray->AddVertexBuffer(m_VertexBuffer);
     // 创建 EBO 索引缓冲对象
     unsigned int indices[3] = {0, 1, 2};
     m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
-    m_IndexBuffer->Bind();
+    m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
     std::string vertexSrc = R"(
         #version 330 core
@@ -182,8 +155,8 @@ void Application::Run()
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        glBindVertexArray(m_VertexArray);
+        m_Shader->Bind();
+        m_VertexArray->Bind();
         // 参数说明：
         // GL_TRIANGLES：绘制模式，表示每三个顶点构成一个三
         // 3：索引数量，这里是 3 个顶点

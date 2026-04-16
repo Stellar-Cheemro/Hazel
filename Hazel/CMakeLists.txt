@@ -25,6 +25,8 @@ add_library(Hazel SHARED
     src/Hazelpch.cpp
     src/Platform/OpenGL/OpenGLBuffer.cpp
     src/Hazel/Renderer/Renderer.cpp
+    src/Hazel/Renderer/VertexArray.cpp
+    src/Platform/OpenGL/OpenGLVertexArray.cpp
 
 
 
