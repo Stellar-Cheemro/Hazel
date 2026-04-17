@@ -1,24 +1,27 @@
 #pragma once
 
+#include <Hazel/Renderer/RenderCommand.h>
+#include <Hazel/Renderer/RendererAPI.h>
+#include <Hazel/Renderer/Shader.h>
+
 namespace Hazel
 {
 // clang-format off
-enum class RendererAPI
-{
-    None,
-    OpenGl,DirectX,Metal,Vulkan
-};
+
 // clang-format on
 class Renderer
 {
 public:
-    inline static RendererAPI GetAPI()
+    inline static void BeginScene();
+    static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+    inline static void EndScene();
+
+    inline static RendererAPI::API GetAPI()
     {
-        return s_RendererAPI;
+        return RendererAPI::GetAPI();
     }
 
 private:
-    static RendererAPI s_RendererAPI;
 };
 
 } // namespace Hazel

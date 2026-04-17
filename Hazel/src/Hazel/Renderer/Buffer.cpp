@@ -11,10 +11,10 @@ VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
 {
     switch (Renderer::GetAPI())
     {
-        case RendererAPI::None:
+        case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "Renderer API not supported!");
             return nullptr;
-        case RendererAPI::OpenGl:
+        case RendererAPI::API::OpenGl:
             return new OpenGLVertexBuffer(vertices, size);
     }
     HAZEL_CORE_ASSERT(false, "Unknown Renderer API!");
@@ -24,10 +24,10 @@ IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
 {
     switch (Renderer::GetAPI())
     {
-        case RendererAPI::None:
+        case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "Renderer API not supported!");
             return nullptr;
-        case RendererAPI::OpenGl:
+        case RendererAPI::API::OpenGl:
             return new OpenGLIndexBuffer(indices, count);
     }
     HAZEL_CORE_ASSERT(false, "Unknown Renderer API!");

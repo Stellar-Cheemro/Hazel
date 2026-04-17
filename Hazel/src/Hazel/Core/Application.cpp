@@ -2,10 +2,12 @@
 #include "Application.h"
 
 #include <Hazel/Core/Log.h>
-
 #include <Hazel/Core/Core.h>
 #include <Hazel/Core/LayerStack.h>
 #include <Hazel/Core/Window.h>
+
+#include <Hazel/Renderer/Renderer.h>
+#include <Hazel/Renderer/RenderCommand.h>
 
 #include <Hazel/Events/ApplicationEvent.h>
 
@@ -13,7 +15,6 @@
 
 #include <Platform/OpenGL/OpenGLBuffer.h>
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
 
@@ -22,28 +23,47 @@ namespace Hazel
 
 Application* Application::s_Instance = nullptr;
 
-static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) noexcept
+void Application::Run()
 {
-    switch (type)
-    {       // clang-format off
-        case ShaderDataType::Float:   return GL_FLOAT;
-        case ShaderDataType::Float2:  return GL_FLOAT;
-        case ShaderDataType::Float3:  return GL_FLOAT;
-        case ShaderDataType::Float4:  return GL_FLOAT;
-        case ShaderDataType::Mat3:    return GL_FLOAT;
-        case ShaderDataType::Mat4:    return GL_FLOAT;
 
-        case ShaderDataType::Int:     return GL_INT;
-        case ShaderDataType::Int2:    return GL_INT;
-        case ShaderDataType::Int3:    return GL_INT;
-        case ShaderDataType::Int4:    return GL_INT;
+    while (m_Running)
+    {
+        RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
+        RenderCommand::Clear();
 
-        case ShaderDataType::Bool:    return GL_BOOL;
-            // clang-format on
+        // Renderer::BeginScene();
+
+        m_Shader->Bind();
+
+        Renderer::Submit(m_SquareVA);
+        Renderer::Submit(m_VertexArray);
+
+        // Renderer::EndScene();
+
+        // 先更新普通 Layer
+        for (Layer* layer : m_LayerStack)
+        {
+            layer->OnUpdate();
+        }
+
+        // 开始一帧 ImGui
+        m_ImGuiLayer->Begin();
+        // 让每个 Layer 绘制自己的 ImGui 内容
+        for (Layer* layer : m_LayerStack)
+        {
+            layer->OnImGuiRender();
+        }
+        // 结束 ImGui，并执行真正的 ImGui 渲染
+        m_ImGuiLayer->End();
+
+        // OnUpdate 连接主循环和平台窗口系统，目前负责：
+        // 1. glfwPollEvents()：轮询系统消息
+        // 2. glfwSwapBuffers()：交换前后缓冲
+        m_Window->OnUpdate();
+        m_Shader->Unbind();
     }
-    HAZEL_CORE_ASSERT(false, "Unknown ShaderDataType!");
-    return 0;
 }
+
 Application::Application()
 {
     HAZEL_CORE_ASSERT(!s_Instance, "Application already exists!");
@@ -169,50 +189,6 @@ void Application::OnEvent(Event& e)
         (*--it)->OnEvent(e);
         if (e.IsHandled())
             break;
-    }
-}
-
-void Application::Run()
-{
-
-    while (m_Running)
-    {
-        glClearColor(0.1f, 0.1f, 0.1f, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-        m_Shader->Bind();
-        m_SquareVA->Bind();
-        glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
-                       nullptr);
-
-        m_VertexArray->Bind();
-        // 参数说明：
-        // GL_TRIANGLES：绘制模式，表示每三个顶点构成一个三
-        // 3：索引数量，这里是 3 个顶点
-        // GL_UNSIGNED_INT：索引数据类型，这里是 unsigned int
-        // nullptr：索引数据在 EBO 中的偏移量，这里是从头开始
-        glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
-                       nullptr);
-        // 先更新普通 Layer
-        for (Layer* layer : m_LayerStack)
-        {
-            layer->OnUpdate();
-        }
-
-        // 开始一帧 ImGui
-        m_ImGuiLayer->Begin();
-        // 让每个 Layer 绘制自己的 ImGui 内容
-        for (Layer* layer : m_LayerStack)
-        {
-            layer->OnImGuiRender();
-        }
-        // 结束 ImGui，并执行真正的 ImGui 渲染
-        m_ImGuiLayer->End();
-
-        // OnUpdate 连接主循环和平台窗口系统，目前负责：
-        // 1. glfwPollEvents()：轮询系统消息
-        // 2. glfwSwapBuffers()：交换前后缓冲
-        m_Window->OnUpdate();
-        m_Shader->Unbind();
     }
 }
 
