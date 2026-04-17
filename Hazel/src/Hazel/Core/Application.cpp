@@ -28,16 +28,6 @@ void Application::Run()
 
     while (m_Running)
     {
-        RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
-        RenderCommand::Clear();
-
-        Renderer::BeginScene(m_Camera);
-
-        Renderer::Submit(m_Shader, m_SquareVA);
-        Renderer::Submit(m_Shader, m_VertexArray);
-
-        Renderer::EndScene();
-
         // 先更新普通 Layer
         for (Layer* layer : m_LayerStack)
         {
@@ -58,11 +48,10 @@ void Application::Run()
         // 1. glfwPollEvents()：轮询系统消息
         // 2. glfwSwapBuffers()：交换前后缓冲
         m_Window->OnUpdate();
-        m_Shader->Unbind();
     }
 }
 
-Application::Application() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f) // 根据窗口宽高比设置正交投影范围
+Application::Application()
 {
     HAZEL_CORE_ASSERT(!s_Instance, "Application already exists!");
     s_Instance = this;
@@ -81,80 +70,6 @@ Application::Application() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f) // 根据窗口�
     // 这里不再使用 unique_ptr 或者shared_ptr 持有 ImGuiLayer避免双重释放
     m_ImGuiLayer = new ImGuiLayer();
     PushOverlay(m_ImGuiLayer);
-    // 顶点数据布局
-    BufferLayout layout = {{ShaderDataType::Float3, "a_Position"},
-                           {ShaderDataType::Float4, "a_Color"}};
-    // clang-format off
-    // 一个简单的三角形顶点数据，包含位置和颜色属性
-    float vertices[3 * 7] = 
-    {
-        -0.5f, -0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // left
-         0.5f, -0.5f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
-         0.0f,  0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// top
-    };
-    // clang-format on
-    m_VertexArray.reset(VertexArray::Create());
-    // 把顶点数据上传到 GPU
-
-    std::shared_ptr<VertexBuffer> vertexBuffer(VertexBuffer::Create(vertices, sizeof(vertices)));
-    vertexBuffer->SetLayout(layout);
-    m_VertexArray->AddVertexBuffer(vertexBuffer);
-    // 创建 EBO 索引缓冲对象
-    unsigned int indices[3] = {0, 1, 2};
-    std::shared_ptr<IndexBuffer> indexBuffer(
-        IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
-    m_VertexArray->SetIndexBuffer(indexBuffer);
-
-    // 正方形绘制
-    // clang-format off
-    float SQvertices[4 * 7] = 
-    {
-         0.0f,  0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // top
-         0.5f,  0.0f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
-         0.0f, -0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// bottom
-        -0.5f,  0.0f, 0.0f,  0.5f,0.5f, 0.5f,1.0f,// left
-    };
-    // clang-format on
-    // 创建VA
-    m_SquareVA.reset(VertexArray::Create());
-    // 把顶点数据上传到 GPU
-    std::shared_ptr<VertexBuffer> squareVB(VertexBuffer::Create(SQvertices, sizeof(SQvertices)));
-    squareVB->SetLayout(layout);
-    m_SquareVA->AddVertexBuffer(squareVB);
-    // 创建 EBO 索引缓冲对象
-    unsigned int squareIndices[6] = {0, 1, 2, 2, 3, 0};
-    std::shared_ptr<IndexBuffer> squareIB(
-        IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
-    m_SquareVA->SetIndexBuffer(squareIB);
-
-    // 着色器源码
-    std::string vertexSrc = R"(
-        #version 330 core
-        layout (location = 0) in vec3 a_Position;
-        layout (location = 1) in vec4 a_Color;
-
-        uniform mat4 u_ViewProjection;
-
-        out vec4 v_Color;
-
-        void main()
-        {
-            v_Color = a_Color;
-            gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-        }
-    )";
-
-    std::string fragmentSrc = R"(
-        #version 330 core
-        layout(location = 0) out vec4 FragColor;
-
-        in vec4 v_Color;
-        void main()
-        {
-            FragColor = v_Color;
-        }
-    )";
-    m_Shader = std::make_unique<Shader>(vertexSrc, fragmentSrc);
 }
 Application::~Application()
 {

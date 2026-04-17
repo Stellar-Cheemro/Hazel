@@ -1,7 +1,7 @@
 #pragma once
 
+#include <Hazel/Core/Core.h>
 #include <Hazel/Core/Log.h>
-
 #include <cstdint>
 #include <string>
 
@@ -126,7 +126,7 @@ private:
     std::vector<BufferElement> m_Elements;
     uint32_t m_Stride = 0;
 };
-class VertexBuffer
+class HAZEL_API VertexBuffer
 {
 public:
     virtual ~VertexBuffer() = default;
@@ -140,7 +140,7 @@ public:
     static VertexBuffer* Create(float* vertices, uint32_t size);
 };
 
-class IndexBuffer
+class HAZEL_API IndexBuffer
 {
 public:
     virtual ~IndexBuffer() = default;

@@ -1,10 +1,12 @@
 #pragma once
 
+#include <Hazel/Core/Core.h>
+
 #include <glm/glm.hpp>
 
 namespace Hazel
 {
-class OrthographicCamera
+class HAZEL_API OrthographicCamera
 {
 public:
     OrthographicCamera(float left, float right, float bottom, float top);

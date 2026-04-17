@@ -8,7 +8,7 @@
 
 namespace Hazel
 {
-class RendererAPI
+class HAZEL_API RendererAPI
 {
 public:
     enum class API

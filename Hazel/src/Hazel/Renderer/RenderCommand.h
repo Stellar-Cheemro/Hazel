@@ -4,7 +4,7 @@
 #include <Hazel/Renderer/RendererAPI.h>
 namespace Hazel
 {
-class RenderCommand
+class HAZEL_API RenderCommand
 {
 public:
     inline static void Clear()

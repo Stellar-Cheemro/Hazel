@@ -1,12 +1,14 @@
 #pragma once
 
+#include <Hazel/Core/Core.h>
+
 #include <glm/glm.hpp>
 
 #include <cstdint>
 #include <string>
 namespace Hazel
 {
-class Shader
+class HAZEL_API Shader
 {
 public:
     Shader(const std::string& vertexSrc, const std::string& fragmentSrc);

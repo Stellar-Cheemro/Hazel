@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Hazel/Core/Core.h>
+
 #include <Hazel/Renderer/RenderCommand.h>
 #include <Hazel/Renderer/RendererAPI.h>
 #include <Hazel/Renderer/Shader.h>
@@ -9,7 +11,7 @@ namespace Hazel
 // clang-format off
 
 // clang-format on
-class Renderer
+class HAZEL_API Renderer
 {
 public:
     static void BeginScene(OrthographicCamera& camera);
