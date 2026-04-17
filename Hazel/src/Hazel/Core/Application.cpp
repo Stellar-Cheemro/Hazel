@@ -5,6 +5,7 @@
 #include <Hazel/Core/Core.h>
 #include <Hazel/Core/LayerStack.h>
 #include <Hazel/Core/Window.h>
+#include <Hazel/Core/Timestep.h>
 
 #include <Hazel/Renderer/Renderer.h>
 #include <Hazel/Renderer/RenderCommand.h>
@@ -28,10 +29,14 @@ void Application::Run()
 
     while (m_Running)
     {
+        float time = (float)glfwGetTime();          // 获取当前时间
+        Timestep timestep = time - m_LastFrameTime; // 计算两帧之间的时间差
+        m_LastFrameTime = time;                     // 更新上一帧的时间
+
         // 先更新普通 Layer
         for (Layer* layer : m_LayerStack)
         {
-            layer->OnUpdate();
+            layer->OnUpdate(timestep);
         }
 
         // 开始一帧 ImGui

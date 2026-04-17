@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Hazel/Core/Core.h>
+#include <Hazel/Core/Timestep.h>
 #include <Hazel/Events/Event.h>
-
 #include <string>
 namespace Hazel
 {
@@ -18,7 +18,7 @@ public:
     virtual void OnDetach()
     {
     }
-    virtual void OnUpdate()
+    virtual void OnUpdate(Timestep timestep)
     {
     }
     virtual void OnEvent(Event& event)

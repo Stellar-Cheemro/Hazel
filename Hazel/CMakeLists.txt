@@ -31,6 +31,7 @@ add_library(Hazel SHARED
     src/Hazel/Renderer/RenderCommand.cpp
     src/Platform/OpenGL/OpenGLRendererAPI.cpp
     src/Hazel/Renderer/OrthographicCamera.cpp
+    src/Hazel/Core/Timestep.cpp
 )
 
 # include路径设置
