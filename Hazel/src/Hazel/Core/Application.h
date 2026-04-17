@@ -8,6 +8,7 @@
 #include <Hazel/ImGui/ImGuiLayer.h>
 
 #include <Hazel/Renderer/Buffer.h>
+#include <Hazel/Renderer/OrthographicCamera.h>
 #include <Hazel/Renderer/Shader.h>
 #include <Hazel/Renderer/VertexArray.h>
 
@@ -50,6 +51,11 @@ private:
     std::shared_ptr<Shader> m_Shader;
     std::shared_ptr<VertexArray> m_VertexArray;
     std::shared_ptr<VertexArray> m_SquareVA;
+
+    OrthographicCamera m_Camera;
+
+    // 这里的 Shader 和 VertexArray 只是为了测试 Renderer 提前准备的
+    // 后续会放到 Layer 中去创建和管理
 
 private:
     static Application* s_Instance;

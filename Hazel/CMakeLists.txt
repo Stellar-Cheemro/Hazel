@@ -30,10 +30,7 @@ add_library(Hazel SHARED
     src/Hazel/Renderer/RendererAPI.cpp
     src/Hazel/Renderer/RenderCommand.cpp
     src/Platform/OpenGL/OpenGLRendererAPI.cpp
-
-
-
-
+    src/Hazel/Renderer/OrthographicCamera.cpp
 )
 
 # include路径设置

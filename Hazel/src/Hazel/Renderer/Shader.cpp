@@ -3,7 +3,8 @@
 #include <Hazel/Core/Log.h>
 
 #include <glad/glad.h>
-
+#include <glm/gtc/type_ptr.hpp>
+#include <string>
 Hazel::Shader::Shader(const std::string& vertexSrc, const std::string& fragmentSrc)
 {
     // 创建顶点着色器句柄
@@ -110,6 +111,8 @@ void Hazel::Shader::Unbind() const
     glUseProgram(0);
 }
 
-void Hazel::Shader::SetUniformMat4(const std::string& name, const glm::mat4& matrix)
+void Hazel::Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

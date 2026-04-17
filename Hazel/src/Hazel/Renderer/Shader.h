@@ -16,7 +16,7 @@ public:
     virtual void Unbind() const;
 
     // 设置 Uniform 变量接口
-    virtual void SetUniformMat4(const std::string& name, const glm::mat4& matrix);
+    virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
 private:
     uint32_t m_RendererID;

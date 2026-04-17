@@ -1,7 +1,7 @@
 #pragma once
 
+#include <Hazel/Renderer/OrthographicCamera.h>
 #include <Hazel/Renderer/RendererAPI.h>
-
 namespace Hazel
 {
 class RenderCommand
