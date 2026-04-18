@@ -1,7 +1,7 @@
 #pragma once
 
+#include <Hazel/Core/Core.h>
 #include <Hazel/Renderer/GraphicsContext.h>
-
 class GLFWwindow;
 
 namespace Hazel

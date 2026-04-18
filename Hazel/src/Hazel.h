@@ -27,6 +27,9 @@
 #include <Hazel/Renderer/Renderer.h>
 #include <Hazel/Renderer/RenderCommand.h>
 // ---------------------------
+#include <Platform/OpenGL/OpenGLShader.h>
+
+#include <glm/gtc/matrix_transform.hpp>
 
 // ---入口点-------------------
 #include <Hazel/Core/EntryPoint.h>

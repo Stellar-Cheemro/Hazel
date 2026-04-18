@@ -1,53 +1,71 @@
-add_library(Hazel SHARED
-    src/Hazel/Core/Application.cpp
-    src/Hazel/Core/Log.cpp
-    src/Hazel/Core/LayerStack.cpp
-    src/Hazel/Core/Layer.cpp
-    src/Hazel/Core/MouseCodes.h
+# HAZEL本体各库路径
+set(HAZEL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Hazel)
+set(PLATFORM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform)
+# 第三方库路径宏设置
+set(GLM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm)
+set(SPDLOG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
+set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
 
+# 源文件列表
+set(IMGUI_SOURCES
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+)
+set(HAZEL_SOURCES
+    ${HAZEL_DIR}/Core/Application.cpp
+    ${HAZEL_DIR}/Core/Log.cpp
+    ${HAZEL_DIR}/Core/LayerStack.cpp
+    ${HAZEL_DIR}/Core/Layer.cpp
+    ${HAZEL_DIR}/Core/Timestep.cpp
 
-    src/Platform/Windows/WindowsWindow.cpp
+    ${HAZEL_DIR}/ImGui/ImGuiLayer.cpp
+    ${HAZEL_DIR}/ImGui/ImGuiBuild.cpp
 
-    src/Hazel/ImGui/ImGuiLayer.cpp
-    src/Hazel/ImGui/ImGuiBuild.cpp
+    ${HAZEL_DIR}/Renderer/Buffer.cpp
+    ${HAZEL_DIR}/Renderer/Shader.cpp
+    ${HAZEL_DIR}/Renderer/GraphicsContext.cpp
+    ${HAZEL_DIR}/Renderer/Renderer.cpp
+    ${HAZEL_DIR}/Renderer/VertexArray.cpp
+    ${HAZEL_DIR}/Renderer/OrthographicCamera.cpp
+    ${HAZEL_DIR}/Renderer/RendererAPI.cpp
+    ${HAZEL_DIR}/Renderer/RenderCommand.cpp
 
-    src/Hazel/Renderer/Buffer.cpp
-    src/Hazel/Renderer/Shader.cpp
-    src/Hazel/Renderer/GraphicsContext.cpp
+    ${PLATFORM_DIR}/Windows/WindowsWindow.cpp
+    ${PLATFORM_DIR}/Windows/WindowsInput.cpp
+    ${PLATFORM_DIR}/OpenGL/OpenGLBuffer.cpp
+    ${PLATFORM_DIR}/OpenGL/OpenGLContext.cpp
+    ${PLATFORM_DIR}/OpenGL/OpenGLRendererAPI.cpp
+    ${PLATFORM_DIR}/OpenGL/OpenGLVertexArray.cpp
+    ${PLATFORM_DIR}/OpenGL/OpenGLShader.cpp
     
-    src/Platform/OpenGL/OpenGLShader.cpp
-    src/Platform/OpenGL/OpenGLContext.cpp
-    src/Platform/Windows/WindowsWindow.cpp
-    src/Platform/Windows/WindowsInput.cpp
-
-    src/Hazel/SpdlogFormatters/EventFormatters.h
-
-    src/Hazelpch.cpp
-    src/Platform/OpenGL/OpenGLBuffer.cpp
-    src/Hazel/Renderer/Renderer.cpp
-    src/Hazel/Renderer/VertexArray.cpp
-    src/Platform/OpenGL/OpenGLVertexArray.cpp
-    src/Hazel/Renderer/RendererAPI.cpp
-    src/Hazel/Renderer/RenderCommand.cpp
-    src/Platform/OpenGL/OpenGLRendererAPI.cpp
-    src/Hazel/Renderer/OrthographicCamera.cpp
-    src/Hazel/Core/Timestep.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Hazelpch.cpp
+)
+# 添加Hazel库
+add_library(Hazel SHARED
+    ${HAZEL_SOURCES}
+    ${IMGUI_SOURCES}
 )
 
 # include路径设置
 target_include_directories(Hazel
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui>
+        $<BUILD_INTERFACE:${SPDLOG_DIR}/include>
+        $<BUILD_INTERFACE:${GLM_DIR}>
+        $<BUILD_INTERFACE:${IMGUI_DIR}>
         $<INSTALL_INTERFACE:include>
+        PRIVATE
+        $<BUILD_INTERFACE:${IMGUI_DIR}/backends>
 )
 
 # 预处理宏定义 
 target_compile_definitions(Hazel
     PUBLIC    
         HAZEL_PLATFORM_WINDOWS
+        IMGUI_USER_CONFIG="${HAZEL_DIR}/ImGui/ImGuiConfig.h"
     PRIVATE
         HAZEL_BUILD_DLL
         $<$<CONFIG:Debug>:HAZEL_DEBUG>
@@ -66,11 +84,10 @@ target_link_libraries(Hazel
     PRIVATE
         glad
         glfw
-        imgui
         opengl32
+        imgui
         glm::glm
 )
-
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     target_compile_definitions(Hazel PRIVATE HAZEL_ARCH_X64)
 endif()

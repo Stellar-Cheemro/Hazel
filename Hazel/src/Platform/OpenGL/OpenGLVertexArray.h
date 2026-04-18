@@ -4,7 +4,6 @@
 #include <memory>
 namespace Hazel
 {
-
 class OpenGLVertexArray : public VertexArray
 {
 public:

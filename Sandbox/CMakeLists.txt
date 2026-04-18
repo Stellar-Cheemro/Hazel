@@ -2,13 +2,6 @@ add_executable(Sandbox
     src/Sandbox.cpp
 )
 
-# #include路径设置
-# target_include_directories(Sandbox
-#     PRIVATE
-#         ${CMAKE_SOURCE_DIR}/Hazel/src
-#         ${CMAKE_SOURCE_DIR}/Hazel
-# )
-
 # 预处理宏定义
 target_compile_definitions(Sandbox
     PRIVATE
@@ -19,7 +12,10 @@ target_compile_definitions(Sandbox
 )
 
 # 链接Hazel库
-target_link_libraries(Sandbox PRIVATE Hazel)
+target_link_libraries(Sandbox 
+PRIVATE 
+Hazel
+)
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     target_compile_definitions(Sandbox PRIVATE HAZEL_ARCH_X64)

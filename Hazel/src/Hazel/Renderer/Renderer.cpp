@@ -1,5 +1,8 @@
 #include "Renderer.h"
 #include <Hazel/Renderer/OrthographicCamera.h>
+#include <Hazel/Renderer/Renderer.h>
+
+#include <Platform/OpenGL/OpenGLShader.h>
 namespace Hazel
 {
 Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
@@ -8,10 +11,21 @@ void Renderer::BeginScene(OrthographicCamera& camera)
     s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 }
 void Renderer::Submit(const std::shared_ptr<Shader>& shader,
-                      const std::shared_ptr<VertexArray>& vertexArray)
+                      const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& modelMatrix)
 {
     shader->Bind();
-    shader->UploadUniformMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+    switch (Renderer::GetAPI())
+    {
+        case RendererAPI::API::None:
+            HAZEL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
+            return;
+        case RendererAPI::API::OpenGl:
+            std::static_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4(
+                "u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+            std::static_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Model",
+                                                                              modelMatrix);
+            break;
+    }
     vertexArray->Bind();
     RenderCommand ::DrawIndexed(vertexArray);
 }

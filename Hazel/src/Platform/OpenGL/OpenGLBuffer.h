@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Hazel/Renderer/Buffer.h"
+#include <Hazel/Core/Core.h>
 #include <Hazel/Core/Log.h>
-
 #include <cstdint>
 namespace Hazel
 {
-class OpenGLVertexBuffer : public Hazel::VertexBuffer
+class HAZEL_API OpenGLVertexBuffer : public Hazel::VertexBuffer
 {
 public:
     OpenGLVertexBuffer(float* vertices, uint32_t size);
@@ -26,7 +26,7 @@ private:
     uint32_t m_RendererID;
     BufferLayout m_Layout;
 };
-class OpenGLIndexBuffer : public Hazel::IndexBuffer
+class HAZEL_API OpenGLIndexBuffer : public Hazel::IndexBuffer
 {
 public:
     OpenGLIndexBuffer(uint32_t* indices, uint32_t count);

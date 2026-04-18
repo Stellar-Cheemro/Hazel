@@ -1,5 +1,6 @@
 #include <Hazel.h>
-
+#include <glm/gtc/type_ptr.hpp>
+#include <imgui.h>
 class ExampleLayer : public Hazel::Layer
 {
 public:
@@ -58,16 +59,13 @@ public:
         std::string vertexSrc = R"(
         #version 330 core
         layout (location = 0) in vec3 a_Position;
-        layout (location = 1) in vec4 a_Color;
 
         uniform mat4 u_ViewProjection;
-
-        out vec4 v_Color;
+        uniform mat4 u_Model;
 
         void main()
         {
-            v_Color = a_Color;
-            gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+            gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 1.0);
         }
     )";
 
@@ -75,13 +73,13 @@ public:
         #version 330 core
         layout(location = 0) out vec4 FragColor;
 
-        in vec4 v_Color;
+        uniform vec4 v_Color;
         void main()
         {
             FragColor = v_Color;
         }
     )";
-        m_Shader = std::make_unique<Hazel::Shader>(vertexSrc, fragmentSrc);
+        m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
     }
 
     void OnUpdate(Hazel::Timestep timestep) override
@@ -107,8 +105,18 @@ public:
         m_Camera.SetRotation(m_CameraRotation);
 
         Hazel::Renderer::BeginScene(m_Camera);
-
-        Hazel::Renderer::Submit(m_Shader, m_SquareVA);
+        glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+        for (int x = 0; x < 20; x++)
+        {
+            for (int y = 0; y < 20; y++)
+            {
+                glm::vec3 translate(x * 0.1f, y * 0.1f, 0.0f);
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), translate) * scale;
+                std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->UploadUniformFloat4(
+                    "v_Color", m_SquareColor);
+                Hazel::Renderer::Submit(m_Shader, m_SquareVA, model);
+            }
+        }
         Hazel::Renderer::Submit(m_Shader, m_VertexArray);
 
         Hazel::Renderer::EndScene();
@@ -120,6 +128,9 @@ public:
 
     void OnImGuiRender() override
     {
+        ImGui::Begin("Settings");
+        ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+        ImGui::End();
     }
 
 private:
@@ -129,6 +140,7 @@ private:
 
     Hazel::OrthographicCamera m_Camera{-1.6f, 1.6f, -0.9f, 0.9f};
     glm::vec3 m_CameraPosition{0.0f, 0.0f, 0.0f};
+    glm::vec4 m_SquareColor{0.2f, 0.3f, 0.8f, 1.0f};
     float m_CameraRotation = 0.0f;
     float m_CameraMoveSpeed = 1.0f;
     float m_CameraRotationSpeed = 10.0f;

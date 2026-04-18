@@ -2,8 +2,6 @@
 
 #include <Hazel/Core/Core.h>
 
-#include <glm/glm.hpp>
-
 #include <cstdint>
 #include <string>
 namespace Hazel
@@ -11,16 +9,11 @@ namespace Hazel
 class HAZEL_API Shader
 {
 public:
-    Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
-    virtual ~Shader();
+    virtual ~Shader() = default;
 
-    virtual void Bind() const;
-    virtual void Unbind() const;
+    virtual void Bind() const = 0;
+    virtual void Unbind() const = 0;
 
-    // 设置 Uniform 变量接口
-    virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
-
-private:
-    uint32_t m_RendererID;
+    static Shader* Create(const std::string& vertexSrc, const std::string& fragmentSrc);
 };
 } // namespace Hazel

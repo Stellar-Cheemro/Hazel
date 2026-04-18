@@ -55,14 +55,14 @@ void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& ver
     const auto& layout = vertexBuffer->GetLayout();
     for (const auto& element : layout)
     {
-        // 设置顶点属性指针
         glEnableVertexAttribArray(index);
         // 参数说明：
-        // 0：顶点属性位置（location = 0）
-        // 3：每个顶点属性由 3 个 float 组成
-        // GL_FALSE：不需要归一化
-        // 3 * sizeof(float)：每个顶点属性占用的字节数（步长）
-        // (const void*)0：顶点属性数据在缓冲中的偏移量，这里是从头开始
+        // index：顶点属性位置（layout(location = x)中的x）
+        // size：每个顶点属性的组件数量（例如，vec3是3，mat4是16）
+        // type：数据类型（例如，GL_FLOAT）
+        // normalized：是否将整数数据归一化为[0, 1]或[-1, 1]
+        // stride：每个顶点的字节偏移量（即顶点属性之间的间隔）
+        // pointer：顶点属性在缓冲区中的偏移量（即属性在顶点结构中的位置）
         glVertexAttribPointer(index, element.GetComponentCount(),
                               ShaderDataTypeToOpenGLBaseType(element.GetType()),
                               element.GetNormalized() ? GL_TRUE : GL_FALSE, layout.GetStride(),
