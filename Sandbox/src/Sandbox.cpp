@@ -22,13 +22,13 @@ public:
         m_VertexArray.reset(Hazel::VertexArray::Create());
         // 把顶点数据上传到 GPU
 
-        std::shared_ptr<Hazel::VertexBuffer> vertexBuffer(
+        Hazel::Ref<Hazel::VertexBuffer> vertexBuffer(
             Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
         vertexBuffer->SetLayout(layout);
         m_VertexArray->AddVertexBuffer(vertexBuffer);
         // 创建 EBO 索引缓冲对象
         unsigned int indices[3] = {0, 1, 2};
-        std::shared_ptr<Hazel::IndexBuffer> indexBuffer(
+        Hazel::Ref<Hazel::IndexBuffer> indexBuffer(
             Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
         m_VertexArray->SetIndexBuffer(indexBuffer);
 
@@ -45,13 +45,13 @@ public:
         // 创建VA
         m_SquareVA.reset(Hazel::VertexArray::Create());
         // 把顶点数据上传到 GPU
-        std::shared_ptr<Hazel::VertexBuffer> squareVB(
+        Hazel::Ref<Hazel::VertexBuffer> squareVB(
             Hazel::VertexBuffer::Create(SQvertices, sizeof(SQvertices)));
         squareVB->SetLayout(layout);
         m_SquareVA->AddVertexBuffer(squareVB);
         // 创建 EBO 索引缓冲对象
         unsigned int squareIndices[6] = {0, 1, 2, 2, 3, 0};
-        std::shared_ptr<Hazel::IndexBuffer> squareIB(Hazel::IndexBuffer::Create(
+        Hazel::Ref<Hazel::IndexBuffer> squareIB(Hazel::IndexBuffer::Create(
             squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
         m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -134,9 +134,9 @@ public:
     }
 
 private:
-    std::shared_ptr<Hazel::Shader> m_Shader;
-    std::shared_ptr<Hazel::VertexArray> m_VertexArray;
-    std::shared_ptr<Hazel::VertexArray> m_SquareVA;
+    Hazel::Ref<Hazel::Shader> m_Shader;
+    Hazel::Ref<Hazel::VertexArray> m_VertexArray;
+    Hazel::Ref<Hazel::VertexArray> m_SquareVA;
 
     Hazel::OrthographicCamera m_Camera{-1.6f, 1.6f, -0.9f, 0.9f};
     glm::vec3 m_CameraPosition{0.0f, 0.0f, 0.0f};
