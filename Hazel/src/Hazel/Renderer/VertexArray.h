@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Buffer.h"
-
+#include <Hazel/Core/Ref.h>
 #include <memory>
 
 namespace Hazel
 {
-class HAZEL_API VertexArray
+class HAZEL_API VertexArray : public RefCounted
 {
 public:
     virtual ~VertexArray() = default;

@@ -5,6 +5,7 @@ set(PLATFORM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Platform)
 set(GLM_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm)
 set(SPDLOG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog)
 set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui)
+set(STB_IMAGE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb_image)
 
 # 源文件列表
 set(IMGUI_SOURCES
@@ -32,6 +33,11 @@ set(HAZEL_SOURCES
     ${HAZEL_DIR}/Renderer/OrthographicCamera.cpp
     ${HAZEL_DIR}/Renderer/RendererAPI.cpp
     ${HAZEL_DIR}/Renderer/RenderCommand.cpp
+    ${HAZEL_DIR}/Renderer/Texture.cpp
+    ${HAZEL_DIR}/Project/Project.cpp
+    ${HAZEL_DIR}/Asset/AssetManager.cpp
+    ${HAZEL_DIR}/Asset/AssetRegistry.cpp
+    ${HAZEL_DIR}/Asset/TextureSerializer.cpp
 
     ${PLATFORM_DIR}/Windows/WindowsWindow.cpp
     ${PLATFORM_DIR}/Windows/WindowsInput.cpp
@@ -40,13 +46,18 @@ set(HAZEL_SOURCES
     ${PLATFORM_DIR}/OpenGL/OpenGLRendererAPI.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLVertexArray.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLShader.cpp
-    
+    ${PLATFORM_DIR}/OpenGL/OpenGLTexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Hazelpch.cpp
+)
+set(STB_IMAGE_SOURCES
+    ${STB_IMAGE_DIR}/stb_image.cpp
 )
 # 添加Hazel库
 add_library(Hazel SHARED
     ${HAZEL_SOURCES}
     ${IMGUI_SOURCES}
+    ${STB_IMAGE_SOURCES}
+
 )
 
 # include路径设置
@@ -56,6 +67,7 @@ target_include_directories(Hazel
         $<BUILD_INTERFACE:${SPDLOG_DIR}/include>
         $<BUILD_INTERFACE:${GLM_DIR}>
         $<BUILD_INTERFACE:${IMGUI_DIR}>
+        $<BUILD_INTERFACE:${STB_IMAGE_DIR}>
         $<INSTALL_INTERFACE:include>
         PRIVATE
         $<BUILD_INTERFACE:${IMGUI_DIR}/backends>

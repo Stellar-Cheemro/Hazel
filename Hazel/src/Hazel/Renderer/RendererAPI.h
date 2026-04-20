@@ -1,7 +1,7 @@
 #pragma once
 
+#include <Hazel/Core/Ref.h>
 #include <Hazel/Renderer/VertexArray.h>
-
 #include <glm/glm.hpp>
 
 #include <memory>
@@ -14,7 +14,7 @@ public:
     enum class API
     { // clang-format off
         None,
-        OpenGl,DirectX,Metal,Vulkan
+        OpenGL,DirectX,Metal,Vulkan
         // clang-format on
     };
 

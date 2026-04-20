@@ -19,11 +19,10 @@ void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexA
         case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
             return;
-        case RendererAPI::API::OpenGl:
-            std::static_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4(
-                "u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-            std::static_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Model",
-                                                                              modelMatrix);
+        case RendererAPI::API::OpenGL:
+            shader.As<OpenGLShader>()->UploadUniformMat4("u_ViewProjection",
+                                                         s_SceneData->ViewProjectionMatrix);
+            shader.As<OpenGLShader>()->UploadUniformMat4("u_Model", modelMatrix);
             break;
     }
     vertexArray->Bind();

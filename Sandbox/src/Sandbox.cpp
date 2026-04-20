@@ -1,45 +1,47 @@
 #include <Hazel.h>
+#include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
+#include <iostream>
 class ExampleLayer : public Hazel::Layer
 {
 public:
     ExampleLayer()
         : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f) // 根据窗口宽高比设置正交投影范围
     {                                                          // 顶点数据布局
-        Hazel::BufferLayout layout = {{Hazel::ShaderDataType::Float3, "a_Position"},
-                                      {Hazel::ShaderDataType::Float4, "a_Color"}};
+        // Hazel::BufferLayout layout = {{Hazel::ShaderDataType::Float3, "a_Position"},
+        //                               {Hazel::ShaderDataType::Float4, "a_Color"}};
 
-        // 一个简单的三角形顶点数据，包含位置和颜色属性
-        float vertices[3 * 7] = {
-            // clang-format off
-            -0.5f, -0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // left
-             0.5f, -0.5f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
-             0.0f,  0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// top
-            // clang-format on
-        };
+        // // 一个简单的三角形顶点数据，包含位置和颜色属性
+        // float vertices[3 * 7] = {
+        //     // clang-format off
+        //     -0.5f, -0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // left
+        //      0.5f, -0.5f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
+        //      0.0f,  0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// top
+        //     // clang-format on
+        // };
 
         m_VertexArray.reset(Hazel::VertexArray::Create());
-        // 把顶点数据上传到 GPU
+        // // 把顶点数据上传到 GPU
 
-        Hazel::Ref<Hazel::VertexBuffer> vertexBuffer(
-            Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
-        vertexBuffer->SetLayout(layout);
-        m_VertexArray->AddVertexBuffer(vertexBuffer);
+        // Hazel::Ref<Hazel::VertexBuffer> vertexBuffer(
+        //     Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+        // vertexBuffer->SetLayout(layout);
+        // m_VertexArray->AddVertexBuffer(vertexBuffer);
         // 创建 EBO 索引缓冲对象
-        unsigned int indices[3] = {0, 1, 2};
-        Hazel::Ref<Hazel::IndexBuffer> indexBuffer(
-            Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
-        m_VertexArray->SetIndexBuffer(indexBuffer);
+        // unsigned int indices[3] = {0, 1, 2};
+        // Hazel::Ref<Hazel::IndexBuffer> indexBuffer(
+        //     Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+        // m_VertexArray->SetIndexBuffer(indexBuffer);
 
         // 正方形绘制
         // clang-format off
-    float SQvertices[4 * 7] = 
+    float SQvertices[4 * 5] = 
     {
-         0.0f,  0.5f, 0.0f,  0.5f,0.5f, 0.0f,1.0f, // top
-         0.5f,  0.0f, 0.0f,  0.0f,0.5f, 0.5f,1.0f,// right
-         0.0f, -0.5f, 0.0f,  0.5f,0.0f, 0.5f,1.0f,// bottom
-        -0.5f,  0.0f, 0.0f,  0.5f,0.5f, 0.5f,1.0f,// left
+         -0.5f,  0.5f,  0.0f,  0.0f,1.0f, // top
+         0.5f,   0.5f,  0.0f,  1.0f,1.0f, // right
+         0.5f,  -0.5f,  0.0f,  1.0f,0.0f, // bottom
+         -0.5f,  -0.5f,  0.0f,  0.0f,0.0f // left
     };
         // clang-format on
         // 创建VA
@@ -47,7 +49,9 @@ public:
         // 把顶点数据上传到 GPU
         Hazel::Ref<Hazel::VertexBuffer> squareVB(
             Hazel::VertexBuffer::Create(SQvertices, sizeof(SQvertices)));
-        squareVB->SetLayout(layout);
+        Hazel::BufferLayout SQlayout = {{Hazel::ShaderDataType::Float3, "a_Position"},
+                                        {Hazel::ShaderDataType::Float2, "a_TexCoord"}};
+        squareVB->SetLayout(SQlayout);
         m_SquareVA->AddVertexBuffer(squareVB);
         // 创建 EBO 索引缓冲对象
         unsigned int squareIndices[6] = {0, 1, 2, 2, 3, 0};
@@ -73,13 +77,50 @@ public:
         #version 330 core
         layout(location = 0) out vec4 FragColor;
 
-        uniform vec4 v_Color;
+        uniform vec4 u_Color;
         void main()
         {
-            FragColor = v_Color;
+            FragColor = u_Color;
+        }
+    )";
+        // 纹理着色器源码
+        std::string textureVertexSrc = R"(
+        #version 330 core
+        layout (location = 0) in vec3 a_Position;
+        layout (location = 1) in vec2 a_TexCoord;
+
+        out vec2 v_TexCoord;
+
+        uniform mat4 u_ViewProjection;
+        uniform mat4 u_Model;
+
+        void main()
+        {
+            v_TexCoord = a_TexCoord;
+            gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 1.0);
+        }
+    )";
+
+        std::string textureFragmentSrc = R"(
+        #version 330 core
+        layout(location = 0) out vec4 FragColor;
+        in vec2 v_TexCoord;
+        uniform sampler2D u_Texture;
+        void main()
+        {
+            FragColor = texture(u_Texture, v_TexCoord);
         }
     )";
         m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
+        m_TextureShader.reset(Hazel::Shader::Create(textureVertexSrc, textureFragmentSrc));
+        m_TextureHandle = Hazel::AssetManager::ImportAsset("textures/Checkerboard.png");
+        Hazel::Ref<Hazel::TextureAsset> textureAsset =
+            Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_TextureHandle);
+        if (textureAsset)
+            m_Texture2D = textureAsset->GetTexture();
+
+        m_TextureShader.As<Hazel::OpenGLShader>()->Bind();
+        m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
     }
 
     void OnUpdate(Hazel::Timestep timestep) override
@@ -104,6 +145,8 @@ public:
         m_Camera.SetPosition(m_CameraPosition);
         m_Camera.SetRotation(m_CameraRotation);
 
+        m_Shader.As<Hazel::OpenGLShader>()->Bind();
+        m_Shader.As<Hazel::OpenGLShader>()->UploadUniformFloat4("u_Color", m_SquareColor);
         Hazel::Renderer::BeginScene(m_Camera);
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
         for (int x = 0; x < 20; x++)
@@ -112,12 +155,17 @@ public:
             {
                 glm::vec3 translate(x * 0.1f, y * 0.1f, 0.0f);
                 glm::mat4 model = glm::translate(glm::mat4(1.0f), translate) * scale;
-                std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_Shader)->UploadUniformFloat4(
-                    "v_Color", m_SquareColor);
                 Hazel::Renderer::Submit(m_Shader, m_SquareVA, model);
             }
         }
-        Hazel::Renderer::Submit(m_Shader, m_VertexArray);
+        m_TextureShader.As<Hazel::OpenGLShader>()->Bind();
+        m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
+        glm::vec3 CSQtranslate(0.0f, 0.0f, 0.0f);
+        glm::mat4 CSQscale = glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));
+        glm::mat4 CSQmodel = glm::translate(glm::mat4(1.0f), CSQtranslate) * CSQscale;
+        m_Texture2D->Bind(0);
+        Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
+        // Hazel::Renderer::Submit(m_Shader, m_VertexArray);
 
         Hazel::Renderer::EndScene();
     }
@@ -135,15 +183,17 @@ public:
 
 private:
     Hazel::Ref<Hazel::Shader> m_Shader;
+    Hazel::Ref<Hazel::Shader> m_TextureShader;
     Hazel::Ref<Hazel::VertexArray> m_VertexArray;
     Hazel::Ref<Hazel::VertexArray> m_SquareVA;
-
+    Hazel::Ref<Hazel::Texture2D> m_Texture2D;
     Hazel::OrthographicCamera m_Camera{-1.6f, 1.6f, -0.9f, 0.9f};
     glm::vec3 m_CameraPosition{0.0f, 0.0f, 0.0f};
     glm::vec4 m_SquareColor{0.2f, 0.3f, 0.8f, 1.0f};
     float m_CameraRotation = 0.0f;
     float m_CameraMoveSpeed = 1.0f;
     float m_CameraRotationSpeed = 10.0f;
+    Hazel::AssetHandle m_TextureHandle = 0;
 };
 
 class Sandbox : public Hazel::Application
@@ -151,10 +201,17 @@ class Sandbox : public Hazel::Application
 public:
     Sandbox()
     {
+        Hazel::ProjectConfig config;
+        config.Name = "Sandbox";
+        config.ProjectDirectory = "D:/Temp/code/Hazel/Sandbox";
+        config.AssetDirectory = "assets";
+        Hazel::Project::SetActive(Hazel::Ref<Hazel::Project>::Create(config));
+        Hazel::AssetManager::Init();
         PushLayer(new ExampleLayer());
     }
     ~Sandbox()
     {
+        Hazel::AssetManager::Shutdown();
     }
 };
 

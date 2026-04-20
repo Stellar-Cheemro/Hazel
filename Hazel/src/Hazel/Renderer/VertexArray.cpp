@@ -12,7 +12,7 @@ VertexArray* VertexArray::Create()
         case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "Renderer API not supported!");
             return nullptr;
-        case RendererAPI::API::OpenGl:
+        case RendererAPI::API::OpenGL:
             return new OpenGLVertexArray();
     }
     HAZEL_CORE_ASSERT(false, "Unknown Renderer API!");

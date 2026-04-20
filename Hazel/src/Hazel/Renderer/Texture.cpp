@@ -1,21 +1,21 @@
-#include "Shader.h"
-
+#include "Texture.h"
+#include <Hazel/Core/Log.h>
+#include <Hazel/Core/Ref.h>
 #include <Hazel/Renderer/Renderer.h>
-#include <Platform/OpenGL/OpenGLShader.h>
-
-#include <string>
+#include <Platform/OpenGL/OpenGLTexture.h>
 namespace Hazel
 {
-Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc)
+Ref<Texture2D> Texture2D::Create(const std::string& path)
 {
-    switch (Renderer::GetAPI())
+    switch (RendererAPI::GetAPI())
     {
         case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
             return nullptr;
         case RendererAPI::API::OpenGL:
-            return new OpenGLShader(vertexSrc, fragmentSrc);
+            return Ref<OpenGLTexture2D>::Create(path.c_str()).As<Texture2D>();
     }
+
     HAZEL_CORE_ASSERT(false, "Unknown RendererAPI!");
     return nullptr;
 }

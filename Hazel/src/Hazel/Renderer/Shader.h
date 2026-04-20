@@ -1,12 +1,12 @@
 #pragma once
 
 #include <Hazel/Core/Core.h>
-
+#include <Hazel/Core/Ref.h>
 #include <cstdint>
 #include <string>
 namespace Hazel
 {
-class HAZEL_API Shader
+class HAZEL_API Shader : public RefCounted
 {
 public:
     virtual ~Shader() = default;
