@@ -9,6 +9,7 @@ target_compile_definitions(Sandbox
         $<$<CONFIG:Debug>:HAZEL_DEBUG>
         $<$<CONFIG:Release>:HAZEL_RELEASE>
         $<$<CONFIG:RelWithDebInfo>:HAZEL_RELEASE>
+        SANDBOX_PROJECT_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
 # 链接Hazel库

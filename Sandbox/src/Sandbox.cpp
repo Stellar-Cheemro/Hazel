@@ -45,6 +45,9 @@ public:
             m_Shader = shaderAsset->GetShader();
         if (textureShaderAsset)
             m_TextureShader = textureShaderAsset->GetShader();
+
+        m_CheckTexHandle = Hazel::AssetManager::ImportAsset("textures/Checkerboard.png");
+        m_LogoTexHandle = Hazel::AssetManager::ImportAsset("textures/ChernoLogo.png");
     }
 
     void OnUpdate(Hazel::Timestep timestep) override
@@ -64,17 +67,15 @@ public:
             m_CameraRotation -= m_CameraRotationSpeed * time;
         m_Camera.SetPosition(m_CameraPosition);
         m_Camera.SetRotation(m_CameraRotation);
-        m_FlatShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/FlatColor.glsl");
-        m_TextureHandle = Hazel::AssetManager::ImportAsset("textures/Checkerboard.png");
+
         Hazel::Ref<Hazel::TextureAsset> textureAsset =
-            Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_TextureHandle);
+            Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_CheckTexHandle);
         if (textureAsset)
             m_CheckTex = textureAsset->GetTexture();
         m_TextureShader.As<Hazel::OpenGLShader>()->Bind();
         m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
 
-        m_TextureHandle = Hazel::AssetManager::ImportAsset("textures/ChernoLogo.png");
-        textureAsset = Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_TextureHandle);
+        textureAsset = Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_LogoTexHandle);
         if (textureAsset)
             m_LogoTex = textureAsset->GetTexture();
         m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
@@ -130,7 +131,8 @@ private:
     float m_CameraRotation = 0.0f;
     float m_CameraMoveSpeed = 1.0f;
     float m_CameraRotationSpeed = 10.0f;
-    Hazel::AssetHandle m_TextureHandle = 0;
+    Hazel::AssetHandle m_CheckTexHandle = 0;
+    Hazel::AssetHandle m_LogoTexHandle = 0;
     Hazel::AssetHandle m_FlatShaderHandle = 0;
     Hazel::AssetHandle m_TextureShaderHandle = 0;
 };
@@ -142,7 +144,7 @@ public:
     {
         Hazel::ProjectConfig config;
         config.Name = "Sandbox";
-        config.ProjectDirectory = "D:/Temp/code/Hazel/Sandbox";
+        config.ProjectDirectory = SANDBOX_PROJECT_DIR;
         config.AssetDirectory = "assets";
         Hazel::Project::SetActive(Hazel::Ref<Hazel::Project>::Create(config));
         Hazel::AssetManager::Init();
