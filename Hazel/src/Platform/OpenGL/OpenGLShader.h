@@ -1,18 +1,24 @@
 #pragma once
 #pragma once
-
+// clang-format off
 #include <Hazel/Core/Core.h>
 #include <Hazel/Renderer/Shader.h>
-#include <glm/glm.hpp>
 
 #include <cstdint>
 #include <string>
+#include <filesystem>
+#include <unordered_map>
+
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+// clang-format on
 namespace Hazel
 {
 class HAZEL_API OpenGLShader : public Shader
 {
 public:
     OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+    OpenGLShader(const std::filesystem::path& filepath);
     virtual ~OpenGLShader();
 
     virtual void Bind() const override;
@@ -28,6 +34,11 @@ public:
 
     void UploadUniformInt(const std::string& name, int value);
     void UploadUniformIntArray(const std::string& name, int* values, uint32_t count);
+
+private:
+    std::string ReadFile(const std::filesystem::path& filepath);
+    std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+    void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 
 private:
     uint32_t m_RendererID;

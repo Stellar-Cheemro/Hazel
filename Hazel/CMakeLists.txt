@@ -57,7 +57,6 @@ add_library(Hazel SHARED
     ${HAZEL_SOURCES}
     ${IMGUI_SOURCES}
     ${STB_IMAGE_SOURCES}
-
 )
 
 # include路径设置
@@ -68,6 +67,7 @@ target_include_directories(Hazel
         $<BUILD_INTERFACE:${GLM_DIR}>
         $<BUILD_INTERFACE:${IMGUI_DIR}>
         $<BUILD_INTERFACE:${STB_IMAGE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor/glad/include>
         $<INSTALL_INTERFACE:include>
         PRIVATE
         $<BUILD_INTERFACE:${IMGUI_DIR}/backends>

@@ -71,6 +71,8 @@ Application::Application()
     // 再由 WindowsWindow 转成 Hazel 事件对象并转发到这里
     m_Window->SetEventCallback(HAZEL_BIND_EVENT_FN(Application::OnEvent));
 
+    Renderer::Init();
+
     // ImGuiLayer 由 LayerStack 统一管理生命周期
     // 这里不再使用 unique_ptr 或者shared_ptr 持有 ImGuiLayer避免双重释放
     m_ImGuiLayer = new ImGuiLayer();

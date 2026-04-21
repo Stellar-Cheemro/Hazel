@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include <Hazel/Renderer/OrthographicCamera.h>
+#include <Hazel/Renderer/RenderCommand.h>
 #include <Hazel/Renderer/Renderer.h>
-
 #include <Platform/OpenGL/OpenGLShader.h>
 namespace Hazel
 {
@@ -30,6 +30,11 @@ void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexA
 }
 void Renderer::EndScene()
 {
+}
+
+void Renderer::Init()
+{
+    RenderCommand::Init();
 }
 
 } // namespace Hazel
