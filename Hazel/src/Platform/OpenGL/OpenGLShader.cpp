@@ -68,7 +68,7 @@ OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& frag
     Compile(shaderSources);
 }
 
-OpenGLShader::OpenGLShader(const std::filesystem::path& filepath) : m_RendererID(0)
+OpenGLShader::OpenGLShader(const std::string& filepath) : m_RendererID(0)
 {
     std::string shaderStr = ReadFile(filepath);
     auto shaderSources = PreProcess(shaderStr);
@@ -140,12 +140,12 @@ void OpenGLShader::UploadUniformIntArray(const std::string& name, int* values, u
 // ----------------------------------------------------------------------------
 // 内部工具函数
 // ----------------------------------------------------------------------------
-std::string OpenGLShader::ReadFile(const std::filesystem::path& filepath)
+std::string OpenGLShader::ReadFile(const std::string& filepath)
 {
     std::ifstream in(filepath, std::ios::in | std::ios::binary);
     if (!in)
     {
-        HAZEL_CORE_ERROR("Could not open file '{0}'", filepath.string());
+        HAZEL_CORE_ERROR("Could not open file '{0}'", filepath);
         HAZEL_CORE_ASSERT(false, "Failed to open Shader file!");
         return std::string();
     }

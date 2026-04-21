@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
-#include <iostream>
+
 class ExampleLayer : public Hazel::Layer
 {
 public:
@@ -34,33 +34,17 @@ public:
             squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
         m_SquareVA->SetIndexBuffer(squareIB);
 
-        // 着色器源码
-        std::string vertexSrc = R"(
-        #version 330 core
-        layout (location = 0) in vec3 a_Position;
+        m_FlatShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/FlatColor.glsl");
+        m_TextureShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/Texture.glsl");
 
-        uniform mat4 u_ViewProjection;
-        uniform mat4 u_Model;
+        auto shaderAsset = Hazel::AssetManager::GetAsset<Hazel::ShaderAsset>(m_FlatShaderHandle);
+        auto textureShaderAsset =
+            Hazel::AssetManager::GetAsset<Hazel::ShaderAsset>(m_TextureShaderHandle);
 
-        void main()
-        {
-            gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 1.0);
-        }
-    )";
-
-        std::string fragmentSrc = R"(
-        #version 330 core
-        layout(location = 0) out vec4 FragColor;
-
-        uniform vec4 u_Color;
-        void main()
-        {
-            FragColor = u_Color;
-        }
-    )";
-        m_Shader.reset(Hazel::Shader::Create(vertexSrc, fragmentSrc));
-        m_TextureShader.reset(
-            Hazel::Shader::Create("D:/Temp/code/Hazel/Sandbox/assets/Shaders/Texture.glsl"));
+        if (shaderAsset)
+            m_Shader = shaderAsset->GetShader();
+        if (textureShaderAsset)
+            m_TextureShader = textureShaderAsset->GetShader();
     }
 
     void OnUpdate(Hazel::Timestep timestep) override
@@ -80,6 +64,7 @@ public:
             m_CameraRotation -= m_CameraRotationSpeed * time;
         m_Camera.SetPosition(m_CameraPosition);
         m_Camera.SetRotation(m_CameraRotation);
+        m_FlatShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/FlatColor.glsl");
         m_TextureHandle = Hazel::AssetManager::ImportAsset("textures/Checkerboard.png");
         Hazel::Ref<Hazel::TextureAsset> textureAsset =
             Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_TextureHandle);
@@ -146,6 +131,8 @@ private:
     float m_CameraMoveSpeed = 1.0f;
     float m_CameraRotationSpeed = 10.0f;
     Hazel::AssetHandle m_TextureHandle = 0;
+    Hazel::AssetHandle m_FlatShaderHandle = 0;
+    Hazel::AssetHandle m_TextureShaderHandle = 0;
 };
 
 class Sandbox : public Hazel::Application

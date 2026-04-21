@@ -1,9 +1,11 @@
 #pragma once
-
+// clang-format off
 #include <Hazel/Core/Core.h>
 #include <Hazel/Core/Timestep.h>
 #include <Hazel/Events/Event.h>
+
 #include <string>
+// clang-format on
 namespace Hazel
 {
 class HAZEL_API Layer

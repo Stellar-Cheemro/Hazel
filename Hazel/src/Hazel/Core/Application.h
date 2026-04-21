@@ -1,4 +1,5 @@
 #pragma once
+// clang-format off
 #include <Hazel/Core/Core.h>
 #include <Hazel/Core/LayerStack.h>
 #include <Hazel/Core/Timestep.h>
@@ -14,6 +15,7 @@
 #include <Hazel/Renderer/VertexArray.h>
 
 #include <memory>
+// clang-format on
 namespace Hazel
 {
 class HAZEL_API Application

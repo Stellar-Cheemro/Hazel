@@ -2,6 +2,9 @@
 
 namespace Hazel
 {
+// ----------------------------------------------------------------------------
+// 构造/析构函数
+// ----------------------------------------------------------------------------
 LayerStack::LayerStack()
 {
 }
@@ -13,7 +16,9 @@ LayerStack::~LayerStack()
         delete layer;
     }
 }
-
+// ----------------------------------------------------------------------------
+// PUBLIC API
+// ----------------------------------------------------------------------------
 void LayerStack::PushLayer(Layer* layer)
 {
     m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
@@ -44,5 +49,4 @@ void LayerStack::PopOverlay(Layer* overlay)
         m_Layers.erase(it);
     }
 }
-
 } // namespace Hazel

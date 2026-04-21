@@ -15,9 +15,11 @@
 #include <Hazel/Asset/AssetMetadata.h>
 #include <Hazel/Asset/AssetManager.h>
 #include <Hazel/Asset/TextureAsset.h>
+#include <Hazel/Asset/ShaderAsset.h>
 #include <Hazel/Asset/AssetSerializer.h>
 #include <Hazel/Asset/AssetRegistry.h>
 #include <Hazel/Asset/TextureSerializer.h>
+#include <Hazel/Asset/AssetManager.h>
 
 #include <Hazel/Project/Project.h>
 
@@ -42,7 +44,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Platform/OpenGL/OpenGLShader.h>
-#include <Hazel/Asset/AssetManager.h>
+
 // ---入口点-------------------
 #include <Hazel/Core/EntryPoint.h>
 // ---------------------------

@@ -4,7 +4,9 @@
 
 namespace Hazel
 {
-static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) noexcept
+namespace
+{
+GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) noexcept
 {
     switch (type)
     {       // clang-format off
@@ -26,7 +28,7 @@ static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) noexcept
     HAZEL_CORE_ASSERT(false, "Unknown ShaderDataType!");
     return 0;
 }
-
+} // namespace
 OpenGLVertexArray::OpenGLVertexArray()
 {
     glCreateVertexArrays(1, &m_RendererID);

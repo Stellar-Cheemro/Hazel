@@ -1,10 +1,13 @@
+// clang-format off
 #include "Log.h"
 
 #include <spdlog/sinks/stdout_color_sinks.h>
+// clang-format on
 namespace Hazel
 {
 std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
-std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
+std::shared_ptr<spdlog::logger> Log::s_ClientLogger; // P
+// ----------------------------------------------------------------------------
 void Log::Init()
 {
     // 设置日志格式

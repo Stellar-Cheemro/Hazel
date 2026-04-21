@@ -15,14 +15,16 @@ bool Hazel::TextureAssetSerializer::TrySerialize(const AssetMetadata& metadata, 
     std::filesystem::path FullPath = AssetManager::GetFileSystemPath(metadata);
     if (FullPath.empty())
     {
-        HAZEL_CORE_ERROR("Texture file does not exist: {0}", FullPath.string());
+        HAZEL_CORE_ERROR("Texture file does not exist: {0} while trying to serialize",
+                         FullPath.string());
         return false;
     }
 
     Ref<Texture2D> texture = Texture2D::Create(FullPath.string());
     if (!texture)
     {
-        HAZEL_CORE_ERROR("Failed to create texture from file: {0}", FullPath.string());
+        HAZEL_CORE_ERROR("Failed to create texture from file: {0} while trying to serialize",
+                         FullPath.string());
         return false;
     }
 

@@ -1,8 +1,9 @@
 #pragma once
+// clang-format off
 #include <Hazel/Core/Core.h>
 
 #include <utility>
-
+// clang-format on
 namespace Hazel
 {
 // Input 是一个“平台无关的输入查询接口”

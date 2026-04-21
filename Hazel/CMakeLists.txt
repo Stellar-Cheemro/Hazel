@@ -38,7 +38,7 @@ set(HAZEL_SOURCES
     ${HAZEL_DIR}/Asset/AssetManager.cpp
     ${HAZEL_DIR}/Asset/AssetRegistry.cpp
     ${HAZEL_DIR}/Asset/TextureSerializer.cpp
-
+    ${HAZEL_DIR}/Asset/ShaderSerializer.cpp
     ${PLATFORM_DIR}/Windows/WindowsWindow.cpp
     ${PLATFORM_DIR}/Windows/WindowsInput.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLBuffer.cpp

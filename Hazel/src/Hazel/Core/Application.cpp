@@ -23,7 +23,41 @@ namespace Hazel
 {
 
 Application* Application::s_Instance = nullptr;
+// ----------------------------------------------------------------------------
+// 构造/析构函数
+// ----------------------------------------------------------------------------
+Application::Application()
+{
+    HAZEL_CORE_ASSERT(!s_Instance, "Application already exists!");
+    s_Instance = this;
 
+    // 创建平台窗口对象
+    // 这里返回的是 Window 抽象接口，实际类型通常是 WindowsWindow
+    // 这样 Application 不需要直接依赖 GLFW，而是只依赖 Hazel 的窗口抽象层
+    m_Window = std::unique_ptr<Window>(Window::Create());
+
+    // 将 Application::OnEvent 绑定为窗口事件回调
+    // 后续 GLFW 原生回调会先进入 WindowsWindow
+    // 再由 WindowsWindow 转成 Hazel 事件对象并转发到这里
+    m_Window->SetEventCallback(HAZEL_BIND_EVENT_FN(Application::OnEvent));
+
+    Renderer::Init();
+
+    // ImGuiLayer 由 LayerStack 统一管理生命周期
+    // 这里不再使用 unique_ptr 或者shared_ptr 持有 ImGuiLayer避免双重释放
+    m_ImGuiLayer = new ImGuiLayer();
+    PushOverlay(m_ImGuiLayer);
+}
+Application::~Application()
+{
+    // 注意：
+    // 当前 Layer 的生命周期由 LayerStack 统一管理
+    // 因此这里不手动 delete m_ImGuiLayer
+    // 如果这里再 delete，会与 LayerStack 析构重复释放
+}
+// ----------------------------------------------------------------------------
+// PUBLIC API
+// ----------------------------------------------------------------------------
 void Application::Run()
 {
 
@@ -56,36 +90,6 @@ void Application::Run()
     }
 }
 
-Application::Application()
-{
-    HAZEL_CORE_ASSERT(!s_Instance, "Application already exists!");
-    s_Instance = this;
-
-    // 创建平台窗口对象
-    // 这里返回的是 Window 抽象接口，实际类型通常是 WindowsWindow
-    // 这样 Application 不需要直接依赖 GLFW，而是只依赖 Hazel 的窗口抽象层
-    m_Window = std::unique_ptr<Window>(Window::Create());
-
-    // 将 Application::OnEvent 绑定为窗口事件回调
-    // 后续 GLFW 原生回调会先进入 WindowsWindow
-    // 再由 WindowsWindow 转成 Hazel 事件对象并转发到这里
-    m_Window->SetEventCallback(HAZEL_BIND_EVENT_FN(Application::OnEvent));
-
-    Renderer::Init();
-
-    // ImGuiLayer 由 LayerStack 统一管理生命周期
-    // 这里不再使用 unique_ptr 或者shared_ptr 持有 ImGuiLayer避免双重释放
-    m_ImGuiLayer = new ImGuiLayer();
-    PushOverlay(m_ImGuiLayer);
-}
-Application::~Application()
-{
-    // 注意：
-    // 当前 Layer 的生命周期由 LayerStack 统一管理
-    // 因此这里不手动 delete m_ImGuiLayer
-    // 如果这里再 delete，会与 LayerStack 析构重复释放
-}
-
 void Application::PushLayer(Layer* layer)
 {
     m_LayerStack.PushLayer(layer);
@@ -113,7 +117,9 @@ void Application::OnEvent(Event& e)
             break;
     }
 }
-
+// ----------------------------------------------------------------------------
+// 内部实现接口
+// ----------------------------------------------------------------------------
 bool Application::OnWindowClose(WindowCloseEvent& e)
 {
     // 收到主窗口关闭事件后，不在这里立即销毁窗口对象
@@ -125,5 +131,4 @@ bool Application::OnWindowClose(WindowCloseEvent& e)
     m_Running = false;
     return true;
 }
-
 } // namespace Hazel

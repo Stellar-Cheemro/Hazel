@@ -1,6 +1,7 @@
 #pragma once
-
+// clang-format off
 #include <memory>
+// clang-format on
 
 #ifdef HAZEL_PLATFORM_WINDOWS
 #    ifdef HAZEL_BUILD_DLL

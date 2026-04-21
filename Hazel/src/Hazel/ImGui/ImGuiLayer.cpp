@@ -14,8 +14,43 @@
 // clang-format on  
 namespace Hazel
 {
+// ----------------------------------------------------------------------------
+// 构造/析构函数
+// ----------------------------------------------------------------------------
 ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
 {
+}
+// ----------------------------------------------------------------------------
+// PUBLIC API
+// ----------------------------------------------------------------------------
+void ImGuiLayer::Begin()
+{
+	// 一帧 ImGui 的开始顺序：
+	// 1. 渲染后端 NewFrame
+	// 2. 平台后端 NewFrame
+	// 3. ImGui::NewFrame()
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void ImGuiLayer::End()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    Application& app = Application::GetApplication();
+    io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+
+    // 渲染
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
 }
 
 void ImGuiLayer::OnAttach()
@@ -105,36 +140,6 @@ void ImGuiLayer::OnImGuiRender()
 {
     static bool show = true;
     ImGui::ShowDemoWindow(&show);
-}
-
-void ImGuiLayer::Begin()
-{
-	// 一帧 ImGui 的开始顺序：
-	// 1. 渲染后端 NewFrame
-	// 2. 平台后端 NewFrame
-	// 3. ImGui::NewFrame()
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-}
-
-void ImGuiLayer::End()
-{
-    ImGuiIO& io = ImGui::GetIO();
-    Application& app = Application::GetApplication();
-    io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
-
-    // 渲染
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(backup_current_context);
-    }
 }
 
 } // namespace Hazel

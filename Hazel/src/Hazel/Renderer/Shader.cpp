@@ -2,7 +2,6 @@
 #include "Shader.h"
 
 #include <string>
-#include <filesystem>
 
 #include <Hazel/Renderer/Renderer.h>
 #include <Platform/OpenGL/OpenGLShader.h>
@@ -22,7 +21,7 @@ Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragment
     HAZEL_CORE_ASSERT(false, "Unknown RendererAPI!");
     return nullptr;
 }
-Shader* Shader::Create(const std::filesystem::path& filepath)
+Shader* Shader::Create(const std::string& filepath)
 {
     switch (Renderer::GetAPI())
     {
