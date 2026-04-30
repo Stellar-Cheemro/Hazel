@@ -21,7 +21,7 @@ public:
 
     template <LayerType T, typename... Args> T& PushLayer(Args&&... args)
     {
-        auto layer = std::make_unique<T>(std::forward<Args>(args)...);
+        auto layer = CreateScope<T>(std::forward<Args>(args)...);
         T& ref = *layer;
         m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, std::move(layer));
         m_LayerInsertIndex++;
@@ -31,7 +31,7 @@ public:
 
     template <LayerType T, typename... Args> T& PushOverlay(Args&&... args)
     {
-        auto overlay = std::make_unique<T>(std::forward<Args>(args)...);
+        auto overlay = CreateScope<T>(std::forward<Args>(args)...);
         T& ref = *overlay;
         m_Layers.emplace_back(std::move(overlay));
         ref.OnAttach();

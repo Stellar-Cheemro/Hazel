@@ -1,6 +1,6 @@
 #pragma once
 #include <Hazel/Core/Core.h>
-
+#include <Hazel/Core/Scope.h>
 #include <Hazel/Events/Event.h>
 
 #include <functional>
@@ -41,6 +41,6 @@ public:
 
     inline virtual void* GetNativeWindow() const = 0;
 
-    static Window* Create(const WindowProps& porps = WindowProps());
+    static Scope<Window> Create(const WindowProps& porps = WindowProps());
 };
 } // namespace Hazel

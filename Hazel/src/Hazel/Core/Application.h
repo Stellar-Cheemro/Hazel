@@ -48,12 +48,18 @@ public:
         return *m_Window;
     }
 
+    Application(const Application&) = delete;
+    Application& operator=(const Application&) = delete;
+
+    Application(Application&&) = delete;
+    Application& operator=(Application&&) = delete;
+
 private:
     bool OnWindowClose(WindowCloseEvent& e);
 
 private:
     LayerStack m_LayerStack;
-    std::unique_ptr<Window> m_Window;
+    Scope<Window> m_Window;
     ImGuiLayer* m_ImGuiLayer;
     Timestep m_Timestep;
     float m_LastFrameTime = 0.0f;

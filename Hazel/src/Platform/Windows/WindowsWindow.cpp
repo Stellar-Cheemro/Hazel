@@ -21,9 +21,9 @@ static void GLFWErrorCallback(int error, const char* description)
     HAZEL_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 }
 
-Window* Window::Create(const WindowProps& props)
+Scope<Window> Window::Create(const WindowProps& props)
 {
-    return new WindowsWindow(props);
+    return CreateScope<WindowsWindow>(props);
 }
 
 WindowsWindow::~WindowsWindow()
@@ -32,14 +32,15 @@ WindowsWindow::~WindowsWindow()
 }
 void WindowsWindow::Shutdown()
 {
-    glfwDestroyWindow(m_Window);
+    if (m_Window)
+    {
+        glfwDestroyWindow(m_Window);
+        m_Window = nullptr;
+    }
 }
 
 void WindowsWindow::SetVSync(bool enabled)
 {
-    // glfwSwapInterval(1) 表示启用垂直同步
-    // 这样 SwapBuffers 会等待显示器刷新节奏，减少画面撕裂
-    // 0 表示不等待刷新，帧率可能更高，但更容易撕裂
     if (enabled)
     {
         glfwSwapInterval(1);
@@ -48,6 +49,7 @@ void WindowsWindow::SetVSync(bool enabled)
     {
         glfwSwapInterval(0);
     }
+    m_Data.VSync = enabled;
 }
 
 bool WindowsWindow::IsVSync() const
@@ -109,7 +111,7 @@ void WindowsWindow::Init(const WindowProps& props)
         nullptr
     );
     // clang-format on
-    m_Context = new OpenGLContext(m_Window);
+    m_Context = CreateScope<OpenGLContext>(m_Window);
     m_Context->Init();
 
     // 把 Hazel 自己的窗口元数据挂到 GLFWwindow 上

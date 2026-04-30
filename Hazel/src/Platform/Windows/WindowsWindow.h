@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Hazel/Core/Scope.h>
 #include <Hazel/Core/Window.h>
 #include <Hazel/Renderer/GraphicsContext.h>
 
@@ -44,7 +45,7 @@ private:
 
 private:
     GLFWwindow* m_Window;
-    GraphicsContext* m_Context;
+    Scope<GraphicsContext> m_Context;
     struct WindowData
     {
         EventCallbackFn EventCallback;

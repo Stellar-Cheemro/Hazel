@@ -34,7 +34,7 @@ Application::Application()
     // 创建平台窗口对象
     // 这里返回的是 Window 抽象接口，实际类型通常是 WindowsWindow
     // 这样 Application 不需要直接依赖 GLFW，而是只依赖 Hazel 的窗口抽象层
-    m_Window = std::unique_ptr<Window>(Window::Create());
+    m_Window = Window::Create();
 
     // 将 Application::OnEvent 绑定为窗口事件回调
     // 后续 GLFW 原生回调会先进入 WindowsWindow
