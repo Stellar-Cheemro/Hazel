@@ -1,20 +1,20 @@
-#include "Renderer.h"
+#include "SceneRenderer.h"
 #include <Hazel/Renderer/OrthographicCamera.h>
 #include <Hazel/Renderer/RenderCommand.h>
-#include <Hazel/Renderer/Renderer.h>
+#include <Hazel/Renderer/SceneRenderer.h>
 #include <Platform/OpenGL/OpenGLShader.h>
 namespace Hazel
 {
-Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
-void Renderer::BeginScene(OrthographicCamera& camera)
+SceneRenderer::SceneData* SceneRenderer::s_SceneData = new SceneRenderer::SceneData;
+void SceneRenderer::BeginScene(OrthographicCamera& camera)
 {
     s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 }
-void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray,
-                      const glm::mat4& modelMatrix)
+void SceneRenderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray,
+                           const glm::mat4& modelMatrix)
 {
     shader->Bind();
-    switch (Renderer::GetAPI())
+    switch (SceneRenderer::GetAPI())
     {
         case RendererAPI::API::None:
             HAZEL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
@@ -28,11 +28,11 @@ void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexA
     vertexArray->Bind();
     RenderCommand ::DrawIndexed(vertexArray);
 }
-void Renderer::EndScene()
+void SceneRenderer::EndScene()
 {
 }
 
-void Renderer::Init()
+void SceneRenderer::Init()
 {
     RenderCommand::Init();
 }

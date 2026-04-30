@@ -4,7 +4,7 @@
 #include <Hazel/Core/LayerStack.h>
 #include <Hazel/Core/Timestep.h>
 #include <Hazel/Core/Window.h>
-
+#include <Hazel/Core/Scope.h>
 #include <Hazel/Events/ApplicationEvent.h>
 
 #include <Hazel/ImGui/ImGuiLayer.h>
@@ -25,8 +25,14 @@ public:
 
     virtual ~Application();
 
-    void PushLayer(Layer* layer);
-    void PushOverlay(Layer* layer);
+    template <LayerType T, typename... Args> T& PushLayer(Args&&... args)
+    {
+        return m_LayerStack.PushLayer<T>(std::forward<Args>(args)...);
+    }
+    template <LayerType T, typename... Args> T& PushOverlay(Args&&... args)
+    {
+        return m_LayerStack.PushOverlay<T>(std::forward<Args>(args)...);
+    }
 
     void OnEvent(Event& e);
 

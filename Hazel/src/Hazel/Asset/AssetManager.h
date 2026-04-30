@@ -3,8 +3,8 @@
 #include <Hazel/Asset/AssetMetadata.h>
 #include <Hazel/Asset/AssetRegistry.h>
 #include <Hazel/Asset/AssetSerializer.h>
-#include <Hazel/Core/Core.h>
 #include <Hazel/Core/Ref.h>
+#include <Hazel/Core/Scope.h>
 namespace Hazel
 {
 class HAZEL_API AssetManager

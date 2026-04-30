@@ -83,7 +83,7 @@ public:
         m_Shader.As<Hazel::OpenGLShader>()->Bind();
         Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         Hazel::RenderCommand::Clear();
-        Hazel::Renderer::BeginScene(m_Camera);
+        Hazel::SceneRenderer::BeginScene(m_Camera);
         m_Shader.As<Hazel::OpenGLShader>()->UploadUniformFloat4("u_Color", m_SquareColor);
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
         for (int x = 0; x < 20; x++)
@@ -92,7 +92,7 @@ public:
             {
                 glm::vec3 translate(x * 0.11f, y * 0.11f, 0.0f);
                 glm::mat4 model = glm::translate(glm::mat4(1.0f), translate) * scale;
-                Hazel::Renderer::Submit(m_Shader, m_SquareVA, model);
+                Hazel::SceneRenderer::Submit(m_Shader, m_SquareVA, model);
             }
         }
 
@@ -101,11 +101,11 @@ public:
         glm::mat4 CSQmodel = glm::translate(glm::mat4(1.0f), CSQtranslate) * CSQscale;
 
         m_CheckTex->Bind();
-        Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
+        Hazel::SceneRenderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
         m_LogoTex->Bind();
-        Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
+        Hazel::SceneRenderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
 
-        Hazel::Renderer::EndScene();
+        Hazel::SceneRenderer::EndScene();
     }
 
     void OnEvent(Hazel::Event& event) override
@@ -148,7 +148,7 @@ public:
         config.AssetDirectory = "assets";
         Hazel::Project::SetActive(Hazel::Ref<Hazel::Project>::Create(config));
         Hazel::AssetManager::Init();
-        PushLayer(new ExampleLayer());
+        PushLayer<ExampleLayer>();
     }
     ~Sandbox()
     {

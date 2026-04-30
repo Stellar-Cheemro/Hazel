@@ -10,31 +10,26 @@ LayerStack::LayerStack()
 }
 LayerStack::~LayerStack()
 {
-    for (Layer* layer : m_Layers)
+    for (const auto& layer : m_Layers)
     {
-        layer->OnDetach();
-        delete layer;
+        if (layer)
+        {
+            layer->OnDetach();
+        }
     }
 }
 // ----------------------------------------------------------------------------
 // PUBLIC API
 // ----------------------------------------------------------------------------
-void LayerStack::PushLayer(Layer* layer)
-{
-    m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
-    m_LayerInsertIndex++;
-}
-void LayerStack::PushOverlay(Layer* overlay)
-{
-    m_Layers.emplace_back(overlay);
-}
-
 void LayerStack::PopLayer(Layer* layer)
 {
-    auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
-    if (it != m_Layers.end())
+    auto begin = m_Layers.begin();
+    auto end = m_Layers.begin() + m_LayerInsertIndex;
+    auto it = std::find_if(begin, end,
+                           [layer](const Scope<Layer>& current) { return current.get() == layer; });
+    if (it != end)
     {
-        layer->OnDetach();
+        (*it)->OnDetach();
         m_Layers.erase(it);
         m_LayerInsertIndex--;
     }
@@ -42,10 +37,13 @@ void LayerStack::PopLayer(Layer* layer)
 
 void LayerStack::PopOverlay(Layer* overlay)
 {
-    auto it = std::find(m_Layers.begin() + m_LayerInsertIndex, m_Layers.end(), overlay);
-    if (it != m_Layers.end())
+    auto begin = m_Layers.begin() + m_LayerInsertIndex;
+    auto end = m_Layers.end();
+    auto it = std::find_if(begin, end, [overlay](const Scope<Layer>& current)
+                           { return current.get() == overlay; });
+    if (it != end)
     {
-        overlay->OnDetach();
+        (*it)->OnDetach();
         m_Layers.erase(it);
     }
 }

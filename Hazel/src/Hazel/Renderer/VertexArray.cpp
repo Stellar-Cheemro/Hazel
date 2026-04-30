@@ -1,21 +1,21 @@
 #include "VertexArray.h"
 
 #include <Hazel/Core/Log.h>
-#include <Hazel/Renderer/Renderer.h>
+#include <Hazel/Renderer/SceneRenderer.h>
 #include <Platform/OpenGL/OpenGLVertexArray.h>
 namespace Hazel
 {
 VertexArray* VertexArray::Create()
 {
-    switch (Renderer::GetAPI())
+    switch (SceneRenderer::GetAPI())
     {
         case RendererAPI::API::None:
-            HAZEL_CORE_ASSERT(false, "Renderer API not supported!");
+            HAZEL_CORE_ASSERT(false, "SceneRenderer API not supported!");
             return nullptr;
         case RendererAPI::API::OpenGL:
             return new OpenGLVertexArray();
     }
-    HAZEL_CORE_ASSERT(false, "Unknown Renderer API!");
+    HAZEL_CORE_ASSERT(false, "Unknown SceneRenderer API!");
     return nullptr;
 }
 }

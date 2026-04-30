@@ -7,7 +7,7 @@
 #include <Hazel/Core/Window.h>
 #include <Hazel/Core/Timestep.h>
 
-#include <Hazel/Renderer/Renderer.h>
+#include <Hazel/Renderer/SceneRenderer.h>
 #include <Hazel/Renderer/RenderCommand.h>
 
 #include <Hazel/Events/ApplicationEvent.h>
@@ -41,13 +41,12 @@ Application::Application()
     // 再由 WindowsWindow 转成 Hazel 事件对象并转发到这里
     m_Window->SetEventCallback(HAZEL_BIND_EVENT_FN(Application::OnEvent));
 
-    Renderer::Init();
+    SceneRenderer::Init();
 
     // ImGuiLayer 由 LayerStack 统一管理生命周期
-    // 这里不再使用 unique_ptr 或者shared_ptr 持有 ImGuiLayer避免双重释放
-    m_ImGuiLayer = new ImGuiLayer();
-    PushOverlay(m_ImGuiLayer);
+    m_ImGuiLayer = &PushOverlay<ImGuiLayer>();
 }
+
 Application::~Application()
 {
     // 注意：
@@ -68,7 +67,7 @@ void Application::Run()
         m_LastFrameTime = time;                     // 更新上一帧的时间
 
         // 先更新普通 Layer
-        for (Layer* layer : m_LayerStack)
+        for (Scope<Layer>& layer : m_LayerStack)
         {
             layer->OnUpdate(timestep);
         }
@@ -76,7 +75,7 @@ void Application::Run()
         // 开始一帧 ImGui
         m_ImGuiLayer->Begin();
         // 让每个 Layer 绘制自己的 ImGui 内容
-        for (Layer* layer : m_LayerStack)
+        for (Scope<Layer>& layer : m_LayerStack)
         {
             layer->OnImGuiRender();
         }
@@ -88,17 +87,6 @@ void Application::Run()
         // 2. glfwSwapBuffers()：交换前后缓冲
         m_Window->OnUpdate();
     }
-}
-
-void Application::PushLayer(Layer* layer)
-{
-    m_LayerStack.PushLayer(layer);
-    layer->OnAttach();
-}
-void Application::PushOverlay(Layer* layer)
-{
-    m_LayerStack.PushOverlay(layer);
-    layer->OnAttach();
 }
 
 void Application::OnEvent(Event& e)

@@ -2,6 +2,7 @@
 #include <Hazel/Asset/ShaderSerializer.h>
 #include <Hazel/Asset/TextureSerializer.h>
 #include <Hazel/Core/Log.h>
+#include <Hazel/Core/Scope.h>
 #include <Hazel/Project/Project.h>
 #include <filesystem>
 

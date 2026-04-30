@@ -1,7 +1,7 @@
 #include "Texture.h"
 #include <Hazel/Core/Log.h>
 #include <Hazel/Core/Ref.h>
-#include <Hazel/Renderer/Renderer.h>
+#include <Hazel/Renderer/SceneRenderer.h>
 #include <Platform/OpenGL/OpenGLTexture.h>
 namespace Hazel
 {

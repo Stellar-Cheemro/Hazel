@@ -38,7 +38,7 @@
 
 #include <Hazel/Renderer/OrthographicCamera.h>
 
-#include <Hazel/Renderer/Renderer.h>
+#include <Hazel/Renderer/SceneRenderer.h>
 #include <Hazel/Renderer/RenderCommand.h>
 // ---------------------------
 #include <glm/gtc/matrix_transform.hpp>

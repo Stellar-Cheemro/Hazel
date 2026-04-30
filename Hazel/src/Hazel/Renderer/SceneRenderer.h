@@ -11,7 +11,7 @@ namespace Hazel
 // clang-format off
 
 // clang-format on
-class HAZEL_API Renderer
+class HAZEL_API SceneRenderer
 {
 public:
     static void BeginScene(OrthographicCamera& camera);

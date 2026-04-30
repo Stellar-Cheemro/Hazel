@@ -28,7 +28,7 @@ set(HAZEL_SOURCES
     ${HAZEL_DIR}/Renderer/Buffer.cpp
     ${HAZEL_DIR}/Renderer/Shader.cpp
     ${HAZEL_DIR}/Renderer/GraphicsContext.cpp
-    ${HAZEL_DIR}/Renderer/Renderer.cpp
+    ${HAZEL_DIR}/Renderer/SceneRenderer.cpp
     ${HAZEL_DIR}/Renderer/VertexArray.cpp
     ${HAZEL_DIR}/Renderer/OrthographicCamera.cpp
     ${HAZEL_DIR}/Renderer/RendererAPI.cpp

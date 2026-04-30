@@ -7,7 +7,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
-#include <vector>
+#include <array>
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -193,9 +193,13 @@ std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::stri
 
 void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 {
+    static constexpr size_t MaxShaderStages = 5;
+    HAZEL_CORE_ASSERT(shaderSources.size() > 0 && shaderSources.size() <= MaxShaderStages,
+                      "Only support up to {0} shader stages!", MaxShaderStages);
     GLuint program = glCreateProgram();
-    std::vector<GLuint> shaderIDs;
-    shaderIDs.reserve(shaderSources.size());
+    std::array<GLuint, MaxShaderStages> shaderIDs;
+    shaderIDs.fill(0);
+    uint32_t shaderCount = 0;
     for (auto& [type, source] : shaderSources)
     {
         GLuint shader = CompileShaderStage(type, source);
@@ -204,9 +208,8 @@ void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shader
             glDeleteProgram(program);
             break;
         }
-        shaderIDs.push_back(shader);
+        shaderIDs[shaderCount++] = shader;
         glAttachShader(program, shader);
-        shaderIDs.push_back(shader);
     }
 
     // 链接着色器程序
@@ -224,8 +227,9 @@ void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shader
         glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 
         glDeleteProgram(program);
-        for (auto id : shaderIDs)
+        for (uint32_t i = 0; i < shaderCount; i++)
         {
+            auto id = shaderIDs[i];
             glDeleteShader(id);
         }
         HAZEL_CORE_ERROR("{0}", infoLog.data());
@@ -233,8 +237,9 @@ void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shader
         return;
     }
 
-    for (auto id : shaderIDs)
+    for (uint32_t i = 0; i < shaderCount; i++)
     {
+        auto id = shaderIDs[i];
         glDetachShader(program, id);
         glDeleteShader(id);
     }
