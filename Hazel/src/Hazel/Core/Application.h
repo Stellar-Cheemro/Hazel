@@ -56,6 +56,7 @@ public:
 
 private:
     bool OnWindowClose(WindowCloseEvent& e);
+    bool OnWindowResize(WindowResizeEvent& e);
 
 private:
     LayerStack m_LayerStack;
@@ -64,6 +65,7 @@ private:
     Timestep m_Timestep;
     float m_LastFrameTime = 0.0f;
     bool m_Running = true;
+    bool m_Minimized = false;
 
 private:
     static Application* s_Instance;

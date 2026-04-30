@@ -7,7 +7,7 @@ class ExampleLayer : public Hazel::Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f) // 根据窗口宽高比设置正交投影范围
+        : Layer("Example"), m_CameraController(1.6f / 0.9f, true) // 根据窗口宽高比设置正交投影范围
     {
         // 正方形绘制
         // clang-format off
@@ -52,21 +52,8 @@ public:
 
     void OnUpdate(Hazel::Timestep timestep) override
     {
-        float time = timestep;
-        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_LEFT))
-            m_CameraPosition.x -= m_CameraMoveSpeed * time;
-        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_RIGHT))
-            m_CameraPosition.x += m_CameraMoveSpeed * time;
-        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_UP))
-            m_CameraPosition.y += m_CameraMoveSpeed * time;
-        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_DOWN))
-            m_CameraPosition.y -= m_CameraMoveSpeed * time;
-        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_Q))
-            m_CameraRotation += m_CameraRotationSpeed * time;
-        if (Hazel::Input::IsKeyPressed(HAZEL_KEY_E))
-            m_CameraRotation -= m_CameraRotationSpeed * time;
-        m_Camera.SetPosition(m_CameraPosition);
-        m_Camera.SetRotation(m_CameraRotation);
+
+        m_CameraController.OnUpdate(timestep);
 
         Hazel::Ref<Hazel::TextureAsset> textureAsset =
             Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_CheckTexHandle);
@@ -83,7 +70,7 @@ public:
         m_Shader.As<Hazel::OpenGLShader>()->Bind();
         Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         Hazel::RenderCommand::Clear();
-        Hazel::SceneRenderer::BeginScene(m_Camera);
+        Hazel::SceneRenderer::BeginScene(m_CameraController.GetCamera());
         m_Shader.As<Hazel::OpenGLShader>()->UploadUniformFloat4("u_Color", m_SquareColor);
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
         for (int x = 0; x < 20; x++)
@@ -110,6 +97,7 @@ public:
 
     void OnEvent(Hazel::Event& event) override
     {
+        m_CameraController.OnEvent(event);
     }
 
     void OnImGuiRender() override
@@ -125,12 +113,9 @@ private:
     Hazel::Ref<Hazel::VertexArray> m_SquareVA;
     Hazel::Ref<Hazel::Texture2D> m_CheckTex;
     Hazel::Ref<Hazel::Texture2D> m_LogoTex;
-    Hazel::OrthographicCamera m_Camera{-1.6f, 1.6f, -0.9f, 0.9f};
-    glm::vec3 m_CameraPosition{0.0f, 0.0f, 0.0f};
+    Hazel::OrthographicCameraController m_CameraController;
+
     glm::vec4 m_SquareColor{0.2f, 0.3f, 0.8f, 1.0f};
-    float m_CameraRotation = 0.0f;
-    float m_CameraMoveSpeed = 1.0f;
-    float m_CameraRotationSpeed = 10.0f;
     Hazel::AssetHandle m_CheckTexHandle = 0;
     Hazel::AssetHandle m_LogoTexHandle = 0;
     Hazel::AssetHandle m_FlatShaderHandle = 0;

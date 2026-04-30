@@ -22,15 +22,15 @@ set(HAZEL_SOURCES
     ${HAZEL_DIR}/Core/Layer.cpp
     ${HAZEL_DIR}/Core/Timestep.cpp
 
+    ${HAZEL_DIR}/Controllers/OrthographicCameraController.cpp
     ${HAZEL_DIR}/ImGui/ImGuiLayer.cpp
     ${HAZEL_DIR}/ImGui/ImGuiBuild.cpp
-
+    ${HAZEL_DIR}/Renderer/OrthographicCamera.cpp
     ${HAZEL_DIR}/Renderer/Buffer.cpp
     ${HAZEL_DIR}/Renderer/Shader.cpp
     ${HAZEL_DIR}/Renderer/GraphicsContext.cpp
     ${HAZEL_DIR}/Renderer/SceneRenderer.cpp
     ${HAZEL_DIR}/Renderer/VertexArray.cpp
-    ${HAZEL_DIR}/Renderer/OrthographicCamera.cpp
     ${HAZEL_DIR}/Renderer/RendererAPI.cpp
     ${HAZEL_DIR}/Renderer/RenderCommand.cpp
     ${HAZEL_DIR}/Renderer/Texture.cpp

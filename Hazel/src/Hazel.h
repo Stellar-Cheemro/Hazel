@@ -10,6 +10,7 @@
 #include <Hazel/Core/MouseCodes.h>
 #include <Hazel/Core/Timestep.h>
 #include <Hazel/Core/Ref.h>
+#include <Hazel/Controllers/OrthographicCameraController.h>
 
 #include <Hazel/Asset/Asset.h>
 #include <Hazel/Asset/AssetMetadata.h>

@@ -24,7 +24,6 @@ public:
     {
         return m_ViewProjectionMatrix;
     }
-
     void SetPosition(const glm::vec3& position)
     {
         m_Position = position;

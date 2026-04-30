@@ -66,10 +66,13 @@ void Application::Run()
         Timestep timestep = time - m_LastFrameTime; // 计算两帧之间的时间差
         m_LastFrameTime = time;                     // 更新上一帧的时间
 
-        // 先更新普通 Layer
-        for (Scope<Layer>& layer : m_LayerStack)
+        if (!m_Minimized)
         {
-            layer->OnUpdate(timestep);
+            // 先更新普通 Layer
+            for (Scope<Layer>& layer : m_LayerStack)
+            {
+                layer->OnUpdate(timestep);
+            }
         }
 
         // 开始一帧 ImGui
@@ -93,7 +96,7 @@ void Application::OnEvent(Event& e)
 {
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<WindowCloseEvent>(HAZEL_BIND_EVENT_FN(Application::OnWindowClose));
-
+    dispatcher.Dispatch<WindowResizeEvent>(HAZEL_BIND_EVENT_FN(Application::OnWindowResize));
     HAZEL_CORE_TRACE(e);
 
     // 事件从栈顶往下传播，上层 UI/Overlay 优先拦截
@@ -118,5 +121,16 @@ bool Application::OnWindowClose(WindowCloseEvent& e)
     // 3. 不会在回调链中途打断对象生命周期
     m_Running = false;
     return true;
+}
+bool Application::OnWindowResize(WindowResizeEvent& e)
+{
+    if (e.GetWidth() == 0 || e.GetHeight() == 0)
+    {
+        m_Minimized = true;
+        return false;
+    }
+    m_Minimized = false;
+    SceneRenderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+    return false;
 }
 } // namespace Hazel
