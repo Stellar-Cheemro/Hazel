@@ -134,7 +134,7 @@ public:
         config.Name = "Sandbox";
         config.ProjectDirectory = SANDBOX_PROJECT_DIR;
         config.AssetDirectory = "assets";
-        Hazel::Project::SetActive(Hazel::Ref<Hazel::Project>::CreateRef(config));
+        Hazel::Project::SetActive(Hazel::CreateRef<Hazel::Project>(config));
         Hazel::AssetManager::Init();
         // PushLayer<ExampleLayer>();
         PushLayer<Sandbox2D>();

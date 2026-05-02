@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Hazel/Core/Core.h>
-
+#include <Hazel/Core/Scope.h>
 #include <Hazel/Renderer/RenderCommand.h>
 #include <Hazel/Renderer/RendererAPI.h>
 #include <Hazel/Renderer/Shader.h>
@@ -30,7 +30,7 @@ private:
     {
         glm::mat4 ViewProjectionMatrix;
     };
-    static SceneData* s_SceneData;
+    static Scope<SceneData> s_SceneData;
 };
 
 } // namespace Hazel

@@ -38,6 +38,10 @@ public:
         DecrementRef();
     }
 
+    Ref(Ref&& other) noexcept : m_Instance(other.m_Instance)
+    {
+        other.m_Instance = nullptr;
+    }
     Ref(T* instance) : m_Instance(instance)
     {
         IncrementRef();
@@ -91,6 +95,8 @@ public:
 
     void reset(T* newInstance = nullptr)
     {
+        if (m_Instance == newInstance)
+            return;
         if (m_Instance)
         {
             DecrementRef(); // 释放当前对象
@@ -113,11 +119,6 @@ public:
         return Ref<U>(static_cast<U*>(m_Instance));
     }
 
-    template <typename... Args> static Ref<T> CreateRef(Args&&... args)
-    {
-        return Ref<T>(new T(std::forward<Args>(args)...));
-    }
-
 private:
     void IncrementRef() const
     {
@@ -131,6 +132,7 @@ private:
         if (m_Instance)
         {
             m_Instance->DecrementRefcount();
+            m_Instance = nullptr;
         }
     }
 
@@ -138,5 +140,8 @@ private:
     template <typename U> friend class Ref;
     T* m_Instance = nullptr;
 };
-
+template <typename T, typename... Args> Ref<T> CreateRef(Args&&... args)
+{
+    return Ref<T>(new T(std::forward<Args>(args)...));
+}
 } // namespace Hazel

@@ -5,7 +5,9 @@
 #include <Platform/OpenGL/OpenGLShader.h>
 namespace Hazel
 {
-SceneRenderer::SceneData* SceneRenderer::s_SceneData = new SceneRenderer::SceneData;
+Scope<SceneRenderer::SceneData> SceneRenderer::s_SceneData =
+    CreateScope<SceneRenderer::SceneData>();
+
 void SceneRenderer::BeginScene(OrthographicCamera& camera)
 {
     s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();

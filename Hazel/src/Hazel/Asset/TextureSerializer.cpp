@@ -28,7 +28,7 @@ bool Hazel::TextureAssetSerializer::TrySerialize(const AssetMetadata& metadata, 
         return false;
     }
 
-    Ref<TextureAsset> textureAsset = Ref<TextureAsset>::CreateRef(texture);
+    Ref<TextureAsset> textureAsset = CreateRef<TextureAsset>(texture);
     textureAsset->Handle = metadata.handle;
 
     asset = textureAsset.As<Asset>();
