@@ -13,7 +13,7 @@ Ref<Texture2D> Texture2D::Create(const std::string& path)
             HAZEL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
             return nullptr;
         case RendererAPI::API::OpenGL:
-            return Ref<OpenGLTexture2D>::Create(path.c_str()).As<Texture2D>();
+            return Ref<OpenGLTexture2D>::CreateRef(path.c_str()).As<Texture2D>();
     }
 
     HAZEL_CORE_ASSERT(false, "Unknown RendererAPI!");

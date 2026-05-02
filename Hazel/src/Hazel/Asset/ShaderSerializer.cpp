@@ -28,7 +28,7 @@ bool Hazel::ShaderSerializer::TrySerialize(const AssetMetadata& metadata, Ref<As
         return false;
     }
 
-    Ref<ShaderAsset> shaderAsset = Ref<ShaderAsset>::Create(shader);
+    Ref<ShaderAsset> shaderAsset = Ref<ShaderAsset>::CreateRef(shader);
     shaderAsset->Handle = metadata.handle;
 
     asset = shaderAsset.As<Asset>();

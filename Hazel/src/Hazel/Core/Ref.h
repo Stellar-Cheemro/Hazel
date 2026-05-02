@@ -113,7 +113,7 @@ public:
         return Ref<U>(static_cast<U*>(m_Instance));
     }
 
-    template <typename... Args> static Ref<T> Create(Args&&... args)
+    template <typename... Args> static Ref<T> CreateRef(Args&&... args)
     {
         return Ref<T>(new T(std::forward<Args>(args)...));
     }

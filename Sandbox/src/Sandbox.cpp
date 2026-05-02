@@ -1,7 +1,10 @@
+// clang-format off
 #include <Hazel.h>
+#include "Sandbox2D.h"
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
+// clang-format on
 
 class ExampleLayer : public Hazel::Layer
 {
@@ -20,7 +23,7 @@ public:
         };
         // clang-format on
         // 创建VA
-        m_SquareVA.reset(Hazel::VertexArray::Create());
+        m_SquareVA = Hazel::VertexArray::Create();
         // 把顶点数据上传到 GPU
         Hazel::Ref<Hazel::VertexBuffer> squareVB(
             Hazel::VertexBuffer::Create(SQvertices, sizeof(SQvertices)));
@@ -131,9 +134,10 @@ public:
         config.Name = "Sandbox";
         config.ProjectDirectory = SANDBOX_PROJECT_DIR;
         config.AssetDirectory = "assets";
-        Hazel::Project::SetActive(Hazel::Ref<Hazel::Project>::Create(config));
+        Hazel::Project::SetActive(Hazel::Ref<Hazel::Project>::CreateRef(config));
         Hazel::AssetManager::Init();
-        PushLayer<ExampleLayer>();
+        // PushLayer<ExampleLayer>();
+        PushLayer<Sandbox2D>();
     }
     ~Sandbox()
     {
@@ -145,3 +149,4 @@ Hazel::Application* Hazel::CreateApplication()
 {
     return new Sandbox();
 }
+#include <Hazel/Core/EntryPoint.h>

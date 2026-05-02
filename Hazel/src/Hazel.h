@@ -45,8 +45,4 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Platform/OpenGL/OpenGLShader.h>
-
-// ---入口点-------------------
-#include <Hazel/Core/EntryPoint.h>
-// ---------------------------
 // clang-format on

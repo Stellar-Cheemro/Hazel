@@ -1,5 +1,6 @@
 add_executable(Sandbox
     src/Sandbox.cpp
+    src/Sandbox2D.cpp
 )
 
 # 预处理宏定义

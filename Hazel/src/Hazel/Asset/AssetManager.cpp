@@ -16,7 +16,7 @@ std::unordered_map<AssetType, Scope<AssetSerializer>> AssetManager::s_Serializer
 // ----------------------------------------------------------------------------
 void AssetManager::Init()
 {
-    s_AssetRegistry = Ref<AssetRegistry>::Create();
+    s_AssetRegistry = Ref<AssetRegistry>::CreateRef();
     s_LoadedAssets.clear();
     s_Serializers.clear();
 

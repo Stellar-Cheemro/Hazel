@@ -4,6 +4,9 @@
 #include <Hazel/Core/KeyCodes.h>
 namespace Hazel
 {
+// ----------------------------------------------------------------------------
+// 构造/析构函数
+// ----------------------------------------------------------------------------
 OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
     : m_AspectRatio(aspectRatio),
       m_Camera(-aspectRatio * m_ZoomLevel, aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
@@ -11,6 +14,9 @@ OrthographicCameraController::OrthographicCameraController(float aspectRatio, bo
 {
 }
 
+// ----------------------------------------------------------------------------
+// PUBLIC API
+// ----------------------------------------------------------------------------
 void OrthographicCameraController::OnUpdate(Timestep ts)
 {
     float time = ts;
@@ -40,6 +46,9 @@ void OrthographicCameraController::OnEvent(Event& e)
     dispatcher.Dispatch<WindowResizeEvent>(
         HAZEL_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 }
+// ----------------------------------------------------------------------------
+// 内部实现接口
+// ----------------------------------------------------------------------------
 bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 {
     m_ZoomLevel -= e.GetYOffset() * 0.25f;
