@@ -2,7 +2,7 @@
 #include <Hazel/Asset/AssetTypes.h>
 #include <Hazel/Core/Core.h>
 #include <Hazel/Core/Ref.h>
-
+#include <concepts>
 namespace Hazel
 {
 class HAZEL_API Asset : public RefCounted
@@ -14,4 +14,6 @@ public:
 public:
     AssetHandle Handle = 0;
 };
+template <typename T>
+concept AssetDerived = std::derived_from<T, Asset>;
 } // namespace Hazel

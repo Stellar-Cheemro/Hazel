@@ -12,15 +12,17 @@
 #include <Hazel/Core/Ref.h>
 #include <Hazel/Controllers/OrthographicCameraController.h>
 
+// ---------------------------
+// Asset
+// ---------------------------
 #include <Hazel/Asset/Asset.h>
+#include <Hazel/Asset/AssetTypes.h>
 #include <Hazel/Asset/AssetMetadata.h>
-#include <Hazel/Asset/AssetManager.h>
-#include <Hazel/Asset/TextureAsset.h>
-#include <Hazel/Asset/ShaderAsset.h>
-#include <Hazel/Asset/AssetSerializer.h>
-#include <Hazel/Asset/AssetRegistry.h>
-#include <Hazel/Asset/TextureSerializer.h>
-#include <Hazel/Asset/AssetManager.h>
+#include <Hazel/Asset/UserAssetManager.h>
+
+// Runtime Asset Types
+#include <Hazel/Asset/Runtime/ShaderAsset.h>
+#include <Hazel/Asset/Runtime/TextureAsset.h>
 
 #include <Hazel/Project/Project.h>
 
@@ -38,7 +40,7 @@
 #include <Hazel/Renderer/VertexArray.h>
 
 #include <Hazel/Renderer/OrthographicCamera.h>
-
+#include <Hazel/Renderer/Renderer2D.h>
 #include <Hazel/Renderer/SceneRenderer.h>
 #include <Hazel/Renderer/RenderCommand.h>
 // ---------------------------

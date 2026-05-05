@@ -47,20 +47,20 @@ void Sandbox2D::OnAttach()
         Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
     m_SquareVA->SetIndexBuffer(squareIB);
 
-    m_FlatShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/FlatColor.glsl");
-    // m_TextureShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/Texture.glsl");
+    m_FlatShaderHandle = Hazel::UserAssetManager::ImportProjectAsset("Shaders/FlatColor.glsl");
+    // m_TextureShaderHandle = Hazel::UserAssetManager::ImportProjectAsset("Shaders/Texture.glsl");
 
-    auto shaderAsset = Hazel::AssetManager::GetAsset<Hazel::ShaderAsset>(m_FlatShaderHandle);
+    auto shaderAsset = Hazel::UserAssetManager::GetAsset<Hazel::ShaderAsset>(m_FlatShaderHandle);
     // auto textureShaderAsset =
-    //     Hazel::AssetManager::GetAsset<Hazel::ShaderAsset>(m_TextureShaderHandle);
+    //     Hazel::UserAssetManager::GetAsset<Hazel::ShaderAsset>(m_TextureShaderHandle);
 
     if (shaderAsset)
         m_Shader = shaderAsset->GetShader();
     // if (textureShaderAsset)
     //     m_TextureShader = textureShaderAsset->GetShader();
 
-    // m_CheckTexHandle = Hazel::AssetManager::ImportAsset("textures/Checkerboard.png");
-    // m_LogoTexHandle = Hazel::AssetManager::ImportAsset("textures/ChernoLogo.png");
+    // m_CheckTexHandle = Hazel::UserAssetManager::ImportProjectAsset("textures/Checkerboard.png");
+    // m_LogoTexHandle = Hazel::UserAssetManager::ImportProjectAsset("textures/ChernoLogo.png");
 }
 
 void Sandbox2D::OnDetach()
@@ -71,47 +71,12 @@ void Sandbox2D::OnUpdate(Hazel::Timestep timestep)
     // 更新
     m_CameraController.OnUpdate(timestep);
     // 渲染
-    // 获取纹理资产并上传
-    // Hazel::Ref<Hazel::TextureAsset> textureAsset =
-    //     Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_CheckTexHandle);
-    // if (textureAsset)
-    //     m_CheckTex = textureAsset->GetTexture();
-    // m_TextureShader.As<Hazel::OpenGLShader>()->Bind();
-    // m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
-
-    // textureAsset = Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_LogoTexHandle);
-    // if (textureAsset)
-    //     m_LogoTex = textureAsset->GetTexture();
-    // m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
-
-    m_Shader.As<Hazel::OpenGLShader>()->Bind();
-    Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1});
+    Hazel::RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
     Hazel::RenderCommand::Clear();
-    Hazel::SceneRenderer::BeginScene(m_CameraController.GetCamera());
-    m_Shader.As<Hazel::OpenGLShader>()->UploadUniformFloat4("u_Color", m_SquareColor);
-    // // 正方形网格
-    // glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
-    //
-    // for (int x = 0; x < 20; x++)
-    // {
-    //     for (int y = 0; y < 20; y++)
-    //     {
-    //         glm::vec3 translate(x * 0.11f, y * 0.11f, 0.0f);
-    //         glm::mat4 model = glm::translate(glm::mat4(1.0f), translate) * scale;
-    //         Hazel::SceneRenderer::Submit(m_Shader, m_SquareVA, model);
-    //     }
-    // }
-    glm::vec3 CSQtranslate(0.0f, 0.0f, 0.0f);
-    glm::mat4 CSQscale = glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));
-    glm::mat4 CSQmodel = glm::translate(glm::mat4(1.0f), CSQtranslate) * CSQscale;
-    Hazel::SceneRenderer::Submit(m_Shader, m_SquareVA, CSQmodel);
-    // // 纹理绘制
-    // m_CheckTex->Bind();
-    // Hazel::SceneRenderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
-    // m_LogoTex->Bind();
-    // Hazel::SceneRenderer::Submit(m_TextureShader, m_SquareVA, CSQmodel);
 
-    Hazel::SceneRenderer::EndScene();
+    Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+    Hazel::Renderer2D::DrawQuad({0.0f, 0.0f}, {1.0f, 1.0f}, {0.8f, 0.2f, 0.3f, 1.0f});
+    Hazel::Renderer2D::EndScene();
 }
 void Sandbox2D::OnEvent(Hazel::Event& event)
 {

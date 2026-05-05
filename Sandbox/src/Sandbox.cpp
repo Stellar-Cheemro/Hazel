@@ -37,20 +37,21 @@ public:
             squareIndices, sizeof(squareIndices) / sizeof(unsigned int)));
         m_SquareVA->SetIndexBuffer(squareIB);
 
-        m_FlatShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/FlatColor.glsl");
-        m_TextureShaderHandle = Hazel::AssetManager::ImportAsset("Shaders/Texture.glsl");
+        m_FlatShaderHandle = Hazel::UserAssetManager::ImportProjectAsset("Shaders/FlatColor.glsl");
+        m_TextureShaderHandle = Hazel::UserAssetManager::ImportProjectAsset("Shaders/Texture.glsl");
 
-        auto shaderAsset = Hazel::AssetManager::GetAsset<Hazel::ShaderAsset>(m_FlatShaderHandle);
+        auto shaderAsset =
+            Hazel::UserAssetManager::GetAsset<Hazel::ShaderAsset>(m_FlatShaderHandle);
         auto textureShaderAsset =
-            Hazel::AssetManager::GetAsset<Hazel::ShaderAsset>(m_TextureShaderHandle);
+            Hazel::UserAssetManager::GetAsset<Hazel::ShaderAsset>(m_TextureShaderHandle);
 
         if (shaderAsset)
             m_Shader = shaderAsset->GetShader();
         if (textureShaderAsset)
             m_TextureShader = textureShaderAsset->GetShader();
 
-        m_CheckTexHandle = Hazel::AssetManager::ImportAsset("textures/Checkerboard.png");
-        m_LogoTexHandle = Hazel::AssetManager::ImportAsset("textures/ChernoLogo.png");
+        m_CheckTexHandle = Hazel::UserAssetManager::ImportProjectAsset("textures/Checkerboard.png");
+        m_LogoTexHandle = Hazel::UserAssetManager::ImportProjectAsset("textures/ChernoLogo.png");
     }
 
     void OnUpdate(Hazel::Timestep timestep) override
@@ -59,13 +60,13 @@ public:
         m_CameraController.OnUpdate(timestep);
 
         Hazel::Ref<Hazel::TextureAsset> textureAsset =
-            Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_CheckTexHandle);
+            Hazel::UserAssetManager::GetAsset<Hazel::TextureAsset>(m_CheckTexHandle);
         if (textureAsset)
             m_CheckTex = textureAsset->GetTexture();
         m_TextureShader.As<Hazel::OpenGLShader>()->Bind();
         m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
 
-        textureAsset = Hazel::AssetManager::GetAsset<Hazel::TextureAsset>(m_LogoTexHandle);
+        textureAsset = Hazel::UserAssetManager::GetAsset<Hazel::TextureAsset>(m_LogoTexHandle);
         if (textureAsset)
             m_LogoTex = textureAsset->GetTexture();
         m_TextureShader.As<Hazel::OpenGLShader>()->UploadUniformInt("u_Texture", 0);
@@ -135,13 +136,11 @@ public:
         config.ProjectDirectory = SANDBOX_PROJECT_DIR;
         config.AssetDirectory = "assets";
         Hazel::Project::SetActive(Hazel::CreateRef<Hazel::Project>(config));
-        Hazel::AssetManager::Init();
         // PushLayer<ExampleLayer>();
         PushLayer<Sandbox2D>();
     }
     ~Sandbox()
     {
-        Hazel::AssetManager::Shutdown();
     }
 };
 

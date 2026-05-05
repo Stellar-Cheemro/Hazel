@@ -1,166 +1,464 @@
 #include "AssetManager.h"
-#include <Hazel/Asset/ShaderSerializer.h>
-#include <Hazel/Asset/TextureSerializer.h>
+
+#include <Hazel/Asset/AssetPath.h>
+#include <Hazel/Asset/AssetRegistry.h>
+#include <Hazel/Asset/Internal/AssetHandleAllocator.h>
+#include <Hazel/Asset/Internal/AssetRootLocator.h>
+#include <Hazel/Asset/Internal/AssetRuntimeCache.h>
+#include <Hazel/Asset/Internal/AssetSerializerRegistry.h>
+#include <Hazel/Asset/Internal/AssetSystemFileResolver.h>
+#include <Hazel/Asset/Serialization/ShaderSerializer.h>
+#include <Hazel/Asset/Serialization/TextureSerializer.h>
+
 #include <Hazel/Core/Log.h>
-#include <Hazel/Core/Scope.h>
-#include <Hazel/Project/Project.h>
-#include <filesystem>
+
+#include <string>
 
 namespace Hazel
 {
+
 Ref<AssetRegistry> AssetManager::s_AssetRegistry = nullptr;
-std::unordered_map<AssetHandle, Ref<Asset>> AssetManager::s_LoadedAssets;
-std::unordered_map<AssetType, Scope<AssetSerializer>> AssetManager::s_Serializers;
+
+AssetRuntimeCache AssetManager::s_RuntimeCache;
+AssetSerializerRegistry AssetManager::s_SerializerRegistry;
+AssetHandleAllocator AssetManager::s_HandleAllocator;
+AssetSystemFileResolver AssetManager::s_SystemFileResolver;
+
 // ----------------------------------------------------------------------------
-// PUBLIC API
+// 生命周期
 // ----------------------------------------------------------------------------
+
 void AssetManager::Init()
 {
-    s_AssetRegistry = CreateRef<AssetRegistry>();
-    s_LoadedAssets.clear();
-    s_Serializers.clear();
+    ResetState();
+    SetEngineAssetRootAuto();
+    RegisterSerializers();
+    ValidateSerializers();
+}
 
-    s_Serializers[AssetType::Texture2D] = std::make_unique<TextureAssetSerializer>();
-    s_Serializers[AssetType::Shader] = std::make_unique<ShaderSerializer>();
+void AssetManager::Init(const std::filesystem::path& engineAssetRoot)
+{
+    ResetState();
+    SetEngineAssetRootExplicit(engineAssetRoot);
+    RegisterSerializers();
+    ValidateSerializers();
 }
 
 void AssetManager::Shutdown()
 {
-    s_LoadedAssets.clear();
+    s_RuntimeCache.Clear();
+    s_SerializerRegistry.Clear();
+    s_HandleAllocator.Reset();
+    s_SystemFileResolver.Clear();
+
     s_AssetRegistry = nullptr;
-    s_Serializers.clear();
 }
 
-AssetHandle AssetManager::ImportAsset(const std::filesystem::path& relaticePath)
+void AssetManager::ResetState() // 重置缓存、Registry、HandleAllocator、Resolver
 {
-    if (!s_AssetRegistry)
+    s_AssetRegistry = CreateRef<AssetRegistry>();
+    s_RuntimeCache.Clear();
+    s_SerializerRegistry.Clear();
+    s_HandleAllocator.Reset();
+    s_SystemFileResolver.Clear();
+}
+
+void AssetManager::SetEngineAssetRootAuto() // 自动查找 EngineAssetRoot
+{
+    auto root = AssetRootLocator::FindEngineAssetRoot(std::filesystem::current_path());
+    if (!root)
     {
-        HAZEL_CORE_ERROR(
-            "AssetRegistry not initialized. Call AssetManager::Init() before importing assets.");
+        HAZEL_CORE_ERROR("Fail: locate engine asset root. Current path: {0}",
+                         std::filesystem::current_path().string());
+        return;
+    }
+
+    SetEngineAssetRootExplicit(*root);
+}
+void AssetManager::SetEngineAssetRootExplicit(const std::filesystem::path& rootPath)
+{
+    if (!s_SystemFileResolver.SetEngineAssetRoot(rootPath))
+    {
+        HAZEL_CORE_ERROR("Fail: set engine asset root. Path invalid: {0}", rootPath.string());
+    }
+}
+void AssetManager::RegisterSerializers()
+{
+    s_SerializerRegistry.Register(CreateScope<TextureAssetSerializer>());
+    s_SerializerRegistry.Register(CreateScope<ShaderSerializer>());
+}
+void AssetManager::ValidateSerializers()
+{
+    s_SerializerRegistry.Validate();
+}
+
+// ----------------------------------------------------------------------------
+// 文件资源
+// ----------------------------------------------------------------------------
+
+AssetHandle AssetManager::ImportEngineAsset(std::string_view relativePath)
+{
+    return ImportFileAsset(relativePath, AssetDomain::Engine);
+}
+
+AssetHandle AssetManager::ImportProjectAsset(std::string_view relativePath)
+{
+    return ImportFileAsset(relativePath, AssetDomain::Project);
+}
+
+AssetHandle AssetManager::ImportFileAsset(std::string_view relativePath, AssetDomain domain)
+{
+    if (!IsRegistryReady("import file asset"))
+        return 0;
+
+    if (!IsValidImportDomain(domain, relativePath))
+        return 0;
+
+    std::string normalizedPath;
+    if (!AssetPath::TryNormalizeRelativePath(relativePath, normalizedPath))
+    {
+        HAZEL_CORE_ERROR("Fail:import file asset. Invalid relative path. Path: {0}",
+                         std::string(relativePath));
         return 0;
     }
 
-    auto normalizedPath = std::filesystem::weakly_canonical(relaticePath);
-    if (s_AssetRegistry->IsContained(normalizedPath))
-    {
-        return s_AssetRegistry->GetHandleFromPath(normalizedPath);
-    }
-    else
-    {
-        AssetMetadata metadata;
+    if (s_AssetRegistry->IsContained(normalizedPath, domain))
+        return s_AssetRegistry->GetHandleFromPath(normalizedPath, domain);
 
-        metadata.Type = GetAssetTypeFromExtension(normalizedPath);
-        if (metadata.Type == AssetType::None)
-        {
-            HAZEL_CORE_ERROR("Unknown asset type for path: {0}", normalizedPath.string());
-            return 0;
-        }
-        metadata.handle = GenerateHandle();
-        metadata.FilePath = normalizedPath;
-        s_AssetRegistry->RegisterAsset(metadata);
-        return metadata.handle;
+    const AssetType type = GetAssetTypeFromPath(normalizedPath);
+    if (type == AssetType::None)
+    {
+        HAZEL_CORE_ERROR("Fail:import file asset. Unknown asset type. Path: {0}", normalizedPath);
+        return 0;
     }
+
+    AssetMetadata metadata;
+    metadata.Handle = s_HandleAllocator.Generate(*s_AssetRegistry);
+    if (metadata.Handle == 0)
+        return 0;
+
+    metadata.Type = type;
+    metadata.Domain = domain;
+    metadata.FilePath = normalizedPath;
+
+    const std::string resolvedPath = s_SystemFileResolver.ResolveAssetPath(metadata);
+
+    if (resolvedPath.empty())
+        return 0;
+
+    if (!s_SystemFileResolver.ValidateExistingFile(resolvedPath, "asset file"))
+        return 0;
+
+    if (!s_AssetRegistry->TryRegisterAsset(metadata))
+        return 0;
+
+    return metadata.Handle;
 }
 
-const AssetMetadata* AssetManager::GetMetadata(AssetHandle handle)
+bool AssetManager::TryRestoreAssetMetadata(const AssetMetadata& metadata)
 {
-    if (!s_AssetRegistry)
+    if (!IsRegistryReady("restore asset metadata"))
+        return false;
+
+    if (!IsValidRestoredFileMetadata(metadata))
+        return false;
+
+    if (!s_AssetRegistry->TryRegisterAsset(metadata))
+        return false;
+
+    s_HandleAllocator.AdvancePast(metadata.Handle);
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// MemoryAsset
+// ----------------------------------------------------------------------------
+
+AssetHandle AssetManager::RegisterMemoryAsset(Ref<Asset> asset)
+{
+    if (!IsRegistryReady("register memory asset"))
+        return 0;
+
+    if (!asset)
     {
-        HAZEL_CORE_ERROR("AssetRegistry not initialized. Call AssetManager::Init() before "
-                         "accessing asset metadata.");
+        HAZEL_CORE_ERROR("Fail:register memory asset. Asset is null.");
+        return 0;
+    }
+
+    if (asset->Handle != 0)
+    {
+        HAZEL_CORE_ERROR("Fail:register memory asset. Asset already has handle. Handle: {0}",
+                         asset->Handle);
+        return 0;
+    }
+
+    const AssetType type = asset->GetAssetType();
+    if (type == AssetType::None)
+    {
+        HAZEL_CORE_ERROR("Fail:register memory asset. AssetType is None.");
+        return 0;
+    }
+
+    AssetMetadata metadata;
+    metadata.Handle = s_HandleAllocator.Generate(*s_AssetRegistry);
+    if (metadata.Handle == 0)
+        return 0;
+
+    metadata.Type = type;
+    metadata.Domain = AssetDomain::Memory;
+    metadata.FilePath.clear();
+
+    if (!s_AssetRegistry->TryRegisterAsset(metadata))
+        return 0;
+
+    asset->Handle = metadata.Handle;
+
+    if (!s_RuntimeCache.Store(metadata.Handle, asset))
+    {
+        asset->Handle = 0;
+        s_AssetRegistry->TryRemoveAsset(metadata.Handle);
+        return 0;
+    }
+
+    return metadata.Handle;
+}
+
+// ----------------------------------------------------------------------------
+// 获取 Asset
+// ----------------------------------------------------------------------------
+
+Ref<Asset> AssetManager::GetAsset(AssetHandle Handle)
+{
+    Ref<Asset> loadedAsset = s_RuntimeCache.Get(Handle);
+    if (loadedAsset)
+        return loadedAsset;
+
+    const AssetMetadata* metadata = TryGetMetadataForOperation(Handle, "get asset");
+
+    if (!metadata)
+        return nullptr;
+
+    if (metadata->IsMemoryAsset())
+    {
+        HAZEL_CORE_ERROR("Fail:get asset. MemoryAsset is registered but not loaded. Handle: {0}",
+                         Handle);
         return nullptr;
     }
-    return s_AssetRegistry->GetMetadata(handle);
-}
 
-AssetMetadata* AssetManager::GetMetadataMutable(AssetHandle handle)
-{
-    if (!s_AssetRegistry)
-    {
-        HAZEL_CORE_ERROR("AssetRegistry not initialized. Call AssetManager::Init() before "
-                         "accessing asset metadata.");
+    Ref<Asset> asset = LoadAsset(*metadata);
+    if (!asset)
         return nullptr;
-    }
-    return s_AssetRegistry->GetMetadata(handle);
+
+    asset->Handle = metadata->Handle;
+
+    if (!s_RuntimeCache.Store(Handle, asset))
+        return nullptr;
+
+    return asset;
 }
 
-bool AssetManager::IsAssetHandleValid(AssetHandle handle)
+// ----------------------------------------------------------------------------
+// Metadata
+// ----------------------------------------------------------------------------
+
+const AssetMetadata* AssetManager::GetMetadata(AssetHandle Handle)
 {
-    if (!s_AssetRegistry)
+    return TryGetMetadataForOperation(Handle, "get metadata");
+}
+
+// ----------------------------------------------------------------------------
+// 路径解析
+// ----------------------------------------------------------------------------
+
+std::string AssetManager::ResolveAssetPath(const AssetMetadata& metadata)
+{
+    return s_SystemFileResolver.ResolveAssetPath(metadata);
+}
+
+// ----------------------------------------------------------------------------
+// 缓存与移除
+// ----------------------------------------------------------------------------
+
+bool AssetManager::TryUnloadAsset(AssetHandle Handle)
+{
+    const AssetMetadata* metadata = TryGetMetadataForOperation(Handle, "unload asset");
+
+    if (!metadata)
+        return false;
+
+    if (metadata->IsMemoryAsset())
     {
-        HAZEL_CORE_ERROR("AssetRegistry not initialized. Call AssetManager::Init() before "
-                         "checking asset handle validity.");
+        HAZEL_CORE_ERROR("Fail:unload asset. MemoryAsset cannot be unloaded. Handle: {0}", Handle);
         return false;
     }
-    return s_AssetRegistry->IsContained(handle);
-}
-bool AssetManager::IsAssetLoaded(AssetHandle handle)
-{
-    return s_LoadedAssets.find(handle) != s_LoadedAssets.end();
+
+    if (!metadata->IsFileAsset())
+    {
+        HAZEL_CORE_ERROR("Fail:unload asset. Metadata is not file asset. Handle: {0}, Domain: {1}, "
+                         "FilePath: {2}",
+                         metadata->Handle, static_cast<int>(metadata->Domain), metadata->FilePath);
+        return false;
+    }
+
+    if (!s_RuntimeCache.IsLoaded(Handle))
+    {
+        HAZEL_CORE_ERROR("Fail:unload asset. Asset is not loaded. Handle: {0}", Handle);
+        return false;
+    }
+
+    s_RuntimeCache.Remove(Handle);
+    return true;
 }
 
-std::filesystem::path AssetManager::GetFileSystemPath(const AssetMetadata& metadata)
+bool AssetManager::TryRemoveAsset(AssetHandle Handle)
 {
-    Ref<Project> currentProject = Project::GetActive();
-    if (!currentProject)
-    {
-        HAZEL_CORE_ERROR("No active project. Cannot get file system path for asset handle: {0}",
-                         metadata.handle);
-        return {};
-    }
-    return currentProject->GetAssetAbsolutePath(metadata.FilePath);
+    if (!TryGetMetadataForOperation(Handle, "remove asset"))
+        return false;
+
+    if (!s_AssetRegistry->TryRemoveAsset(Handle))
+        return false;
+
+    s_RuntimeCache.Remove(Handle);
+    return true;
 }
 
-std::filesystem::path AssetManager::GetFileSystemPath(AssetHandle handle)
-{
-    const AssetMetadata* metadata = GetMetadata(handle);
-    if (!metadata)
-    {
-        HAZEL_CORE_ERROR("Invalid asset handle: {0} In GetFileSystemPath", handle);
-        return {};
-    }
-    return GetFileSystemPath(*metadata);
-}
 // ----------------------------------------------------------------------------
-// 内部工具函数
+// 状态查询
 // ----------------------------------------------------------------------------
-AssetHandle AssetManager::GenerateHandle()
+
+bool AssetManager::IsAssetHandleValid(AssetHandle Handle)
 {
-    // 0默认unvalid
-    static AssetHandle currentHandle = 1;
-    return currentHandle++;
+    if (!IsRegistryReady("check asset handle"))
+        return false;
+
+    return s_AssetRegistry->IsContained(Handle);
 }
-AssetType AssetManager::GetAssetTypeFromExtension(const std::filesystem::path& path)
+
+bool AssetManager::IsAssetLoaded(AssetHandle Handle)
 {
-    auto extension = path.extension().string();
-    if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
-        return AssetType::Texture2D;
-    if (extension == ".shader" || extension == ".glsl")
-        return AssetType::Shader;
-    if (extension == ".scene")
-        return AssetType::Scene;
-    if (extension == ".mesh")
-        return AssetType::Mesh;
-    if (extension == ".audio")
-        return AssetType::Audio;
-    return AssetType::None;
+    return s_RuntimeCache.IsLoaded(Handle);
 }
+
+// ----------------------------------------------------------------------------
+// 加载实现
+// ----------------------------------------------------------------------------
+
 Ref<Asset> AssetManager::LoadAsset(const AssetMetadata& metadata)
 {
-    auto serializerIt = s_Serializers.find(metadata.Type);
-    if (serializerIt == s_Serializers.end())
+    if (!metadata.IsValid())
     {
-        HAZEL_CORE_ERROR("No serializer found for asset type: {0}",
-                         static_cast<int>(metadata.Type));
+        HAZEL_CORE_ERROR(
+            "Fail:load asset. Invalid metadata. Handle: {0}, Type: {1}, Domain: {2}, FilePath: {3}",
+            metadata.Handle, static_cast<int>(metadata.Type), static_cast<int>(metadata.Domain),
+            metadata.FilePath);
         return nullptr;
     }
+
+    if (!metadata.IsFileAsset())
+    {
+        HAZEL_CORE_ERROR(
+            "Fail:load asset. Metadata is not file asset. Handle: {0}, Domain: {1}, FilePath: {2}",
+            metadata.Handle, static_cast<int>(metadata.Domain), metadata.FilePath);
+        return nullptr;
+    }
+
+    AssetSerializer* serializer = s_SerializerRegistry.GetSerializer(metadata.Type);
+
+    if (!serializer)
+    {
+        HAZEL_CORE_ERROR("Fail:load asset. No serializer. Handle: {0}, Type: {1}, FilePath: {2}",
+                         metadata.Handle, static_cast<int>(metadata.Type), metadata.FilePath);
+        return nullptr;
+    }
+
     Ref<Asset> asset;
-    if (!serializerIt->second->TrySerialize(metadata, asset))
+    if (!serializer->TryLoad(metadata, asset))
+        return nullptr;
+
+    return asset;
+}
+
+// ----------------------------------------------------------------------------
+// 校验函数
+// ----------------------------------------------------------------------------
+
+bool AssetManager::IsRegistryReady(std::string_view operation)
+{
+    if (s_AssetRegistry)
+        return true;
+
+    HAZEL_CORE_ERROR("Fail:{0}. AssetRegistry is not initialized.", operation);
+    return false;
+}
+
+const AssetMetadata* AssetManager::TryGetMetadataForOperation(AssetHandle Handle,
+                                                              std::string_view operation)
+{
+    if (!IsRegistryReady(operation))
+        return nullptr;
+
+    if (Handle == 0)
     {
-        HAZEL_CORE_ERROR("Failed to serialize asset with handle: {0}", metadata.handle);
+        HAZEL_CORE_ERROR("Fail:{0}. Invalid handle. Handle: {1}", operation, Handle);
         return nullptr;
     }
-    return asset;
+
+    const AssetMetadata* metadata = s_AssetRegistry->GetMetadata(Handle);
+    if (metadata)
+        return metadata;
+
+    HAZEL_CORE_ERROR("Fail:{0}. Handle does not exist. Handle: {1}", operation, Handle);
+    return nullptr;
+}
+
+bool AssetManager::IsValidRestoredFileMetadata(const AssetMetadata& metadata)
+{
+    if (!metadata.IsValid())
+    {
+        HAZEL_CORE_ERROR("Fail:restore asset metadata. Invalid metadata. Handle: {0}, Type: {1}, "
+                         "Domain: {2}, FilePath: {3}",
+                         metadata.Handle, static_cast<int>(metadata.Type),
+                         static_cast<int>(metadata.Domain), metadata.FilePath);
+        return false;
+    }
+
+    if (!metadata.IsFileAsset())
+    {
+        HAZEL_CORE_ERROR("Fail:restore asset metadata. Metadata is not file asset. Handle: {0}, "
+                         "Domain: {1}, FilePath: {2}",
+                         metadata.Handle, static_cast<int>(metadata.Domain), metadata.FilePath);
+        return false;
+    }
+
+    const AssetType typeFromPath = GetAssetTypeFromPath(metadata.FilePath);
+    if (typeFromPath == AssetType::None)
+    {
+        HAZEL_CORE_ERROR(
+            "Fail:restore asset metadata. Unknown asset type. Handle: {0}, FilePath: {1}",
+            metadata.Handle, metadata.FilePath);
+        return false;
+    }
+
+    if (typeFromPath != metadata.Type)
+    {
+        HAZEL_CORE_ERROR("Fail:restore asset metadata. Type does not match extension. Handle: {0}, "
+                         "MetadataType: {1}, PathType: {2}, FilePath: {3}",
+                         metadata.Handle, static_cast<int>(metadata.Type),
+                         static_cast<int>(typeFromPath), metadata.FilePath);
+        return false;
+    }
+
+    return true;
+}
+
+bool AssetManager::IsValidImportDomain(AssetDomain domain, std::string_view relativePath)
+{
+    if (domain == AssetDomain::Engine || domain == AssetDomain::Project)
+        return true;
+
+    HAZEL_CORE_ERROR("Fail:import file asset. Invalid import domain. Domain: {0}, Path: {1}",
+                     static_cast<int>(domain), std::string(relativePath));
+    return false;
 }
 
 } // namespace Hazel

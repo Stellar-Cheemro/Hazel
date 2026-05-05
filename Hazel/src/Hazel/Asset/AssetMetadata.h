@@ -1,40 +1,52 @@
+// AssetMetadata 只保存资源的稳定身份信息。
+// 不保存运行时加载状态，也不保存绝对文件系统路径。
 #pragma once
 #include <Hazel/Asset/AssetTypes.h>
 #include <Hazel/Core/Core.h>
-#include <filesystem>
+
+#include <string>
 namespace Hazel
 {
+
 struct HAZEL_API AssetMetadata
 {
-    AssetHandle handle = 0;
+    AssetHandle Handle = 0;
     AssetType Type = AssetType::None;
-    std::filesystem::path FilePath;
-    bool IsLoaded = false;
-    bool IsMemoryOnly = false;
+    AssetDomain Domain = AssetDomain::None;
 
-    operator bool() const
-    {
-        return handle != 0 && Type != AssetType::None;
-    }
+    // Engine / Project：保存规范化后的 Asset 相对路径，统一使用 "/"。
+    // Memory：必须为空。
+    std::string FilePath;
     bool IsValid() const
     {
-        return handle != 0 && Type != AssetType::None;
+        return Handle != 0 && Type != AssetType::None && Domain != AssetDomain::None;
+    }
+    operator bool() const
+    {
+        return IsValid();
     }
     bool HasFilePath() const
     {
         return !FilePath.empty();
     }
-    bool IsFileAsset() const
+
+    bool IsEngineAsset() const
     {
-        return HasFilePath() && !IsMemoryOnly;
+        return Domain == AssetDomain::Engine;
     }
+
+    bool IsProjectAsset() const
+    {
+        return Domain == AssetDomain::Project;
+    }
+
     bool IsMemoryAsset() const
     {
-        return IsMemoryOnly;
+        return Domain == AssetDomain::Memory;
     }
-    std::filesystem::path GetFileSystemPath() const
+    bool IsFileAsset() const
     {
-        return FilePath.lexically_normal();
+        return HasFilePath() && Domain != AssetDomain::Memory && Domain != AssetDomain::None;
     }
 };
 } // namespace Hazel

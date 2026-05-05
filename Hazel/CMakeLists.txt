@@ -16,15 +16,29 @@ set(IMGUI_SOURCES
     ${IMGUI_DIR}/imgui_demo.cpp
 )
 set(HAZEL_SOURCES
+    ## --------------------------------------
+    ## HAZEL
+    ## --------------------------------------
+    ## --------------------------------------
+    ## Core
+    ## --------------------------------------
     ${HAZEL_DIR}/Core/Application.cpp
     ${HAZEL_DIR}/Core/Log.cpp
     ${HAZEL_DIR}/Core/LayerStack.cpp
     ${HAZEL_DIR}/Core/Layer.cpp
     ${HAZEL_DIR}/Core/Timestep.cpp
-
+    ## --------------------------------------
+    ## Controllers
+    ## --------------------------------------
     ${HAZEL_DIR}/Controllers/OrthographicCameraController.cpp
+    ## --------------------------------------
+    ## ImGui
+    ## --------------------------------------
     ${HAZEL_DIR}/ImGui/ImGuiLayer.cpp
     ${HAZEL_DIR}/ImGui/ImGuiBuild.cpp
+    ## --------------------------------------
+    ## Renderer
+    ## --------------------------------------
     ${HAZEL_DIR}/Renderer/OrthographicCamera.cpp
     ${HAZEL_DIR}/Renderer/Buffer.cpp
     ${HAZEL_DIR}/Renderer/Shader.cpp
@@ -33,20 +47,44 @@ set(HAZEL_SOURCES
     ${HAZEL_DIR}/Renderer/VertexArray.cpp
     ${HAZEL_DIR}/Renderer/RendererAPI.cpp
     ${HAZEL_DIR}/Renderer/RenderCommand.cpp
+    ${HAZEL_DIR}/Renderer/Renderer2D.cpp
     ${HAZEL_DIR}/Renderer/Texture.cpp
+    ## --------------------------------------
+    ## Project
+    ## --------------------------------------
     ${HAZEL_DIR}/Project/Project.cpp
+    ## --------------------------------------
+    ## Asset
+    ## --------------------------------------
     ${HAZEL_DIR}/Asset/AssetManager.cpp
     ${HAZEL_DIR}/Asset/AssetRegistry.cpp
-    ${HAZEL_DIR}/Asset/TextureSerializer.cpp
-    ${HAZEL_DIR}/Asset/ShaderSerializer.cpp
+    ${HAZEL_DIR}/Asset/Serialization/TextureSerializer.cpp
+    ${HAZEL_DIR}/Asset/Serialization/ShaderSerializer.cpp
+    ${HAZEL_DIR}/Asset/UserAssetManager.cpp
+    ${HAZEL_DIR}/Asset/AssetPath.cpp
+    ${HAZEL_DIR}/Asset/Internal/AssetHandleAllocator.cpp
+    ${HAZEL_DIR}/Asset/Internal/AssetRuntimeCache.cpp
+    ${HAZEL_DIR}/Asset/Internal/AssetSerializerRegistry.cpp
+    ${HAZEL_DIR}/Asset/Internal/AssetSystemFileResolver.cpp
+    ${HAZEL_DIR}/Asset/Internal/AssetRootLocator.cpp
+    ## --------------------------------------
+    ## PLATFORM
+    ## --------------------------------------
+    ## --------------------------------------
+    ## Windows
+    ## --------------------------------------
     ${PLATFORM_DIR}/Windows/WindowsWindow.cpp
     ${PLATFORM_DIR}/Windows/WindowsInput.cpp
+    ## --------------------------------------
+    ## OpenGL
+    ## --------------------------------------
     ${PLATFORM_DIR}/OpenGL/OpenGLBuffer.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLContext.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLRendererAPI.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLVertexArray.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLShader.cpp
     ${PLATFORM_DIR}/OpenGL/OpenGLTexture.cpp
+
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Hazelpch.cpp
 )
 set(STB_IMAGE_SOURCES
@@ -57,6 +95,7 @@ add_library(Hazel SHARED
     ${HAZEL_SOURCES}
     ${IMGUI_SOURCES}
     ${STB_IMAGE_SOURCES}
+    src/Hazel/Asset/Internal/AssetRootLocator.cpp
 )
 
 # include路径设置

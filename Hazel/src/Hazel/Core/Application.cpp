@@ -40,9 +40,9 @@ Application::Application()
     // 后续 GLFW 原生回调会先进入 WindowsWindow
     // 再由 WindowsWindow 转成 Hazel 事件对象并转发到这里
     m_Window->SetEventCallback(HAZEL_BIND_EVENT_FN(Application::OnEvent));
-
+    AssetManager::Init();
     SceneRenderer::Init();
-
+    Renderer2D::Init();
     // ImGuiLayer 由 LayerStack 统一管理生命周期
     m_ImGuiLayer = &PushOverlay<ImGuiLayer>();
 }
@@ -53,6 +53,8 @@ Application::~Application()
     // 当前 Layer 的生命周期由 LayerStack 统一管理
     // 因此这里不手动 delete m_ImGuiLayer
     // 如果这里再 delete，会与 LayerStack 析构重复释放
+    Renderer2D::Shutdown();
+    AssetManager::Shutdown();
 }
 // ----------------------------------------------------------------------------
 // PUBLIC API

@@ -2,7 +2,7 @@
 #include "OpenGLShader.h"
 
 #include <Hazel/Core/Log.h>
-
+#include <Hazel/Core/Containers.h>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -62,7 +62,7 @@ GLuint CompileShaderStage(GLenum type, const std::string& source)
 OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
     : m_RendererID(0)
 {
-    std::unordered_map<GLenum, std::string> shaderSources;
+    HashMap<GLenum, std::string> shaderSources;
     shaderSources[GL_VERTEX_SHADER] = vertexSrc;
     shaderSources[GL_FRAGMENT_SHADER] = fragmentSrc;
     Compile(shaderSources);
@@ -160,9 +160,9 @@ std::string OpenGLShader::ReadFile(const std::string& filepath)
     return result;
 }
 
-std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
+HashMap<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 {
-    std::unordered_map<GLenum, std::string> shaderSources;
+    HashMap<GLenum, std::string> shaderSources;
     const char* typeToken = "#type";
     size_t typeTokenLength = strlen(typeToken);
     size_t pos = source.find(typeToken, 0);
@@ -191,7 +191,7 @@ std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::stri
     return shaderSources;
 }
 
-void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
+void OpenGLShader::Compile(const HashMap<GLenum, std::string>& shaderSources)
 {
     static constexpr size_t MaxShaderStages = 5;
     HAZEL_CORE_ASSERT(shaderSources.size() > 0 && shaderSources.size() <= MaxShaderStages,

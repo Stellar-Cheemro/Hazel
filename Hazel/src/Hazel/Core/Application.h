@@ -5,6 +5,8 @@
 #include <Hazel/Core/Timestep.h>
 #include <Hazel/Core/Window.h>
 #include <Hazel/Core/Scope.h>
+
+#include <Hazel/Asset/AssetManager.h>
 #include <Hazel/Events/ApplicationEvent.h>
 
 #include <Hazel/ImGui/ImGuiLayer.h>
@@ -13,6 +15,7 @@
 #include <Hazel/Renderer/OrthographicCamera.h>
 #include <Hazel/Renderer/Shader.h>
 #include <Hazel/Renderer/VertexArray.h>
+#include <Hazel/Renderer/Renderer2D.h>
 
 #include <memory>
 // clang-format on
