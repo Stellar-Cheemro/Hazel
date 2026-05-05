@@ -39,7 +39,7 @@ AssetPath 只提供一个主接口：
 ```cpp
 namespace Hazel::AssetPath
 {
-    bool TryNormalizeRelative(
+    bool TryNormalizeRelativePath(
         std::string_view inputPath,
         std::string& outNormalizedPath);
 }
@@ -69,10 +69,31 @@ AssetPath 不负责：
 - 文件是否存在检查。
 - Asset 注册。
 - Asset 加载。
+- 真实文件系统路径解析。
 
 `AssetMetadata::FilePath` 使用 `std::string`，保存 AssetPath 输出的稳定相对路径字符串。
 
-真实文件系统边界再临时转换为 `std::filesystem::path`。
+真实文件系统边界由 `AssetSystemFileResolver` 负责。
+
+当 Engine / Project 文件资源需要解析到真实文件系统路径时，`AssetSystemFileResolver` 会在边界处将 `AssetMetadata::FilePath` 临时转换为 `std::filesystem::path` 并拼接对应根目录。
+
+## Relationship With AssetSystemFileResolver
+
+`AssetPath` 和 `AssetSystemFileResolver` 的边界如下：
+
+```text
+AssetPath:
+    原始输入路径字符串
+    -> 规范化 Asset 逻辑相对路径字符串
+
+AssetSystemFileResolver:
+    AssetMetadata + Domain Root
+    -> 真实文件系统路径
+```
+
+`AssetPath` 不知道 Engine Asset Root，也不访问 `Project::GetActive()`。
+
+`AssetSystemFileResolver` 不重新定义 Asset 逻辑路径规范，它只接收已经写入 `AssetMetadata::FilePath` 的规范化相对路径，并在真实文件系统边界转换为 `std::filesystem::path`。
 
 ## Alternatives Considered
 
@@ -104,7 +125,7 @@ Rejected.
 
 原因：
 
-- `TryNormalizeRelative()` 逻辑不够短，`inline` 不保证实际内联优化。
+- `TryNormalizeRelativePath()` 逻辑不够短，`inline` 不保证实际内联优化。
 - header-only 会增加编译依赖传播。
 - 多函数接口容易让调用方错误组合，例如绕过规范化流程直接转稳定字符串。
 - 当前阶段不需要为了减少一个 `.cpp` 文件牺牲接口边界。
@@ -119,7 +140,7 @@ Rejected.
 - Asset 路径是引擎内部逻辑路径，不应依赖操作系统路径语义。
 - 不利于保持 Metadata、Registry、序列化之间的稳定字符串表达。
 
-### 方案 E：`AssetPath.h/.cpp` + 单一 `TryNormalizeRelative()` 接口，使用纯字符串规则输出 `std::string`
+### 方案 E：`AssetPath.h/.cpp` + 单一 `TryNormalizeRelativePath()` 接口，使用纯字符串规则输出 `std::string`
 
 Accepted.
 
@@ -131,7 +152,7 @@ Accepted.
 - 当前阶段改动可控。
 - 输出结果可直接写入 `AssetMetadata::FilePath`。
 - Registry 可直接基于稳定字符串生成内部 key。
-- 真实文件系统边界再临时转换为 `std::filesystem::path`，职责更清楚。
+- 真实文件系统边界再由 `AssetSystemFileResolver` 临时转换为 `std::filesystem::path`，职责更清楚。
 - 避免路径规范化阶段出现多次 string/path 往返转换。
 
 ### 方案 F：引入 `AssetRelativePath` 值对象
@@ -150,17 +171,20 @@ Rejected for now.
 正面影响：
 
 - Asset 相对路径规范有唯一来源。
-- `AssetManager` 和 `AssetRegistry` 后续不再各自实现不同规则。
+- `AssetManager` 和 `AssetRegistry` 后续不再各自实现不同路径规范化规则。
 - `AssetMetadata::FilePath` 语义明确为稳定逻辑路径字符串。
-- 外部业务代码仍然通过 `AssetManager` 使用 Asset 系统。
+- 引擎内部流程通过 `AssetManager` 使用 Asset 系统。
+- 用户项目通过 `UserAssetManager` 使用 Asset 系统。
 - Registry key 仍然保持为 `AssetRegistry` 内部实现细节。
-- 真实文件系统路径解析只发生在 `AssetManager` 边界。
+- 真实文件系统路径解析只发生在 `AssetSystemFileResolver` 边界。
 - 路径规范化流程不再依赖 `std::filesystem::path`。
 
 代价：
 
 - 新增 `AssetPath.h/.cpp` 两个文件。
-- 当前仍然依赖约束保证外部不绕过 `AssetManager` 主流程。
+- 当前仍然依赖约束保证外部不绕过对应入口：
+  - 引擎内部通过 `AssetManager` 使用完整 Asset 系统能力。
+  - 用户项目通过 `UserAssetManager` 使用用户侧 Asset API。
 - `std::string` 仍然不是强类型的已规范化路径，后续如有需要可升级为 `AssetRelativePath` 值对象。
 
 ## Rules
@@ -171,11 +195,13 @@ Rejected for now.
 - `AssetPath` 不检查文件是否存在。
 - `AssetPath` 不负责 Asset 注册。
 - `AssetPath` 不负责 Asset 加载。
-- `AssetPath::TryNormalizeRelative()` 输出的字符串统一使用 `/`。
-- `AssetMetadata::FilePath` 保存 `AssetPath::TryNormalizeRelative()` 输出的字符串。
-- 后续路径输入入口应优先经过 `AssetPath::TryNormalizeRelative()`。
-- 外部业务代码仍然应优先通过 `AssetManager` 使用 Asset 系统。
+- `AssetPath::TryNormalizeRelativePath()` 输出的字符串统一使用 `/`。
+- `AssetMetadata::FilePath` 保存 `AssetPath::TryNormalizeRelativePath()` 输出的字符串。
+- 后续路径输入入口应优先经过 `AssetPath::TryNormalizeRelativePath()`。
+- 引擎内部代码通过 `AssetManager` 使用完整 Asset 系统能力。
+- 用户项目代码通过 `UserAssetManager` 使用用户侧 Asset API。
 - Registry key 生成必须保留在 `AssetRegistry` 内部。
+- 真实文件系统路径解析必须保留在 `AssetSystemFileResolver` 边界。
 
 ## Current Recommended Code
 
@@ -192,7 +218,7 @@ Rejected for now.
 namespace Hazel::AssetPath
 {
     // 尝试将输入路径转换为 Asset 系统使用的规范化相对路径字符串。
-    HAZEL_API bool TryNormalizeRelative(
+    HAZEL_API bool TryNormalizeRelativePath(
         std::string_view inputPath,
         std::string& outNormalizedPath);
 }
@@ -240,7 +266,7 @@ namespace Hazel::AssetPath
         }
     }
 
-    bool TryNormalizeRelative(
+    bool TryNormalizeRelativePath(
         std::string_view inputPath,
         std::string& outNormalizedPath);
 }
