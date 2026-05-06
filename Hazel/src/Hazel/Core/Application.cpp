@@ -9,7 +9,7 @@
 
 #include <Hazel/Renderer/SceneRenderer.h>
 #include <Hazel/Renderer/RenderCommand.h>
-
+#include <Hazel/Renderer/Renderer2D.h>
 #include <Hazel/Events/ApplicationEvent.h>
 
 #include <Hazel/ImGui/ImGuiLayer.h>

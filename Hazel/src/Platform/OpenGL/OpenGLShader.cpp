@@ -92,7 +92,37 @@ void OpenGLShader::Unbind() const
 {
     glUseProgram(0);
 }
-
+// ----------------------------------------------------------------------------
+// Uniform设置接口
+// ----------------------------------------------------------------------------
+void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
+{
+    UploadUniformMat4(name, matrix);
+}
+void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& vector)
+{
+    UploadUniformFloat4(name, vector);
+}
+void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& vector)
+{
+    UploadUniformFloat3(name, vector);
+}
+void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& vector)
+{
+    UploadUniformFloat2(name, vector);
+}
+void OpenGLShader::SetFloat(const std::string& name, float value)
+{
+    UploadUniformFloat(name, value);
+}
+void OpenGLShader::SetInt(const std::string& name, int value)
+{
+    UploadUniformInt(name, value);
+}
+void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
+{
+    UploadUniformIntArray(name, values, count);
+}
 // ----------------------------------------------------------------------------
 // Uniform上传接口
 // ----------------------------------------------------------------------------

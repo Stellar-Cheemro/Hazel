@@ -15,7 +15,6 @@
 #include <Hazel/Renderer/OrthographicCamera.h>
 #include <Hazel/Renderer/Shader.h>
 #include <Hazel/Renderer/VertexArray.h>
-#include <Hazel/Renderer/Renderer2D.h>
 
 #include <memory>
 // clang-format on
