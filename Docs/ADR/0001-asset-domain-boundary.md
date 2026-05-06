@@ -1,4 +1,4 @@
-# 0002. 使用 AssetPath 统一 Asset 相对路径规范
+# 0001. 使用 AssetDomain 区分 Engine / Project / Memory Asset
 
 Date: 2026-05-03
 
@@ -6,244 +6,138 @@ Status: Accepted
 
 ## Context
 
-当前 Asset 系统中路径规范化逻辑分散在多个地方：
+Asset 系统需要支持三类资源：
 
-- `AssetManager::ImportAsset()` 直接调用 `relativePath.lexically_normal()`。
-- `AssetRegistry` 内部有 `NormalizePath()`。
-- `AssetMetadata::GetFileSystemPath()` 实际也只是做 `FilePath.lexically_normal()`，并不是真正文件系统路径解析。
+1. 引擎内部资源，例如默认 Shader、默认 Texture、编辑器图标。
+2. 项目资源，例如项目导入的贴图、Shader、场景、网格、音频。
+3. 运行时内存资源，例如动态生成的 Mesh、临时 Texture、运行时 Material。
 
-随着设计明确，`AssetMetadata::FilePath` 的语义已经不是“操作系统路径对象”，而是“Asset 系统内部稳定相对路径标识”。
+需要明确：
 
-如果继续让各模块各自处理路径，后续容易出现规则不一致，例如：
-
-- 有的地方允许绝对路径。
-- 有的地方允许 `..`。
-- 有的地方使用平台相关分隔符。
-- 有的地方使用 `/`。
-- Engine Asset 和 Project Asset 路径规则不一致。
-- Metadata、Registry、序列化之间路径表达不一致。
-
-因此需要统一 Asset 系统中的相对路径规范。
+- 根目录由谁持有？
+- Domain 是持有者还是分类标签？
+- MemoryAsset 是否进入 Registry？
+- Serializer 是否需要关心 Engine / Project / Memory？
+- 用户项目如何使用公开 Engine Asset？
+- 用户项目是否应该接触 Asset 系统内部 Runtime wrapper？
 
 ## Decision
 
-新增 AssetPath 模块：
+采用以下设计：
 
-```text
-Hazel/Asset/AssetPath.h
-Hazel/Asset/AssetPath.cpp
-```
-
-AssetPath 只提供一个主接口：
-
-```cpp
-namespace Hazel::AssetPath
-{
-    bool TryNormalizeRelative(
-        std::string_view inputPath,
-        std::string& outNormalizedPath);
-}
-```
-
-AssetPath 使用纯字符串规则进行规范化，不使用 `std::filesystem::path` 参与规范化流程。
-
-路径规则：
-
-1. 路径不能为空。
-2. 路径不能是绝对路径。
-3. 路径不能包含盘符或 URI 风格的冒号。
-4. 路径中的 `\` 会统一转换为 `/`。
-5. `.` 路径片段会被忽略。
-6. 不允许出现 `..` 路径片段。
-7. 输出统一使用 `/`。
-8. 不允许 Windows 文件名非法字符：`* ? " < > |`。
-9. 不允许 ASCII 控制字符。
-10. 不允许路径片段以空格或 `.` 结尾。
-11. 不允许 Windows 设备保留名，例如 `CON`、`PRN`、`AUX`、`NUL`、`COM1`、`LPT1`。
-12. 支持 UTF-8 中文路径，但不做 UTF-8 合法性校验。
-
-AssetPath 不负责：
-
-- Registry key 生成。
-- Engine / Project 根目录拼接。
-- 文件是否存在检查。
-- Asset 注册。
-- Asset 加载。
-
-`AssetMetadata::FilePath` 使用 `std::string`，保存 AssetPath 输出的稳定相对路径字符串。
-
-真实文件系统边界再临时转换为 `std::filesystem::path`。
+1. `AssetDomain` 只表达资源来源域，不表达持有者。
+2. `AssetMetadata` 只保存稳定身份信息：
+   - Handle
+   - Type
+   - Domain
+   - FilePath
+3. Engine Asset Root 由 `AssetManager::Init()` 内部通过 `AssetRootLocator` 自动定位，并保存在 `AssetSystemFileResolver` 中。
+4. Project Asset Root 由 `Project::GetActive()` 提供，由 `AssetSystemFileResolver` 在真实文件系统边界访问。
+5. MemoryAsset 不走文件路径，不走 Resolver，不走 Serializer，但进入 Registry 和 RuntimeCache。
+6. `AssetRegistry` 使用 `Domain + NormalizedRelativePath` 作为文件资源路径索引。
+7. 真实文件系统路径解析统一由 `AssetSystemFileResolver` 完成。
+8. `AssetManager` 是引擎内部 Asset 系统入口，负责编排流程。
+9. `UserAssetManager` 是用户项目访问 Project / Memory 资源，以及通过明确 `AssetHandle` 获取实际运行时产物的公开入口。
+10. `EngineAssets` 是用户项目使用公开 Engine Asset 的公开目录入口。
+11. 用户项目不通过路径任意导入 Engine Asset，也不直接操作 Engine Asset 生命周期。
+12. `ShaderAsset`、`TextureAsset` 等 Runtime wrapper 属于 Asset 系统内部；用户侧 API 返回 `Shader`、`Texture2D` 等实际运行时产物。
 
 ## Alternatives Considered
 
-### 方案 A：继续让各模块各自调用 `lexically_normal()`
+### 方案 A：把根目录放进 AssetMetadata
 
 Rejected.
 
 原因：
 
-- 路径规则会继续分散。
-- 后续不同模块可能出现不同校验规则。
-- 不利于长期维护。
-- 无法清晰保证写入 `AssetMetadata::FilePath` 的路径一定符合 Asset 系统规则。
+- Project 移动目录后 Metadata 会失效。
+- Engine 发布路径变化后 Metadata 会失效。
+- MemoryAsset 没有根目录。
+- Metadata 会混入运行时环境信息。
 
-### 方案 B：新增 `NormalizeTool`
-
-Rejected.
-
-原因：
-
-- `Normalize` 是动作，不是领域。
-- 路径规范化、字符串规范化、Shader 源码规范化等规则完全不同。
-- 容易变成杂物工具类。
-- 会让低层工具文件逐渐依赖越来越多的高层模块。
-
-### 方案 C：`AssetPath` 使用 header-only inline 多函数
+### 方案 B：拆成 EngineAssetManager / ProjectAssetManager / MemoryAssetManager
 
 Rejected.
 
 原因：
 
-- `TryNormalizeRelative()` 逻辑不够短，`inline` 不保证实际内联优化。
-- header-only 会增加编译依赖传播。
-- 多函数接口容易让调用方错误组合，例如绕过规范化流程直接转稳定字符串。
-- 当前阶段不需要为了减少一个 `.cpp` 文件牺牲接口边界。
+- 当前资源来源只有三类，拆分管理器会增加入口数量。
+- Serializer、Registry、RuntimeCache 的协调会更复杂。
+- 当前阶段 `AssetDomain` 已足以表达资源来源。
 
-### 方案 D：`AssetPath` 使用 `std::filesystem::path` 做规范化
-
-Rejected.
-
-原因：
-
-- 会造成 `string -> filesystem::path -> string` 的冗余转换。
-- Asset 路径是引擎内部逻辑路径，不应依赖操作系统路径语义。
-- 不利于保持 Metadata、Registry、序列化之间的稳定字符串表达。
-
-### 方案 E：`AssetPath.h/.cpp` + 单一 `TryNormalizeRelative()` 接口，使用纯字符串规则输出 `std::string`
-
-Accepted.
-
-原因：
-
-- 接口收敛。
-- 职责清楚。
-- 编译依赖较小。
-- 当前阶段改动可控。
-- 输出结果可直接写入 `AssetMetadata::FilePath`。
-- Registry 可直接基于稳定字符串生成内部 key。
-- 真实文件系统边界再临时转换为 `std::filesystem::path`，职责更清楚。
-- 避免路径规范化阶段出现多次 string/path 往返转换。
-
-### 方案 F：引入 `AssetRelativePath` 值对象
+### 方案 C：新增 AssetSource / AssetStorage 多态系统
 
 Rejected for now.
 
 原因：
 
-- 长期更类型安全。
-- 但当前阶段会扩大改动面。
-- 需要同时修改 `AssetMetadata`、`AssetRegistry`、`AssetManager` 等多个模块。
-- 当前职责重构还不需要这么重的路径类型系统。
+- 未来可能有用，但当前阶段过度设计。
+- 现在只需要通过 Domain 做简单分流。
+
+### 方案 D：AssetManager 编排生命周期，AssetSystemFileResolver 解析真实路径
+
+Accepted.
+
+原因：
+
+- 符合当前代码结构。
+- `AssetManager` 负责 Import / Restore / RegisterMemory / Get / Unload / Remove 等流程编排。
+- `AssetSystemFileResolver` 负责 Engine / Project 真实路径解析和文件系统边界检查。
+- Serializer 可以继续只关心最终文件路径。
+- Registry 可以继续只关心索引。
+
+### 方案 E：用户项目通过 `UserAssetManager::ImportEngineAsset(path)` 使用 Engine Asset
+
+Rejected.
+
+原因：
+
+- 会暴露 Engine Asset 的内部路径结构。
+- 用户无法从路径 API 中判断哪些 Engine Asset 是公开稳定资源。
+- Engine Asset 的注册和生命周期应由引擎侧控制。
+- 用户应通过 `EngineAssets` catalog 使用公开 Engine Asset。
+
+### 方案 F：用户侧直接获取 `ShaderAsset` / `TextureAsset` 等 Runtime wrapper
+
+Rejected.
+
+原因：
+
+- Runtime wrapper 是 Asset 系统内部实现细节。
+- 用户真正需要的是 `Shader`、`Texture2D` 等实际运行时产物。
+- wrapper 结构变化不应影响用户项目代码。
 
 ## Consequences
 
 正面影响：
 
-- Asset 相对路径规范有唯一来源。
-- `AssetManager` 和 `AssetRegistry` 后续不再各自实现不同规则。
-- `AssetMetadata::FilePath` 语义明确为稳定逻辑路径字符串。
-- 外部业务代码仍然通过 `AssetManager` 使用 Asset 系统。
-- Registry key 仍然保持为 `AssetRegistry` 内部实现细节。
-- 真实文件系统路径解析只发生在 `AssetManager` 边界。
-- 路径规范化流程不再依赖 `std::filesystem::path`。
+- Engine / Project / Memory Asset 边界清晰。
+- Serializer 不需要知道资源来自哪个 Domain。
+- AssetMetadata 保持稳定、可序列化。
+- Project 目录迁移不会破坏 Metadata。
+- MemoryAsset 可以通过 Handle 统一管理。
+- 用户项目可以使用公开 Engine Asset。
+- 用户项目不会依赖 Engine Asset 的内部路径。
+- 用户项目不会依赖 Asset 系统内部 Runtime wrapper。
 
 代价：
 
-- 新增 `AssetPath.h/.cpp` 两个文件。
-- 当前仍然依赖约束保证外部不绕过 `AssetManager` 主流程。
-- `std::string` 仍然不是强类型的已规范化路径，后续如有需要可升级为 `AssetRelativePath` 值对象。
+- `AssetManager` 需要协调更多内部组件。
+- `AssetSystemFileResolver` 需要依赖 `Project::GetActive()` 解析 Project Asset。
+- Registry 内部需要使用 Domain + Path 作为路径索引。
+- 需要维护 `EngineAssets` 公开资源目录。
+- 新增公开 Engine Asset 时需要同步更新公开目录。
 
 ## Rules
 
-- `AssetPath` 只负责相对路径规范化。
-- `AssetPath` 不生成 Registry key。
-- `AssetPath` 不解析绝对文件系统路径。
-- `AssetPath` 不检查文件是否存在。
-- `AssetPath` 不负责 Asset 注册。
-- `AssetPath` 不负责 Asset 加载。
-- `AssetPath::TryNormalizeRelative()` 输出的字符串统一使用 `/`。
-- `AssetMetadata::FilePath` 保存 `AssetPath::TryNormalizeRelative()` 输出的字符串。
-- 后续路径输入入口应优先经过 `AssetPath::TryNormalizeRelative()`。
-- 外部业务代码仍然应优先通过 `AssetManager` 使用 Asset 系统。
-- Registry key 生成必须保留在 `AssetRegistry` 内部。
-
-## Current Recommended Code
-
-### AssetPath.h
-
-```cpp
-#pragma once
-
-#include <Hazel/Core/Core.h>
-
-#include <string>
-#include <string_view>
-
-namespace Hazel::AssetPath
-{
-    // 尝试将输入路径转换为 Asset 系统使用的规范化相对路径字符串。
-    HAZEL_API bool TryNormalizeRelative(
-        std::string_view inputPath,
-        std::string& outNormalizedPath);
-}
-```
-
-### AssetPath.cpp
-
-```cpp
-#include "AssetPath.h"
-
-#include <string>
-#include <utility>
-
-namespace Hazel::AssetPath
-{
-    namespace
-    {
-        bool IsSeparator(char c)
-        {
-            return c == '/' || c == '\\';
-        }
-
-        bool IsDisallowedCharacter(char c)
-        {
-            const unsigned char value = static_cast<unsigned char>(c);
-
-            if (value < 0x20)
-                return true;
-
-            if (c == ':')
-                return true;
-
-            switch (c)
-            {
-                case '*':
-                case '?':
-                case '"':
-                case '<':
-                case '>':
-                case '|':
-                    return true;
-                default:
-                    return false;
-            }
-        }
-    }
-
-    bool TryNormalizeRelative(
-        std::string_view inputPath,
-        std::string& outNormalizedPath);
-}
-```
-
-完整实现以代码文件为准。
+- 不允许 AssetMetadata 保存绝对路径。
+- 不允许 AssetMetadata 保存根目录。
+- 不允许 AssetMetadata 保存加载状态。
+- 不允许 Serializer 自己拼接资源根目录。
+- 不允许 MemoryAsset 拥有 FilePath。
+- 不允许 Registry key 暴露到 AssetRegistry 外部。
+- 不允许用户项目直接使用 AssetManager 操作资源。
+- 用户项目必须通过 UserAssetManager 访问 Project / Memory 资源。
+- 用户项目必须通过 EngineAssets 使用公开 Engine Asset。
+- 用户项目不通过路径任意导入 Engine Asset。
+- 用户项目不直接使用 ShaderAsset / TextureAsset 等 Runtime wrapper。

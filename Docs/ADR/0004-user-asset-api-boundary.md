@@ -12,6 +12,7 @@ Asset 系统同时服务引擎内部和用户项目。
 
 - 导入 Engine Asset；
 - 导入 Project Asset；
+- 恢复 File Asset Metadata；
 - 注册 Memory Asset；
 - 解析真实路径；
 - 使用 Registry、Cache、Serializer 等内部组件。
@@ -22,6 +23,7 @@ Asset 系统同时服务引擎内部和用户项目。
 - 注册 Memory Asset；
 - 获取 Asset；
 - 查询只读 Metadata；
+- 查询 Handle / Loaded 状态；
 - 对 Project / Memory Asset 执行允许的生命周期操作。
 
 如果用户项目直接包含 `AssetManager.h` 或 `Asset/Internal/*`，会产生以下问题：
@@ -71,6 +73,9 @@ UserAssetManager::GetAsset<T>(...);
 UserAssetManager::GetMetadata(...);
 UserAssetManager::IsAssetHandleValid(...);
 UserAssetManager::IsAssetLoaded(...);
+UserAssetManager::TryUnloadProjectAsset(...);
+UserAssetManager::TryRemoveProjectAsset(...);
+UserAssetManager::TryRemoveMemoryAsset(...);
 ```
 
 用户侧不允许：
@@ -110,14 +115,17 @@ AssetSerializerRegistry::Register(...);
 
 `ShaderAsset` 和 `TextureAsset` 可以暴露给用户项目。
 
-原因是用户项目需要写：
+原因是用户项目可能需要写：
 
 ```cpp
 Ref<ShaderAsset> shader =
     UserAssetManager::GetAsset<ShaderAsset>(handle);
+
+Ref<TextureAsset> texture =
+    UserAssetManager::GetAsset<TextureAsset>(handle);
 ```
 
-Runtime Asset 类型只包装运行时对象，不负责加载和注册，因此可以作为用户可见类型。
+Runtime Asset 类型只包装运行时对象，不负责加载、注册和真实路径解析，因此可以作为用户可见类型。
 
 ## Alternatives Considered
 
