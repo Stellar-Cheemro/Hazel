@@ -88,7 +88,12 @@ public:
     {
         return *m_Instance;
     }
-    T* Raw() const
+    const T* Raw() const
+    {
+        return m_Instance;
+    }
+
+    T* Raw()
     {
         return m_Instance;
     }
@@ -117,6 +122,12 @@ public:
     template <typename U> Ref<U> As() const
     {
         return Ref<U>(static_cast<U*>(m_Instance));
+    }
+
+    Ref& operator=(std::nullptr_t)
+    {
+        reset();
+        return *this;
     }
 
 private:

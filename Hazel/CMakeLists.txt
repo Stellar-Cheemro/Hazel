@@ -67,6 +67,7 @@ set(HAZEL_SOURCES
     ${HAZEL_DIR}/Asset/Internal/AssetSerializerRegistry.cpp
     ${HAZEL_DIR}/Asset/Internal/AssetSystemFileResolver.cpp
     ${HAZEL_DIR}/Asset/Internal/AssetRootLocator.cpp
+    ${HAZEL_DIR}/Asset/EngineAssets.cpp
     ## --------------------------------------
     ## PLATFORM
     ## --------------------------------------

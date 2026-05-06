@@ -15,14 +15,13 @@
 // ---------------------------
 // Asset
 // ---------------------------
-#include <Hazel/Asset/Asset.h>
 #include <Hazel/Asset/AssetTypes.h>
 #include <Hazel/Asset/AssetMetadata.h>
 #include <Hazel/Asset/UserAssetManager.h>
+#include <Hazel/Asset/EngineAssets.h>
 
-// Runtime Asset Types
-#include <Hazel/Asset/Runtime/ShaderAsset.h>
-#include <Hazel/Asset/Runtime/TextureAsset.h>
+#include <Hazel/Renderer/Shader.h>
+#include <Hazel/Renderer/Texture.h>
 
 #include <Hazel/Project/Project.h>
 

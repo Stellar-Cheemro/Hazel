@@ -11,6 +11,8 @@
 #include <Hazel/Renderer/RenderCommand.h>
 #include <Hazel/Renderer/Renderer2D.h>
 #include <Hazel/Events/ApplicationEvent.h>
+#include <Hazel/Asset/AssetManager.h>
+#include <Hazel/Asset/EngineAssets.h>
 
 #include <Hazel/ImGui/ImGuiLayer.h>
 
@@ -41,6 +43,7 @@ Application::Application()
     // 再由 WindowsWindow 转成 Hazel 事件对象并转发到这里
     m_Window->SetEventCallback(HAZEL_BIND_EVENT_FN(Application::OnEvent));
     AssetManager::Init();
+    EngineAssets::Init();
     SceneRenderer::Init();
     Renderer2D::Init();
     // ImGuiLayer 由 LayerStack 统一管理生命周期
@@ -54,6 +57,7 @@ Application::~Application()
     // 因此这里不手动 delete m_ImGuiLayer
     // 如果这里再 delete，会与 LayerStack 析构重复释放
     Renderer2D::Shutdown();
+    EngineAssets::Shutdown();
     AssetManager::Shutdown();
 }
 // ----------------------------------------------------------------------------

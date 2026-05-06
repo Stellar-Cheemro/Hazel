@@ -20,9 +20,4 @@ private:
     glm::vec4 m_SquareColor{0.2f, 0.3f, 0.8f, 1.0f};
 
     Hazel::OrthographicCameraController m_CameraController;
-
-    Hazel::AssetHandle m_CheckTexHandle = 0;
-    Hazel::AssetHandle m_LogoTexHandle = 0;
-    Hazel::AssetHandle m_FlatShaderHandle = 0;
-    Hazel::AssetHandle m_TextureShaderHandle = 0;
 };
