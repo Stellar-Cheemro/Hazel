@@ -15,6 +15,7 @@ enum class EngineShader : uint8_t
 {
     FlatColor = 0,
     Texture,
+    Quad,
 
     Count
 };

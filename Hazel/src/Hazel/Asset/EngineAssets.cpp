@@ -35,7 +35,8 @@ void EngineAssets::Init()
 
     s_ShaderHandles[static_cast<size_t>(EngineShader::Texture)] =
         AssetManager::ImportEngineAsset("Shaders/Texture.glsl");
-
+    s_ShaderHandles[static_cast<size_t>(EngineShader::Quad)] =
+        AssetManager::ImportEngineAsset("Shaders/Quad.glsl");
     s_TextureHandles[static_cast<size_t>(EngineTexture::Checkerboard)] =
         AssetManager::ImportEngineAsset("Textures/Checkerboard.png");
 

@@ -5,6 +5,21 @@
 #include <Platform/OpenGL/OpenGLTexture.h>
 namespace Hazel
 {
+Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+{
+    switch (RendererAPI::GetAPI())
+    {
+        case RendererAPI::API::None:
+            HAZEL_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
+            return nullptr;
+        case RendererAPI::API::OpenGL:
+            return Ref<Texture2D>(new OpenGLTexture2D(width, height));
+    }
+
+    HAZEL_CORE_ASSERT(false, "Unknown RendererAPI!");
+    return nullptr;
+}
+
 Ref<Texture2D> Texture2D::Create(const std::string& path)
 {
     switch (RendererAPI::GetAPI())
