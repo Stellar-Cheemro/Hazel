@@ -1,6 +1,10 @@
 add_executable(Sandbox
     src/Sandbox.cpp
     src/Sandbox2D.cpp
+    src/GameLayer.cpp
+    src/Player.cpp
+    src/ParticleSystem.cpp
+    src/Level.cpp
 )
 
 # 预处理宏定义

@@ -96,7 +96,6 @@ add_library(Hazel SHARED
     ${HAZEL_SOURCES}
     ${IMGUI_SOURCES}
     ${STB_IMAGE_SOURCES}
-    src/Hazel/Asset/Internal/AssetRootLocator.cpp
 )
 
 # include路径设置
