@@ -52,7 +52,7 @@ void Renderer2D::Init()
     s_Data->VertexArray->SetIndexBuffer(QuadIB);
 
     s_Data->WhiteTexture = Texture2D::Create(1, 1);
-    uint32_t whiteTextureData = 0xffffffff;
+    uint32_t whiteTextureData = 0xffffffff; // RGBA 255,255,255,255
     s_Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
     s_Data->QuadShader = EngineAssets::GetShader(EngineShader::Quad);
@@ -81,50 +81,59 @@ void Renderer2D::BeginScene(const OrthographicCamera& camera)
 void Renderer2D::EndScene()
 {
 }
+void Renderer2D::DrawQuad(const QuadDrawParams& params)
+{
+    if (!s_Data || !s_Data->VertexArray || !s_Data->QuadShader || !s_Data->WhiteTexture)
+        return;
+
+    const Ref<Texture2D>& texture = params.Texture ? params.Texture : s_Data->WhiteTexture;
+
+    const glm::mat4 model = glm::translate(glm::mat4(1.0f), params.Position) *
+                            glm::rotate(glm::mat4(1.0f), params.Rotation, {0.0f, 0.0f, 1.0f}) *
+                            glm::scale(glm::mat4(1.0f), {params.Size.x, params.Size.y, 1.0f});
+
+    s_Data->QuadShader->Bind();
+    s_Data->QuadShader->SetMat4("u_Model", model);
+    s_Data->QuadShader->SetFloat4("u_Color", params.Color);
+    s_Data->QuadShader->SetFloat("u_TexScale", params.TextureScale);
+
+    s_Data->VertexArray->Bind();
+    texture->Bind();
+
+    RenderCommand::DrawIndexed(s_Data->VertexArray);
+
+    texture->UnBind();
+}
+
 void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 {
     DrawQuad({position.x, position.y, 0.0f}, size, color);
 }
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 {
-    if (!s_Data || !s_Data->VertexArray || !s_Data->QuadShader)
-        return;
+    QuadDrawParams params;
+    params.Position = position;
+    params.Size = size;
+    params.Color = color;
 
-    s_Data->QuadShader->Bind();
-
-    const glm::mat4 model = glm::translate(glm::mat4(1.0f), position) *
-                            glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-    s_Data->QuadShader->SetMat4("u_Model", model);
-    s_Data->QuadShader->SetFloat4("u_Color", color);
-
-    s_Data->VertexArray->Bind();
-    s_Data->WhiteTexture->Bind();
-    RenderCommand::DrawIndexed(s_Data->VertexArray);
-    s_Data->WhiteTexture->UnBind();
+    DrawQuad(params);
 }
 
 void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size,
-                          const Ref<Texture2D>& texture)
+                          const Ref<Texture2D>& texture, const glm::f32& texScale)
 {
-    DrawQuad({position.x, position.y, 0.0f}, size, texture);
+    DrawQuad({position.x, position.y, 0.0f}, size, texture, texScale);
 }
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
-                          const Ref<Texture2D>& texture)
+                          const Ref<Texture2D>& texture, const glm::f32& texScale)
 {
-    if (!s_Data || !s_Data->VertexArray || !s_Data->QuadShader)
-        return;
+    QuadDrawParams params;
+    params.Position = position;
+    params.Size = size;
+    params.Texture = texture;
+    params.TextureScale = texScale;
+    params.Color = glm::vec4(1.0f);
 
-    s_Data->QuadShader->Bind();
-    texture->Bind();
-
-    const glm::mat4 model = glm::translate(glm::mat4(1.0f), position) *
-                            glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f});
-
-    s_Data->QuadShader->SetMat4("u_Model", model);
-    s_Data->QuadShader->SetFloat("u_TexScale", 10.0f);
-    s_Data->QuadShader->SetFloat4("u_Color", glm::vec4(1.0f));
-    s_Data->VertexArray->Bind();
-    RenderCommand::DrawIndexed(s_Data->VertexArray);
-    texture->UnBind();
+    DrawQuad(params);
 }
 } // namespace Hazel
